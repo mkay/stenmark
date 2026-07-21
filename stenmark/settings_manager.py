@@ -23,6 +23,7 @@ DEFAULTS = {
     "file_watching": True,
     "remember_last_folder": False,
     "show_sidebar_tags": False,
+    "preview_enabled": False,
     "last_root_folder": "",
     "window_width": 1000,
     "window_height": 700,

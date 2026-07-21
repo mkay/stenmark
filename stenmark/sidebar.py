@@ -173,15 +173,16 @@ class Sidebar(Gtk.Box):
         )
         self._listbox.append(row)
 
-        # "No Folder" row (root-level files only)
+        # "No Folder" row — only when there are root-level files
         root_count = _count_root_md_files(root)
-        row = self._make_row(
-            "No Folder",
-            "stenmark-folder-striped-symbolic",
-            root_count,
-            self.NO_FOLDER,
-        )
-        self._listbox.append(row)
+        if root_count:
+            row = self._make_row(
+                "No Folder",
+                "stenmark-folder-striped-symbolic",
+                root_count,
+                self.NO_FOLDER,
+            )
+            self._listbox.append(row)
 
         # One row per subdirectory — pinned folders first
         subdirs = _collect_subdirs(root)

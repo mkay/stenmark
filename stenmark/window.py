@@ -103,10 +103,12 @@ class MainWindow(Adw.ApplicationWindow):
         self._content_header.pack_start(self._edit_btn)
 
         # Preview toggle (only visible while editing)
+        # Restores whatever the user last chose
+        preview_on = bool(self._settings.get("preview_enabled"))
         self._preview_btn = Gtk.ToggleButton(
-            icon_name="stenmark-preview-symbolic",
+            icon_name="stenmark-preview-symbolic" if preview_on else "stenmark-preview-off-symbolic",
             tooltip_text="Toggle live preview",
-            active=True,
+            active=preview_on,
             visible=False,
         )
         self._preview_btn.set_focus_on_click(False)
@@ -220,6 +222,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         self._editor = MarkdownEditor(self._settings)
         self._preview_viewer = MarkdownViewer(self._settings)
+        self._preview_viewer.set_visible(self._preview_btn.get_active())
 
         self._edit_paned = Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
         self._edit_paned.set_start_child(self._editor)
@@ -730,6 +733,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _on_preview_toggled(self, btn):
         active = btn.get_active()
+        self._settings.set("preview_enabled", active)
         self._preview_viewer.set_visible(active)
         btn.set_icon_name(
             "stenmark-preview-symbolic" if active else "stenmark-preview-off-symbolic"

@@ -80,17 +80,21 @@ Settings are stored in `~/.config/stenmark/settings.json` and can be changed fro
 
 ## License
 
-GPL-3.0-only. See [LICENSE](LICENSE).
+GPL-3.0-**only** — version 3 of the GNU General Public License, and not "or any later version".
+The full text is in [LICENSE](LICENSE), the copyright notice in [COPYRIGHT](COPYRIGHT).
 
-Copyright (C) 2026 Kreuder <mk@singular.de>
+### Artwork and name
 
-Stenmark is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License, version 3, as published by the Free Software Foundation. Version 3 only, not "or any later version" — every source file carries `SPDX-License-Identifier: GPL-3.0-only` saying so. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+The application icon is licensed separately, under **CC BY 4.0**.
+[COPYRIGHT](COPYRIGHT) lists the files.
+
+The **name** is not licensed by either grant — give a fork its own.
 
 ## Credits
 
-Stenmark bundles or builds on the following, all under GPL-compatible terms:
+Stenmark bundles the following, both GPL-compatible — [COPYRIGHT](COPYRIGHT) has the details:
 
-- [Phosphor Icons](https://phosphoricons.com/) (MIT)
+- [Phosphor Icons](https://phosphoricons.com/) (MIT) — the toolbar and sidebar icons
 - [CodeMirror 6](https://codemirror.net/) (MIT) — the bundled editor
 
 Translations are contributed by native speakers — see [TRANSLATING.md](TRANSLATING.md) if you would like to add yours.

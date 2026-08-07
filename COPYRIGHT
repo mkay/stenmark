@@ -1,0 +1,62 @@
+Stenmark — a GTK4 Markdown reader, organizer and editor
+Copyright (C) 2026 Kreuder <mk@singular.de>
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License, version 3, as published by the
+Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <https://www.gnu.org/licenses/>.
+
+Version 3 only, not "or any later version". Every source file carries
+`SPDX-License-Identifier: GPL-3.0-only` saying so.
+
+
+ARTWORK
+
+The application icon is original artwork, and is licensed separately from the
+code, under the Creative Commons Attribution 4.0 International licence
+(CC BY 4.0) — see <https://creativecommons.org/licenses/by/4.0/>:
+
+  data/de.singular.stenmark.svg
+  data/de.singular.stenmark-symbolic.svg
+  assets/stenmark_view.png
+  assets/stenmark_edit.png
+
+  SPDX-License-Identifier: CC-BY-4.0
+  Copyright (C) 2026 Kreuder <mk@singular.de>
+
+Use them, including commercially and in a modified form, provided you credit
+the author. A free licence rather than a reservation, deliberately: a
+distribution that ships the app ships its icon too, and artwork held back turns
+a packageable program into one with a rights question attached. CC BY rather
+than the GPL because the GPL would oblige the editable sources to ship as the
+artwork's source, and they are not in this repository — what is committed is
+generated from them.
+
+
+THIRD-PARTY
+
+Not covered by either grant above. Both are GPL-compatible, which is what lets
+this program ship them:
+
+  stenmark/data/icons/hicolor/scalable/actions/*.svg
+  Phosphor Icons — MIT — <https://phosphoricons.com/>
+
+  stenmark/data/editor/dist/*
+  CodeMirror 6 — MIT — <https://codemirror.net/>
+  Built from the sources under stenmark/data/editor/src.
+
+
+THE NAME
+
+"Stenmark" is not licensed by either grant above. Give a fork its own name: the
+code is yours to take, and so is the artwork if you credit it, but two apps
+answering to one name serves nobody looking for either.
+
+Nothing here is a registered trademark, and this is not claiming to be one. It
+is a statement of what the licences do and do not cover.

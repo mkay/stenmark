@@ -3,5 +3,5 @@
 
 APP_ID = "de.singular.stenmark"
 APP_NAME = "Stenmark"
-VERSION = "0.6.0"
+VERSION = "0.6.1"
 LOCALEDIR = "/usr/share/locale"

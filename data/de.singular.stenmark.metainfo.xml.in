@@ -37,6 +37,21 @@
     <name>Kreuder</name>
   </developer>
 
+  <!-- Reachable public URLs, pinned to the commit that added the files so a
+       moved branch cannot change what a published listing resolves to; re-pin
+       whenever the screenshots are replaced. The first one is the one people
+       actually see. -->
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/mkay/stenmark/cd2d829639deef1160eb7c410b7e99fec9540b11/data/screenshots/reader.png</image>
+      <caption>Reading a document beside the folder sidebar</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/mkay/stenmark/cd2d829639deef1160eb7c410b7e99fec9540b11/data/screenshots/editor.png</image>
+      <caption>Editing Markdown with syntax highlighting</caption>
+    </screenshot>
+  </screenshots>
+
   <branding>
     <color type="primary" scheme_preference="light">#99c1f1</color>
     <color type="primary" scheme_preference="dark">#1a5fb4</color>

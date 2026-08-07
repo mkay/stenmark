@@ -2,7 +2,7 @@
 pkgname=stenmark
 pkgver=0.5.1
 pkgrel=1
-pkgdesc='A lightweight GTK4 Markdown organizer and editor'
+pkgdesc='Lightweight GTK4 Markdown reader, organizer and editor'
 arch=('any')
 url='https://github.com/mkay/stenmark'
 license=('MIT')
@@ -20,6 +20,7 @@ conflicts=('marklite')
 replaces=('marklite')
 makedepends=(
   'meson'
+  'gettext'
 )
 source=("$pkgname-$pkgver.tar.gz::https://github.com/mkay/stenmark/archive/refs/tags/v$pkgver.tar.gz")
 sha256sums=('3034cc3422ed7ff280d197abc432bd562afb22c3e96c8f4bbd41946f42aca75e')

@@ -1,0 +1,17 @@
+# List of source files containing translatable strings.
+data/de.singular.stenmark.desktop.in.in
+data/de.singular.stenmark.metainfo.xml.in
+
+stenmark/app.py
+stenmark/document_panel.py
+stenmark/editor.py
+stenmark/frontmatter.py
+stenmark/html_template.py
+stenmark/markdown_renderer.py
+stenmark/search_panel.py
+stenmark/settings_dialog.py
+stenmark/sidebar.py
+stenmark/tag_panel.py
+stenmark/viewer.py
+stenmark/welcome.py
+stenmark/window.py

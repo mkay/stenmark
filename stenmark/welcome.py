@@ -6,6 +6,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gtk
 
 from stenmark import APP_NAME, VERSION
+from stenmark.i18n import _
 
 
 class WelcomeView(Adw.Bin):
@@ -19,7 +20,7 @@ class WelcomeView(Adw.Bin):
 
         self._status = Adw.StatusPage(
             icon_name="de.singular.stenmark-symbolic",
-            title=f"Welcome to {APP_NAME}",
+            title=_("Welcome to {app}").format(app=APP_NAME),
             vexpand=True,
             hexpand=True,
         )
@@ -31,7 +32,7 @@ class WelcomeView(Adw.Bin):
         )
 
         self._set_root_btn = Gtk.Button(
-            label="Set a Root Directory for Stenmark",
+            label=_("Set a Root Directory for Stenmark"),
             halign=Gtk.Align.CENTER,
             css_classes=["pill", "suggested-action"],
         )
@@ -42,9 +43,12 @@ class WelcomeView(Adw.Bin):
             use_markup=True,
             halign=Gtk.Align.CENTER,
         )
-        self._create_label.set_markup(
-            'Select a Markdown file from the sidebar or <a href="create">click here to create one</a>.'
-        )
+        # Translators: the <a href="create"> markup wraps the clickable part
+        # of the sentence — keep the tag, move it wherever the sentence needs.
+        self._create_label.set_markup(_(
+            'Select a Markdown file from the sidebar or '
+            '<a href="create">click here to create one</a>.'
+        ))
         self._create_label.connect("activate-link", self._on_link_activated)
         child_box.append(self._create_label)
 
@@ -63,17 +67,18 @@ class WelcomeView(Adw.Bin):
         missing = self._root_is_missing()
         if missing:
             self._status.set_description(
-                f"Your Markdown Librarian\nVersion {VERSION}\n\n"
-                "No root directory is set, or the configured directory is missing.\n"
-                "Choose a folder to get started."
+                _("Your Markdown Librarian\nVersion {version}\n\n"
+                  "No root directory is set, or the configured directory is "
+                  "missing.\nChoose a folder to get started.").format(version=VERSION)
             )  # nosec B608
             self._set_root_btn.set_visible(True)
             self._create_label.set_visible(False)
         else:
             self._status.set_description(
-                f"Your Markdown Librarian\nVersion {VERSION}\n\n"
-                "Stenmark is alpha software\n"
-                "Features may appear, disappear, or spontaneously improve."
+                _("Your Markdown Librarian\nVersion {version}\n\n"
+                  "Stenmark is alpha software\n"
+                  "Features may appear, disappear, or spontaneously "
+                  "improve.").format(version=VERSION)
             )  # nosec B608
             self._set_root_btn.set_visible(False)
             self._create_label.set_visible(True)

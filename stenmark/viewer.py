@@ -6,7 +6,9 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 gi.require_version("WebKit", "6.0")
-from gi.repository import Adw, Gdk, Gio, GObject, Gtk, WebKit
+from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk, WebKit
+
+from stenmark.i18n import _
 
 from stenmark.markdown_renderer import MarkdownRenderer
 from stenmark.html_template import wrap_html
@@ -78,7 +80,7 @@ class MarkdownViewer(Gtk.Box):
         box.set_margin_top(4)
         box.set_margin_bottom(4)
 
-        self._search_entry = Gtk.SearchEntry(hexpand=True, placeholder_text="Find in document")
+        self._search_entry = Gtk.SearchEntry(hexpand=True, placeholder_text=_("Find in document"))
         self._search_entry.connect("search-changed", self._on_search_changed)
         self._search_entry.connect("activate", lambda *_: self._find_next())
         box.append(self._search_entry)
@@ -87,15 +89,15 @@ class MarkdownViewer(Gtk.Box):
         self._match_label.set_visible(False)
         box.append(self._match_label)
 
-        prev_btn = Gtk.Button(icon_name="stenmark-go-up-symbolic", tooltip_text="Previous match")
+        prev_btn = Gtk.Button(icon_name="stenmark-go-up-symbolic", tooltip_text=_("Previous match"))
         prev_btn.connect("clicked", lambda *_: self._find_prev())
         box.append(prev_btn)
 
-        next_btn = Gtk.Button(icon_name="stenmark-go-down-symbolic", tooltip_text="Next match")
+        next_btn = Gtk.Button(icon_name="stenmark-go-down-symbolic", tooltip_text=_("Next match"))
         next_btn.connect("clicked", lambda *_: self._find_next())
         box.append(next_btn)
 
-        close_btn = Gtk.Button(icon_name="stenmark-close-symbolic", tooltip_text="Close")
+        close_btn = Gtk.Button(icon_name="stenmark-close-symbolic", tooltip_text=_("Close"))
         close_btn.connect("clicked", lambda *_: self.hide_search())
         box.append(close_btn)
 
@@ -228,7 +230,7 @@ class MarkdownViewer(Gtk.Box):
             )
             self._match_label.set_visible(True)
         else:
-            self._match_label.set_label("No matches")
+            self._match_label.set_label(_("No matches"))
             self._match_label.set_visible(bool(self._search_entry.get_text()))
 
     def _on_search_key(self, _ctl, keyval, _keycode, _state):
@@ -345,8 +347,8 @@ class MarkdownViewer(Gtk.Box):
         fwd_action.set_enabled(self._can_go_forward)
         fwd_action.connect("activate", lambda *_: self.emit("navigate-forward"))
 
-        back_item = WebKit.ContextMenuItem.new_from_gaction(back_action, "Back", None)
-        fwd_item = WebKit.ContextMenuItem.new_from_gaction(fwd_action, "Forward", None)
+        back_item = WebKit.ContextMenuItem.new_from_gaction(back_action, _("Back"), None)
+        fwd_item = WebKit.ContextMenuItem.new_from_gaction(fwd_action, _("Forward"), None)
 
         menu.prepend(WebKit.ContextMenuItem.new_separator())
         menu.prepend(fwd_item)
@@ -360,7 +362,8 @@ class MarkdownViewer(Gtk.Box):
     def _show_empty(self):
         html = wrap_html(
             "<p style='color:#888; text-align:center; margin-top:40vh;'>"
-            "Select a markdown file to view</p>",
+            + GLib.markup_escape_text(_("Select a markdown file to view"))
+            + "</p>",
             self._settings.font_family,
             self._settings.font_size,
             dark=self._is_dark(),

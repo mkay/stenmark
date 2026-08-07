@@ -5,6 +5,8 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gtk, GLib, GObject, Gdk
 
+from stenmark.i18n import _, ngettext
+
 from stenmark.document_panel import (
     _collect_md_files,
     _collect_md_files_recursive,
@@ -42,7 +44,7 @@ class SearchPanel(Gtk.Box):
         bar.add_css_class("toolbar")
 
         self._entry = Gtk.SearchEntry(
-            placeholder_text="Search all documents\u2026",
+            placeholder_text=_("Search all documents\u2026"),
             hexpand=True,
         )
         self._entry.connect("search-changed", self._on_search_changed)
@@ -77,12 +79,12 @@ class SearchPanel(Gtk.Box):
         # Empty / status page
         self._status = Adw.StatusPage(
             icon_name="stenmark-search-symbolic",
-            title="Search Documents",
-            description="Search for text across all your markdown files.",
+            title=_("Search Documents"),
+            description=_("Search for text across all your markdown files."),
             vexpand=True,
         )
         tag_link = Gtk.Button(
-            label="or filter by tags",
+            label=_("or filter by tags"),
             css_classes=["flat", "link"],
             halign=Gtk.Align.CENTER,
         )
@@ -100,14 +102,15 @@ class SearchPanel(Gtk.Box):
         """Set search scope: a directory path, ALL_DOCUMENTS, or NO_FOLDER."""
         self._folder = folder
         if folder == Sidebar.ALL_DOCUMENTS:
-            self._scope_name = "All Documents"
+            self._scope_name = _("All Documents")
         elif folder == Sidebar.NO_FOLDER:
-            self._scope_name = "Files without Folder"
+            self._scope_name = _("Files without Folder")
         else:
             self._scope_name = f"\u201c{os.path.basename(folder)}\u201d"
-        self._entry.set_placeholder_text(f"Search in {self._scope_name}\u2026")
-        self._status.set_title(f"Search {self._scope_name}")
-        self._status.set_description("What are you looking for?")
+        self._entry.set_placeholder_text(
+            _("Search in {scope}\u2026").format(scope=self._scope_name))
+        self._status.set_title(_("Search {scope}").format(scope=self._scope_name))
+        self._status.set_description(_("What are you looking for?"))
 
     def focus_search(self):
         self._entry.grab_focus()
@@ -117,8 +120,9 @@ class SearchPanel(Gtk.Box):
         self._clear_results()
         self._scrolled.set_visible(False)
         self._status.set_visible(True)
-        self._status.set_title(f"Search {self._scope_name}")
-        self._status.set_description(f"Search for text in {self._scope_name}.")
+        self._status.set_title(_("Search {scope}").format(scope=self._scope_name))
+        self._status.set_description(
+            _("Search for text in {scope}.").format(scope=self._scope_name))
         self._count_label.set_visible(False)
 
     def _clear_results(self):
@@ -220,12 +224,13 @@ class SearchPanel(Gtk.Box):
             if match_count == 0:
                 self._scrolled.set_visible(False)
                 self._status.set_visible(True)
-                self._status.set_title("No Results")
-                self._status.set_description("No documents match your search.")
+                self._status.set_title(_("No Results"))
+                self._status.set_description(_("No documents match your search."))
                 self._count_label.set_visible(False)
             else:
                 self._count_label.set_label(
-                    f"{match_count} result{'s' if match_count != 1 else ''}"
+                    ngettext("{n} result", "{n} results", match_count)
+                    .format(n=match_count)
                 )
                 self._count_label.set_visible(True)
 

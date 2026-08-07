@@ -33,6 +33,7 @@ Your markdown librarian. A lightweight GTK4 Markdown organizer and editor.
 - Welcome screen with root directory setup prompt when no folder is configured
 - Remember last folder across sessions (optional, in Preferences)
 - Configurable keyboard shortcuts, fonts, and themes
+- Translated interface — English and German, switchable in Preferences (see [TRANSLATING.md](TRANSLATING.md))
 
 ## Dependencies
 
@@ -40,7 +41,7 @@ Your markdown librarian. A lightweight GTK4 Markdown organizer and editor.
 - GTK 4.0, libadwaita 1
 - WebKitGTK 6.0
 - python-markdown, Pygments, PyYAML
-- Meson, Ninja (build)
+- Meson, Ninja, gettext (build)
 
 ## Install
 
@@ -75,7 +76,7 @@ stenmark ~/Notes/todo.md        # opens a file directly (sidebar hidden)
 
 ## Configuration
 
-Settings are stored in `~/.config/stenmark/settings.json` and can be changed from the Preferences dialog. All changes take effect immediately.
+Settings are stored in `~/.config/stenmark/settings.json` and can be changed from the Preferences dialog. All changes take effect immediately, except the interface language, which applies on restart.
 
 ## License
 
@@ -84,6 +85,8 @@ MIT
 ## Credits
 
 Stenmark uses [Phosphor Icons](https://phosphoricons.com/) (MIT)
+
+Translations are contributed by native speakers — see [TRANSLATING.md](TRANSLATING.md) if you would like to add yours.
 
 ## Screenshots
 

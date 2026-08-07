@@ -7,6 +7,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, GLib, Gtk, Gio
 
 from stenmark import APP_NAME, VERSION
+from stenmark.i18n import _, ngettext
 from stenmark.sidebar import Sidebar
 from stenmark.document_panel import DocumentPanel
 from stenmark.viewer import MarkdownViewer
@@ -87,7 +88,7 @@ class MainWindow(Adw.ApplicationWindow):
         # Back button (start, leftmost)
         self._back_btn = Gtk.Button(
             icon_name="stenmark-go-previous-symbolic",
-            tooltip_text="Back",
+            tooltip_text=_("Back"),
             visible=False,
         )
         self._back_btn.connect("clicked", self._on_back_clicked)
@@ -96,7 +97,7 @@ class MainWindow(Adw.ApplicationWindow):
         # Edit toggle (start)
         self._edit_btn = Gtk.ToggleButton(
             icon_name="stenmark-edit-symbolic",
-            tooltip_text="Toggle edit mode",
+            tooltip_text=_("Toggle edit mode"),
             sensitive=False,
         )
         self._edit_btn.set_focus_on_click(False)
@@ -107,7 +108,7 @@ class MainWindow(Adw.ApplicationWindow):
         preview_on = bool(self._settings.get("preview_enabled"))
         self._preview_btn = Gtk.ToggleButton(
             icon_name="stenmark-preview-symbolic" if preview_on else "stenmark-preview-off-symbolic",
-            tooltip_text="Toggle live preview",
+            tooltip_text=_("Toggle live preview"),
             active=preview_on,
             visible=False,
         )
@@ -121,22 +122,22 @@ class MainWindow(Adw.ApplicationWindow):
         # Hamburger menu (rightmost end)
         menu = Gio.Menu()
         window_section = Gio.Menu()
-        window_section.append("New Window", "app.new-window")
-        window_section.append("Window Size", "app.window-size")
+        window_section.append(_("New Window"), "app.new-window")
+        window_section.append(_("Window Size"), "app.window-size")
         menu.append_section(None, window_section)
         file_section = Gio.Menu()
-        file_section.append("Export to PDF", "win.export-pdf")
+        file_section.append(_("Export to PDF"), "win.export-pdf")
         menu.append_section(None, file_section)
         prefs_section = Gio.Menu()
-        prefs_section.append("Preferences", "win.preferences")
+        prefs_section.append(_("Preferences"), "win.preferences")
         menu.append_section(None, prefs_section)
         about_section = Gio.Menu()
-        about_section.append("About", "win.about")
+        about_section.append(_("About"), "win.about")
         menu.append_section(None, about_section)
         menu_btn = Gtk.MenuButton(
             icon_name="stenmark-open-menu-symbolic",
             menu_model=menu,
-            tooltip_text="Menu",
+            tooltip_text=_("Menu"),
         )
         menu_btn.set_focus_on_click(False)
         self._content_header.pack_end(menu_btn)
@@ -144,7 +145,7 @@ class MainWindow(Adw.ApplicationWindow):
         # Sidebar toggle (left of menu button)
         self._sidebar_btn = Gtk.Button(
             icon_name="stenmark-sidebar-hide-symbolic",
-            tooltip_text="Toggle sidebar",
+            tooltip_text=_("Toggle sidebar"),
         )
         self._sidebar_btn.set_focus_on_click(False)
         self._content_header.pack_end(self._sidebar_btn)
@@ -152,7 +153,7 @@ class MainWindow(Adw.ApplicationWindow):
         # Open In (visible when a file is open, disabled while editing)
         self._open_in_btn = Gtk.Button(
             icon_name="stenmark-open-with-symbolic",
-            tooltip_text="Open in…",
+            tooltip_text=_("Open in…"),
             visible=False,
         )
         self._open_in_btn.set_focus_on_click(False)
@@ -161,7 +162,7 @@ class MainWindow(Adw.ApplicationWindow):
         # Copy as rich text (visible when a file is open)
         self._copy_rich_btn = Gtk.Button(
             icon_name="stenmark-copy-rich-text-symbolic",
-            tooltip_text="Copy as rich text",
+            tooltip_text=_("Copy as rich text"),
             visible=False,
         )
         self._copy_rich_btn.set_focus_on_click(False)
@@ -170,7 +171,7 @@ class MainWindow(Adw.ApplicationWindow):
         # Tags button (visible when a file is open)
         self._tags_btn = Gtk.Button(
             icon_name="stenmark-tag-symbolic",
-            tooltip_text="Edit tags",
+            tooltip_text=_("Edit tags"),
             visible=False,
         )
         self._tags_btn.set_focus_on_click(False)
@@ -179,7 +180,7 @@ class MainWindow(Adw.ApplicationWindow):
         # Table of contents popover (visible when a file is open)
         self._toc_btn = Gtk.MenuButton(
             icon_name="stenmark-toc-symbolic",
-            tooltip_text="Table of contents",
+            tooltip_text=_("Table of contents"),
             visible=False,
         )
         self._toc_btn.set_focus_on_click(False)
@@ -441,11 +442,12 @@ class MainWindow(Adw.ApplicationWindow):
 
         from stenmark.sidebar import Sidebar
         if folder_path.startswith("tag:"):
-            self._title_widget.set_subtitle(f"Tagged: {folder_path[4:]}")
+            self._title_widget.set_subtitle(
+                _("Tagged: {tag}").format(tag=folder_path[4:]))
         elif folder_path == Sidebar.ALL_DOCUMENTS:
-            self._title_widget.set_subtitle("All Documents")
+            self._title_widget.set_subtitle(_("All Documents"))
         elif folder_path == Sidebar.NO_FOLDER:
-            self._title_widget.set_subtitle("No Folder")
+            self._title_widget.set_subtitle(_("No Folder"))
         else:
             self._title_widget.set_subtitle(os.path.basename(folder_path))
 
@@ -518,11 +520,12 @@ class MainWindow(Adw.ApplicationWindow):
         from stenmark.sidebar import Sidebar
         folder = self._doc_panel._current_folder
         if folder and folder.startswith("tag:"):
-            self._title_widget.set_subtitle(f"Tagged: {folder[4:]}")
+            self._title_widget.set_subtitle(
+                _("Tagged: {tag}").format(tag=folder[4:]))
         elif folder == Sidebar.ALL_DOCUMENTS:
-            self._title_widget.set_subtitle("All Documents")
+            self._title_widget.set_subtitle(_("All Documents"))
         elif folder == Sidebar.NO_FOLDER:
-            self._title_widget.set_subtitle("No Folder")
+            self._title_widget.set_subtitle(_("No Folder"))
         elif self._doc_panel.is_drilled_in:
             self._title_widget.set_subtitle(os.path.basename(self._doc_panel._browsing_folder))
         else:
@@ -628,12 +631,12 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _prompt_unsaved(self, next_path):
         dialog = Adw.AlertDialog(
-            heading="Unsaved Changes",
-            body="You have unsaved changes. What would you like to do?",
+            heading=_("Unsaved Changes"),
+            body=_("You have unsaved changes. What would you like to do?"),
         )
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("discard", "Discard")
-        dialog.add_response("save", "Save")
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("discard", _("Discard"))
+        dialog.add_response("save", _("Save"))
         dialog.set_response_appearance("discard", Adw.ResponseAppearance.DESTRUCTIVE)
         dialog.set_response_appearance("save", Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response("save")
@@ -854,13 +857,17 @@ class MainWindow(Adw.ApplicationWindow):
         ]
         clipboard = Gdk.Display.get_default().get_clipboard()
         clipboard.set_content(Gdk.ContentProvider.new_union(providers))
-        self.show_toast("Copied as rich text", "success")
+        self.show_toast(_("Copied as rich text"), "success")
 
     def _update_stats(self, text):
         words = len(text.split())
         minutes = max(1, round(words / 200))
-        self._word_count_label.set_label(f"{words} words")
-        self._reading_time_label.set_label(f"{minutes} min read")
+        self._word_count_label.set_label(
+            ngettext("{n} word", "{n} words", words).format(n=words)
+        )
+        self._reading_time_label.set_label(
+            _("{n} min read").format(n=minutes)
+        )
         self._status_bar.set_visible(True)
 
     def _apply_edit_shortcut(self):
@@ -1013,7 +1020,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         # Entry for adding new tags with autocomplete
         entry = Gtk.Entry(
-            placeholder_text="Add tag\u2026",
+            placeholder_text=_("Add tag\u2026"),
             hexpand=True,
         )
 
@@ -1081,7 +1088,7 @@ class MainWindow(Adw.ApplicationWindow):
             self._editing = False
             self._edit_btn.set_active(False)
             self._preview_btn.set_visible(False)
-        self._title_widget.set_subtitle("Tags")
+        self._title_widget.set_subtitle(_("Tags"))
         self._edit_btn.set_sensitive(False)
         self._copy_rich_btn.set_visible(False)
         self._open_in_btn.set_visible(False)
@@ -1113,7 +1120,7 @@ class MainWindow(Adw.ApplicationWindow):
         folder = self._doc_panel._current_folder
         if folder:
             self._search_panel.set_folder(folder)
-        self._title_widget.set_subtitle("Search")
+        self._title_widget.set_subtitle(_("Search"))
         self._edit_btn.set_sensitive(False)
         self._copy_rich_btn.set_visible(False)
         self._open_in_btn.set_visible(False)
@@ -1139,6 +1146,11 @@ class MainWindow(Adw.ApplicationWindow):
             website="https://github.com/mkay/stenmark",
             license_type=Gtk.License.MIT_X11,
         )
+        # Left untranslated in a catalogue, this stays the msgid — which means
+        # nobody has claimed the translation, so there is no one to credit.
+        credits = _("translator-credits")
+        if credits != "translator-credits":
+            about.set_translator_credits(credits)
         about.present(self)
 
     # ---- Open root folder (sidebar, file outside root) --------------------
@@ -1187,7 +1199,7 @@ class MainWindow(Adw.ApplicationWindow):
             )
             back_box.append(Gtk.Image(icon_name="stenmark-go-previous-symbolic"))
             back_box.append(Gtk.Label(
-                label=os.path.basename(parent) if parent != current_root else "Back",
+                label=os.path.basename(parent) if parent != current_root else _("Back"),
                 xalign=0,
                 hexpand=True,
             ))
@@ -1216,7 +1228,7 @@ class MainWindow(Adw.ApplicationWindow):
                 box.append(btn)
         else:
             box.append(Gtk.Label(
-                label="No subfolders",
+                label=_("No subfolders"),
                 css_classes=["dim-label"],
                 margin_start=6,
                 margin_end=6,

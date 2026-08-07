@@ -1,7 +1,7 @@
- [Desktop Entry]
+[Desktop Entry]
 Type=Application
 Name=Stenmark
-Comment=A lightweight Markdown reader and editor
+Comment=Your markdown librarian
 Exec=@BIN@ %f
 Icon=de.singular.stenmark
 Terminal=false

@@ -8,6 +8,9 @@ from gi.repository import GObject
 
 DEFAULTS = {
     "root_directory": str(Path.home() / "Documents"),
+    # Empty means "follow the system locale". See stenmark.i18n, which reads
+    # this key straight from the file before any catalogue is loaded.
+    "language": "",
     "font_family": "Sans",
     "font_size": 16,
     "theme": "system",

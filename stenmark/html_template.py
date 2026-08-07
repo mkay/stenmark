@@ -1,4 +1,8 @@
+import json
+
 from pygments.formatters import HtmlFormatter
+
+from stenmark.i18n import _
 
 
 # Each theme dict defines the visual palette and the Pygments style for code blocks.
@@ -84,6 +88,13 @@ def wrap_html(body_html, font_family="Sans", font_size=16, dark=False, viewer_th
         t = _THEMES.get(viewer_theme, _THEMES["light"])
 
     pygments_css = _pygments_css(t["pygments"])
+
+    # Interpolated rather than written inline: the template is one big
+    # f-string, and xgettext cannot see a string it never parses as Python.
+    # json.dumps() and slice off its quotes — a translation containing an
+    # apostrophe or quote mark must not break out of the JS string literal.
+    copy_code_label = json.dumps(_("Copy code"))[1:-1]
+    copied_label = json.dumps(_("Copied!"))[1:-1]
 
     return f"""<!DOCTYPE html>
 <html>
@@ -216,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function() {{
     document.querySelectorAll("pre").forEach(function(pre) {{
         var btn = document.createElement("button");
         btn.className = "copy-btn";
-        btn.title = "Copy code";
+        btn.title = "{copy_code_label}";
         btn.innerHTML = svgIcon;
         btn.addEventListener("click", function() {{
             var code = pre.querySelector("code");
@@ -226,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function() {{
                 return t !== "" && !t.startsWith("#");
             }}).join("\\n");
             window.webkit.messageHandlers.copyCode.postMessage(text);
-            btn.innerHTML = "Copied!";
+            btn.innerHTML = "{copied_label}";
             btn.classList.add("copied");
             setTimeout(function() {{
                 btn.innerHTML = svgIcon;

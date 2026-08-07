@@ -7,6 +7,8 @@ gi.require_version("Adw", "1")
 gi.require_version("WebKit", "6.0")
 from gi.repository import Adw, Gdk, GLib, Gtk, WebKit
 
+from stenmark.i18n import _
+
 
 _EDITOR_HTML = os.path.join(
     os.path.dirname(__file__), "data", "editor", "editor.html"
@@ -89,27 +91,27 @@ class MarkdownEditor(Gtk.Box):
             return s
 
         # Headings
-        bar.append(btn(icon="stenmark-heading-1-symbolic", tip="Heading 1", js="window.formatHeading(1)"))
-        bar.append(btn(icon="stenmark-heading-2-symbolic", tip="Heading 2", js="window.formatHeading(2)"))
-        bar.append(btn(icon="stenmark-heading-3-symbolic", tip="Heading 3", js="window.formatHeading(3)"))
+        bar.append(btn(icon="stenmark-heading-1-symbolic", tip=_("Heading 1"), js="window.formatHeading(1)"))
+        bar.append(btn(icon="stenmark-heading-2-symbolic", tip=_("Heading 2"), js="window.formatHeading(2)"))
+        bar.append(btn(icon="stenmark-heading-3-symbolic", tip=_("Heading 3"), js="window.formatHeading(3)"))
         bar.append(sep())
 
         # Inline formatting
-        bar.append(btn(icon="stenmark-format-bold-symbolic",          tip="Bold (Ctrl+B)",             js="window.formatBold()"))
-        bar.append(btn(icon="stenmark-format-italic-symbolic",        tip="Italic (Ctrl+I)",           js="window.formatItalic()"))
-        bar.append(btn(icon="stenmark-format-strikethrough-symbolic", tip="Strikethrough",              js="window.formatStrike()"))
-        bar.append(btn(icon="stenmark-format-code-symbolic",          tip="Inline code (Ctrl+`)",      js="window.formatCode()"))
-        bar.append(btn(icon="stenmark-format-code-block-symbolic",    tip="Code block (Ctrl+Shift+K)", js="window.formatCodeBlock()"))
+        bar.append(btn(icon="stenmark-format-bold-symbolic",          tip=_("Bold (Ctrl+B)"),             js="window.formatBold()"))
+        bar.append(btn(icon="stenmark-format-italic-symbolic",        tip=_("Italic (Ctrl+I)"),           js="window.formatItalic()"))
+        bar.append(btn(icon="stenmark-format-strikethrough-symbolic", tip=_("Strikethrough"),              js="window.formatStrike()"))
+        bar.append(btn(icon="stenmark-format-code-symbolic",          tip=_("Inline code (Ctrl+`)"),      js="window.formatCode()"))
+        bar.append(btn(icon="stenmark-format-code-block-symbolic",    tip=_("Code block (Ctrl+Shift+K)"), js="window.formatCodeBlock()"))
         bar.append(sep())
 
         # Block inserts
-        bar.append(btn(icon="stenmark-insert-link-symbolic",          tip="Link (Ctrl+K)",             js="window.formatLink()"))
-        bar.append(btn(icon="stenmark-format-quote-symbolic",         tip="Blockquote",                js="window.formatQuote()"))
+        bar.append(btn(icon="stenmark-insert-link-symbolic",          tip=_("Link (Ctrl+K)"),             js="window.formatLink()"))
+        bar.append(btn(icon="stenmark-format-quote-symbolic",         tip=_("Blockquote"),                js="window.formatQuote()"))
         bar.append(sep())
 
         # Lists
-        bar.append(btn(icon="stenmark-list-bullet-symbolic",    tip="Bullet list (Ctrl+Shift+U)",   js="window.formatBullet()"))
-        bar.append(btn(icon="stenmark-list-ordered-symbolic",   tip="Numbered list (Ctrl+Shift+O)", js="window.formatNumbered()"))
+        bar.append(btn(icon="stenmark-list-bullet-symbolic",    tip=_("Bullet list (Ctrl+Shift+U)"),   js="window.formatBullet()"))
+        bar.append(btn(icon="stenmark-list-ordered-symbolic",   tip=_("Numbered list (Ctrl+Shift+O)"), js="window.formatNumbered()"))
 
         return bar
 

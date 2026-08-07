@@ -5,6 +5,8 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gtk, GObject, Gdk
 
+from stenmark.i18n import _, ngettext
+
 from stenmark.document_panel import _read_title
 
 
@@ -34,7 +36,7 @@ class TagPanel(Gtk.Box):
 
         # Filter entry for tags
         self._entry = Gtk.SearchEntry(
-            placeholder_text="Filter tags\u2026",
+            placeholder_text=_("Filter tags\u2026"),
             hexpand=True,
         )
         self._entry.connect("search-changed", self._on_entry_changed)
@@ -78,7 +80,7 @@ class TagPanel(Gtk.Box):
         self._info_box.append(spacer)
 
         self._clear_btn = Gtk.Button(
-            label="Clear",
+            label=_("Clear"),
             css_classes=["flat", "caption"],
             visible=False,
         )
@@ -115,8 +117,8 @@ class TagPanel(Gtk.Box):
         # Empty state
         self._status = Adw.StatusPage(
             icon_name="stenmark-tag-symbolic",
-            title="Filter by Tag",
-            description="Select tags above to find matching documents.",
+            title=_("Filter by Tag"),
+            description=_("Select tags above to find matching documents."),
             vexpand=True,
         )
         self._bottom_box.append(self._status)
@@ -152,8 +154,8 @@ class TagPanel(Gtk.Box):
         self._clear_results()
         self._scrolled.set_visible(False)
         self._status.set_visible(True)
-        self._status.set_title("Filter by Tag")
-        self._status.set_description("Select tags above to find matching documents.")
+        self._status.set_title(_("Filter by Tag"))
+        self._status.set_description(_("Select tags above to find matching documents."))
         self._count_label.set_visible(False)
         self._clear_btn.set_visible(False)
         self._rebuild_tag_chips()
@@ -172,7 +174,7 @@ class TagPanel(Gtk.Box):
 
         if not all_tags:
             label = Gtk.Label(
-                label="No tags found",
+                label=_("No tags found"),
                 css_classes=["dim-label"],
             )
             self._tags_flow.append(label)
@@ -257,8 +259,8 @@ class TagPanel(Gtk.Box):
         if not matched:
             self._scrolled.set_visible(False)
             self._status.set_visible(True)
-            self._status.set_title("No Results")
-            self._status.set_description("No documents match the selected tags.")
+            self._status.set_title(_("No Results"))
+            self._status.set_description(_("No documents match the selected tags."))
             self._count_label.set_visible(False)
             return
 
@@ -274,13 +276,14 @@ class TagPanel(Gtk.Box):
 
         match_count = len(matched)
         self._count_label.set_label(
-            f"{match_count} document{'s' if match_count != 1 else ''}"
+            ngettext("{n} document", "{n} documents", match_count)
+            .format(n=match_count)
         )
         self._count_label.set_visible(True)
 
         for dir_path in sorted(groups.keys()):
             if dir_path == root:
-                section_name = "No Folder"
+                section_name = _("No Folder")
             else:
                 section_name = os.path.relpath(dir_path, root)
 

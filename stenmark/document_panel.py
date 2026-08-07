@@ -6,6 +6,8 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gtk, Gio, GObject, Gdk, Graphene
 
+from stenmark.i18n import _, ngettext
+
 from stenmark.sidebar import Sidebar, _count_md_files
 
 
@@ -92,27 +94,29 @@ def _read_title(path):
 
 
 def _format_size(size):
+    # Translators: {n} is a file size. B / KB / MB are the unit symbols.
     if size < 1024:
-        return f"{size} B"
+        return _("{n} B").format(n=size)
     elif size < 1024 * 1024:
-        return f"{size / 1024:.1f} KB"
+        return _("{n} KB").format(n=f"{size / 1024:.1f}")
     else:
-        return f"{size / (1024 * 1024):.1f} MB"
+        return _("{n} MB").format(n=f"{size / (1024 * 1024):.1f}")
 
 
 def _format_date(mtime):
     now = time.time()
     delta = now - mtime
     if delta < 60:
-        return "just now"
+        return _("just now")
     elif delta < 3600:
         m = int(delta / 60)
-        return f"{m} min ago"
+        return ngettext("{n} min ago", "{n} min ago", m).format(n=m)
     elif delta < 86400:
         h = int(delta / 3600)
-        return f"{h}h ago"
+        return ngettext("{n}h ago", "{n}h ago", h).format(n=h)
     else:
-        return time.strftime("%b %d, %Y", time.localtime(mtime))
+        # Translators: strftime format for a file date, e.g. "Mar 04, 2025".
+        return time.strftime(_("%b %d, %Y"), time.localtime(mtime))
 
 
 class DocumentPanel(Gtk.Box):
@@ -143,7 +147,7 @@ class DocumentPanel(Gtk.Box):
             margin_bottom=4,
         )
         self._filter_entry = Gtk.SearchEntry(
-            placeholder_text="Filter documents\u2026",
+            placeholder_text=_("Filter documents\u2026"),
             hexpand=True,
         )
         self._filter_entry.connect("search-changed", self._on_filter_changed)
@@ -176,8 +180,8 @@ class DocumentPanel(Gtk.Box):
 
         # Empty state
         self._empty = Adw.StatusPage(
-            title="No Documents",
-            description="This folder has no markdown files.",
+            title=_("No Documents"),
+            description=_("This folder has no markdown files."),
             icon_name="stenmark-search-symbolic",
             vexpand=True,
         )
@@ -256,7 +260,7 @@ class DocumentPanel(Gtk.Box):
         if files:
             if subdirs:
                 header = Gtk.Label(
-                    label="Documents",
+                    label=_("Documents"),
                     xalign=0,
                     css_classes=["heading"],
                     margin_top=20,
@@ -302,11 +306,13 @@ class DocumentPanel(Gtk.Box):
         subdir_count = len(_collect_subdirs(dir_path))
         parts = []
         if doc_count:
-            parts.append(f"{doc_count} document{'s' if doc_count != 1 else ''}")
+            parts.append(ngettext("{n} document", "{n} documents", doc_count)
+                         .format(n=doc_count))
         if subdir_count:
-            parts.append(f"{subdir_count} folder{'s' if subdir_count != 1 else ''}")
+            parts.append(ngettext("{n} folder", "{n} folders", subdir_count)
+                         .format(n=subdir_count))
         if not parts:
-            parts.append("Empty")
+            parts.append(_("Empty"))
         try:
             mtime = os.stat(dir_path).st_mtime
             parts.append(_format_date(mtime))
@@ -593,14 +599,14 @@ class DocumentPanel(Gtk.Box):
         pin_section.append(label, "docpanel.toggle-pin")
 
         section = Gio.Menu()
-        section.append("Open With…", "docpanel.open-with")
-        section.append("Rename", "docpanel.rename")
-        section.append("Move to Folder…", "docpanel.move-to-folder")
-        section.append("Move to Trash", "docpanel.trash")
-        section.append("Reveal in File Manager", "docpanel.reveal")
+        section.append(_("Open With…"), "docpanel.open-with")
+        section.append(_("Rename"), "docpanel.rename")
+        section.append(_("Move to Folder…"), "docpanel.move-to-folder")
+        section.append(_("Move to Trash"), "docpanel.trash")
+        section.append(_("Reveal in File Manager"), "docpanel.reveal")
 
         path_section = Gio.Menu()
-        path_section.append("Copy Path", "docpanel.copy-path")
+        path_section.append(_("Copy Path"), "docpanel.copy-path")
 
         menu = Gio.Menu()
         menu.append_section(None, pin_section)
@@ -678,8 +684,8 @@ class DocumentPanel(Gtk.Box):
         self._pane_context_rect = Gdk.Rectangle()
 
         menu = Gio.Menu()
-        menu.append("Create new Document here", "docpane.new-document")
-        menu.append("Refresh", "docpane.refresh")
+        menu.append(_("Create new Document here"), "docpane.new-document")
+        menu.append(_("Refresh"), "docpane.refresh")
         self._pane_popover.set_menu_model(menu)
 
         new_doc_action = Gio.SimpleAction.new("new-document", None)
@@ -722,14 +728,14 @@ class DocumentPanel(Gtk.Box):
     def _on_new_document_activate(self, *_args):
         parent_dir = self._browsing_folder or self._settings.root_directory
 
-        dialog = Adw.AlertDialog(heading="New Document")
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("create", "Create")
+        dialog = Adw.AlertDialog(heading=_("New Document"))
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("create", _("Create"))
         dialog.set_response_appearance("create", Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response("create")
         dialog.set_close_response("cancel")
 
-        entry = Gtk.Entry(text="Untitled.md")
+        entry = Gtk.Entry(text=_("Untitled.md"))
         entry.set_activates_default(True)
         entry.connect("map", self._focus_and_select, 0, entry.get_text().rfind("."))
         dialog.set_extra_child(entry)
@@ -748,7 +754,8 @@ class DocumentPanel(Gtk.Box):
         if os.path.exists(path):
             win = self.get_root()
             if hasattr(win, "show_toast"):
-                win.show_toast(f"\u201c{name}\u201d already exists", "warning")
+                win.show_toast(_("\u201c{name}\u201d already exists").format(name=name),
+                               "warning")
             return
         try:
             with open(path, "w", encoding="utf-8") as f:
@@ -763,15 +770,16 @@ class DocumentPanel(Gtk.Box):
             if self._context_folder_path else False
         )
         pin_section = Gio.Menu()
-        pin_section.append("Unpin" if is_pinned else "Pin to Top", "docpanel.toggle-folder-pin")
+        pin_section.append(_("Unpin") if is_pinned else _("Pin to Top"),
+                           "docpanel.toggle-folder-pin")
 
         action_section = Gio.Menu()
-        action_section.append("Rename", "docpanel.rename-folder")
-        action_section.append("Delete Folder", "docpanel.delete-folder")
-        action_section.append("Reveal in File Manager", "docpanel.reveal-folder")
+        action_section.append(_("Rename"), "docpanel.rename-folder")
+        action_section.append(_("Delete Folder"), "docpanel.delete-folder")
+        action_section.append(_("Reveal in File Manager"), "docpanel.reveal-folder")
 
         path_section = Gio.Menu()
-        path_section.append("Copy Path", "docpanel.copy-folder-path")
+        path_section.append(_("Copy Path"), "docpanel.copy-folder-path")
 
         menu = Gio.Menu()
         menu.append_section(None, pin_section)
@@ -815,21 +823,22 @@ class DocumentPanel(Gtk.Box):
 
         if not self._is_dir_empty(self._context_folder_path):
             dialog = Adw.AlertDialog(
-                heading="Folder is not empty",
-                body=f"\u201c{name}\u201d still contains files or folders.\nRemove its contents first.",
+                heading=_("Folder is not empty"),
+                body=_("\u201c{name}\u201d still contains files or folders.\n"
+                       "Remove its contents first.").format(name=name),
             )
-            dialog.add_response("ok", "OK")
+            dialog.add_response("ok", _("OK"))
             dialog.set_default_response("ok")
             dialog.set_close_response("ok")
             dialog.present(self.get_root())
             return
 
         dialog = Adw.AlertDialog(
-            heading="Delete Folder?",
-            body=f"\u201c{name}\u201d will be deleted.",
+            heading=_("Delete Folder?"),
+            body=_("\u201c{name}\u201d will be deleted.").format(name=name),
         )
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("delete", "Delete")
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("delete", _("Delete"))
         dialog.set_response_appearance("delete", Adw.ResponseAppearance.DESTRUCTIVE)
         dialog.set_default_response("cancel")
         dialog.set_close_response("cancel")
@@ -850,11 +859,11 @@ class DocumentPanel(Gtk.Box):
             return
         name = os.path.basename(self._context_folder_path)
         dialog = Adw.AlertDialog(
-            heading="Rename",
-            body=f"Enter a new name for \u201c{name}\u201d:",
+            heading=_("Rename"),
+            body=_("Enter a new name for \u201c{name}\u201d:").format(name=name),
         )
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("rename", "Rename")
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("rename", _("Rename"))
         dialog.set_response_appearance("rename", Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response("rename")
         dialog.set_close_response("cancel")
@@ -877,7 +886,8 @@ class DocumentPanel(Gtk.Box):
         if os.path.exists(new_path):
             win = self.get_root()
             if hasattr(win, "show_toast"):
-                win.show_toast(f"\u201c{new_name}\u201d already exists", "warning")
+                win.show_toast(_("\u201c{name}\u201d already exists").format(name=new_name),
+                               "warning")
             return
         try:
             os.rename(old_path, new_path)
@@ -904,7 +914,7 @@ class DocumentPanel(Gtk.Box):
         Gdk.Display.get_default().get_clipboard().set(self._context_folder_path)
         win = self.get_root()
         if hasattr(win, "show_toast"):
-            win.show_toast("Path copied to clipboard", "success")
+            win.show_toast(_("Path copied to clipboard"), "success")
 
     def _on_row_right_click(self, gesture, _n_press, x, y, row):
         self._context_path = row._file_path
@@ -1019,18 +1029,18 @@ class DocumentPanel(Gtk.Box):
         Gdk.Display.get_default().get_clipboard().set(self._context_path)
         win = self.get_root()
         if hasattr(win, "show_toast"):
-            win.show_toast("Path copied to clipboard", "success")
+            win.show_toast(_("Path copied to clipboard"), "success")
 
     def _on_trash_activate(self, *_args):
         if not self._context_path:
             return
         name = os.path.basename(self._context_path)
         dialog = Adw.AlertDialog(
-            heading="Move to Trash?",
-            body=f"\u201c{name}\u201d will be moved to the trash.",
+            heading=_("Move to Trash?"),
+            body=_("\u201c{name}\u201d will be moved to the trash.").format(name=name),
         )
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("trash", "Move to Trash")
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("trash", _("Move to Trash"))
         dialog.set_response_appearance("trash", Adw.ResponseAppearance.DESTRUCTIVE)
         dialog.set_default_response("cancel")
         dialog.set_close_response("cancel")
@@ -1059,15 +1069,15 @@ class DocumentPanel(Gtk.Box):
         name = os.path.basename(self._context_path)
         current_dir = os.path.dirname(self._context_path)
 
-        folder_paths = [root] + [p for p, _ in subdirs]
-        folder_names = ["No Folder"] + [n for _, n in subdirs]
+        folder_paths = [root] + [p for p, _n in subdirs]
+        folder_names = [_("No Folder")] + [n for _p, n in subdirs]
 
         dialog = Adw.AlertDialog(
-            heading="Move to Folder",
-            body=f"Choose a destination folder for \u201c{name}\u201d:",
+            heading=_("Move to Folder"),
+            body=_("Choose a destination folder for \u201c{name}\u201d:").format(name=name),
         )
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("move", "Move")
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("move", _("Move"))
         dialog.set_response_appearance("move", Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response("move")
         dialog.set_close_response("cancel")
@@ -1092,7 +1102,8 @@ class DocumentPanel(Gtk.Box):
         if os.path.exists(new_path):
             win = self.get_root()
             if hasattr(win, "show_toast"):
-                win.show_toast("A file with that name already exists in the destination folder", "warning")
+                win.show_toast(_("A file with that name already exists in the "
+                                 "destination folder"), "warning")
             return
         try:
             os.rename(old_path, new_path)
@@ -1106,11 +1117,11 @@ class DocumentPanel(Gtk.Box):
             return
         name = os.path.basename(self._context_path)
         dialog = Adw.AlertDialog(
-            heading="Rename",
-            body=f"Enter a new name for \u201c{name}\u201d:",
+            heading=_("Rename"),
+            body=_("Enter a new name for \u201c{name}\u201d:").format(name=name),
         )
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("rename", "Rename")
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("rename", _("Rename"))
         dialog.set_response_appearance("rename", Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response("rename")
         dialog.set_close_response("cancel")
@@ -1140,7 +1151,8 @@ class DocumentPanel(Gtk.Box):
         if os.path.exists(new_path):
             win = self.get_root()
             if hasattr(win, "show_toast"):
-                win.show_toast(f"\u201c{new_name}\u201d already exists", "warning")
+                win.show_toast(_("\u201c{name}\u201d already exists").format(name=new_name),
+                               "warning")
             return
         try:
             os.rename(old_path, new_path)

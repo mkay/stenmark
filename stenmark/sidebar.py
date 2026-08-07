@@ -5,6 +5,8 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gtk, Gio, GObject, Gdk, Graphene
 
+from stenmark.i18n import _
+
 
 def _count_md_files(dir_path):
     """Recursively count .md files in a directory."""
@@ -90,28 +92,28 @@ class Sidebar(Gtk.Box):
 
         new_file_btn = Gtk.Button(
             icon_name="stenmark-document-new-symbolic",
-            tooltip_text="New Document",
+            tooltip_text=_("New Document"),
             hexpand=True,
         )
         new_file_btn.connect("clicked", lambda _b: self._new_file(self._active_dir()))
 
         new_dir_btn = Gtk.Button(
             icon_name="stenmark-folder-new-symbolic",
-            tooltip_text="New Folder",
+            tooltip_text=_("New Folder"),
             hexpand=True,
         )
         new_dir_btn.connect("clicked", lambda _b: self._new_directory(self._settings.root_directory))
 
         tag_btn = Gtk.Button(
             icon_name="stenmark-tag-symbolic",
-            tooltip_text="Filter by Tag",
+            tooltip_text=_("Filter by Tag"),
             hexpand=True,
         )
         tag_btn.connect("clicked", lambda _b: self.emit("tag-filter-requested"))
 
         search_btn = Gtk.Button(
             icon_name="stenmark-system-search-symbolic",
-            tooltip_text="Search All Documents",
+            tooltip_text=_("Search All Documents"),
             hexpand=True,
         )
         search_btn.connect("clicked", lambda _b: self.emit("search-requested"))
@@ -133,7 +135,7 @@ class Sidebar(Gtk.Box):
             visible=False,
         )
         open_root_btn = Gtk.Button(
-            label="Open root folder",
+            label=_("Open root folder"),
             css_classes=["suggested-action", "pill"],
             halign=Gtk.Align.CENTER,
         )
@@ -166,7 +168,7 @@ class Sidebar(Gtk.Box):
         # "All Documents" row
         total = _count_md_files(root)
         row = self._make_row(
-            "All Documents",
+            _("All Documents"),
             "stenmark-document-all-symbolic",
             total,
             self.ALL_DOCUMENTS,
@@ -177,7 +179,7 @@ class Sidebar(Gtk.Box):
         root_count = _count_root_md_files(root)
         if root_count:
             row = self._make_row(
-                "No Folder",
+                _("No Folder"),
                 "stenmark-folder-striped-symbolic",
                 root_count,
                 self.NO_FOLDER,
@@ -204,7 +206,7 @@ class Sidebar(Gtk.Box):
                 )
                 divider_box.append(Gtk.Separator(margin_top=6, margin_bottom=4))
                 divider_box.append(Gtk.Label(
-                    label="Tags",
+                    label=_("Tags"),
                     xalign=0,
                     css_classes=["dim-label", "caption"],
                     margin_start=8,
@@ -331,24 +333,24 @@ class Sidebar(Gtk.Box):
 
         if is_folder:
             pin_section = Gio.Menu()
-            pin_section.append("Unpin" if is_pinned else "Pin to Top", "sidebar.pin")
+            pin_section.append(_("Unpin") if is_pinned else _("Pin to Top"), "sidebar.pin")
             menu.append_section(None, pin_section)
 
         item_section = Gio.Menu()
-        item_section.append("Rename", "sidebar.rename")
-        item_section.append("Delete Folder", "sidebar.trash")
-        item_section.append("Reveal in File Manager", "sidebar.reveal")
+        item_section.append(_("Rename"), "sidebar.rename")
+        item_section.append(_("Delete Folder"), "sidebar.trash")
+        item_section.append(_("Reveal in File Manager"), "sidebar.reveal")
         menu.append_section(None, item_section)
 
         new_section = Gio.Menu()
-        new_section.append("New Document", "sidebar.new-file")
-        new_section.append("New Folder", "sidebar.new-dir")
+        new_section.append(_("New Document"), "sidebar.new-file")
+        new_section.append(_("New Folder"), "sidebar.new-dir")
         menu.append_section(None, new_section)
 
         misc_section = Gio.Menu()
         if is_folder:
-            misc_section.append("Copy Path", "sidebar.copy-path")
-        misc_section.append("Refresh", "sidebar.refresh")
+            misc_section.append(_("Copy Path"), "sidebar.copy-path")
+        misc_section.append(_("Refresh"), "sidebar.refresh")
         menu.append_section(None, misc_section)
 
         return menu
@@ -408,7 +410,7 @@ class Sidebar(Gtk.Box):
         Gdk.Display.get_default().get_clipboard().set(self._context_path)
         win = self.get_root()
         if hasattr(win, "show_toast"):
-            win.show_toast("Path copied to clipboard", "success")
+            win.show_toast(_("Path copied to clipboard"), "success")
 
     # ---- Pin ------------------------------------------------------------
 
@@ -437,21 +439,22 @@ class Sidebar(Gtk.Box):
 
         if os.path.isdir(self._context_path) and not self._is_dir_empty(self._context_path):
             dialog = Adw.AlertDialog(
-                heading="Folder is not empty",
-                body=f"\u201c{name}\u201d still contains files or folders.\nRemove its contents first.",
+                heading=_("Folder is not empty"),
+                body=_("\u201c{name}\u201d still contains files or folders.\n"
+                       "Remove its contents first.").format(name=name),
             )
-            dialog.add_response("ok", "OK")
+            dialog.add_response("ok", _("OK"))
             dialog.set_default_response("ok")
             dialog.set_close_response("ok")
             dialog.present(self.get_root())
             return
 
         dialog = Adw.AlertDialog(
-            heading="Delete Folder?",
-            body=f"\u201c{name}\u201d will be deleted.",
+            heading=_("Delete Folder?"),
+            body=_("\u201c{name}\u201d will be deleted.").format(name=name),
         )
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("trash", "Delete")
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("trash", _("Delete"))
         dialog.set_response_appearance("trash", Adw.ResponseAppearance.DESTRUCTIVE)
         dialog.set_default_response("cancel")
         dialog.set_close_response("cancel")
@@ -474,11 +477,11 @@ class Sidebar(Gtk.Box):
             return
         name = os.path.basename(self._context_path)
         dialog = Adw.AlertDialog(
-            heading="Rename",
-            body=f"Enter a new name for \u201c{name}\u201d:",
+            heading=_("Rename"),
+            body=_("Enter a new name for \u201c{name}\u201d:").format(name=name),
         )
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("rename", "Rename")
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("rename", _("Rename"))
         dialog.set_response_appearance("rename", Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response("rename")
         dialog.set_close_response("cancel")
@@ -532,19 +535,19 @@ class Sidebar(Gtk.Box):
         subdirs = _collect_subdirs(root)
 
         # folder_paths[i] maps to the dropdown index
-        folder_paths = [root] + [p for p, _ in subdirs]
-        folder_names = ["No Folder"] + [n for _, n in subdirs]
+        folder_paths = [root] + [p for p, _n in subdirs]
+        folder_names = [_("No Folder")] + [n for _p, n in subdirs]
 
-        dialog = Adw.AlertDialog(heading="New Document")
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("create", "Create")
+        dialog = Adw.AlertDialog(heading=_("New Document"))
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("create", _("Create"))
         dialog.set_response_appearance("create", Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response("create")
         dialog.set_close_response("cancel")
 
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
 
-        entry = Gtk.Entry(text="Untitled.md")
+        entry = Gtk.Entry(text=_("Untitled.md"))
         entry.set_activates_default(True)
         entry.connect("map", self._focus_and_select, 0, entry.get_text().rfind("."))
         vbox.append(entry)
@@ -556,7 +559,7 @@ class Sidebar(Gtk.Box):
                 spacing=8,
                 margin_top=2,
             )
-            lbl = Gtk.Label(label="Folder", xalign=0, hexpand=True)
+            lbl = Gtk.Label(label=_("Folder"), xalign=0, hexpand=True)
             lbl.add_css_class("dim-label")
             folder_dropdown = Gtk.DropDown.new_from_strings(folder_names)
             folder_dropdown.set_valign(Gtk.Align.CENTER)
@@ -590,7 +593,8 @@ class Sidebar(Gtk.Box):
         if os.path.exists(path):
             win = self.get_root()
             if hasattr(win, "show_toast"):
-                win.show_toast(f"\u201c{name}\u201d already exists", "warning")
+                win.show_toast(_("\u201c{name}\u201d already exists").format(name=name),
+                               "warning")
             return
         try:
             with open(path, "w", encoding="utf-8") as f:
@@ -602,18 +606,19 @@ class Sidebar(Gtk.Box):
 
     def _new_directory(self, parent_dir):
         dialog = Adw.AlertDialog(
-            heading="New Folder",
-            body="Enter a name for the new folder:",
+            heading=_("New Folder"),
+            body=_("Enter a name for the new folder:"),
         )
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("create", "Create")
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("create", _("Create"))
         dialog.set_response_appearance("create", Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response("create")
         dialog.set_close_response("cancel")
 
-        entry = Gtk.Entry(text="New Folder")
+        default_name = _("New Folder")
+        entry = Gtk.Entry(text=default_name)
         entry.set_activates_default(True)
-        entry.connect("map", self._focus_and_select, 0, len("New Folder"))
+        entry.connect("map", self._focus_and_select, 0, len(default_name))
         dialog.set_extra_child(entry)
         dialog.connect("response", self._on_new_dir_response, parent_dir, entry)
         dialog.present(self.get_root())
@@ -628,7 +633,8 @@ class Sidebar(Gtk.Box):
         if os.path.exists(path):
             win = self.get_root()
             if hasattr(win, "show_toast"):
-                win.show_toast(f"\u201c{name}\u201d already exists", "warning")
+                win.show_toast(_("\u201c{name}\u201d already exists").format(name=name),
+                               "warning")
             return
         try:
             os.makedirs(path)
@@ -669,7 +675,7 @@ class Sidebar(Gtk.Box):
             )
             divider_box.append(Gtk.Separator(margin_top=6, margin_bottom=4))
             divider_box.append(Gtk.Label(
-                label="Tags",
+                label=_("Tags"),
                 xalign=0,
                 css_classes=["dim-label", "caption"],
                 margin_start=8,

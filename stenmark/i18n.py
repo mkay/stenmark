@@ -59,7 +59,11 @@ def _apply_language_override():
         import json
         from pathlib import Path
 
-        with open(Path.home() / ".config" / "stenmark" / "settings.json") as f:
+        # Same path SettingsManager uses; duplicated rather than imported so
+        # this stays free of GObject. If one moves, move both.
+        config_dir = Path(os.environ.get("XDG_CONFIG_HOME",
+                                         Path.home() / ".config")) / "stenmark"
+        with open(config_dir / "settings.json") as f:
             choice = json.load(f).get(LANGUAGE_KEY, "")
     except Exception:  # noqa: BLE001 - a bad config must not stop startup
         return

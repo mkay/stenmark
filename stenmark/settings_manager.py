@@ -37,7 +37,10 @@ DEFAULTS = {
     "window_height": 700,
 }
 
-CONFIG_DIR = Path.home() / ".config" / "stenmark"
+# Honours XDG_CONFIG_HOME, which Flatpak points at the app's own state
+# directory. Unset (the usual case) this is ~/.config, so a native install
+# keeps the exact path it always had. Mirrored in i18n.py — keep in sync.
+CONFIG_DIR = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "stenmark"
 CONFIG_FILE = CONFIG_DIR / "settings.json"
 
 

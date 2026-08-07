@@ -20,8 +20,5 @@ Links may be written as [label](https://…) or as a bare URL. Prefer the labell
 form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
-- Stenmark speaks German. Pick your language under Preferences → General → Appearance; it applies on restart.
-- Any language can be added without touching code — the translations are plain text files. See [how to translate](https://github.com/mkay/stenmark/blob/main/TRANSLATING.md).
-- There is now a Flatpak, from [Stenmark's own repository](https://mkay.github.io/stenmark-flatpak/). Not Flathub: their policy doesn't allow AI-assisted apps, and this one is.
-- A new Support Stenmark item in the main menu, with three ways to help. Two of them are free.
-- Stenmark is now GPL-3.0-only. It was MIT before; the source is still yours to read, change and pass on.
+- Your software centre will finally name the right version. Stenmark's metadata had reported 0.3.3 since March, whatever was actually installed.
+- Everything from 0.6.0, if you are coming from further back: German and a language picker, a Flatpak of its own, a Support item in the menu, and a move to GPL-3.0-only.

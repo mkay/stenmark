@@ -45,6 +45,36 @@
   <content_rating type="oars-1.1" />
 
   <releases>
+    <release version="0.6.1" date="2026-08-07">
+      <description>
+        <p>Corrected the version this metadata reports: it had stopped at 0.3.3, so software centres named the wrong release.</p>
+      </description>
+    </release>
+    <release version="0.6.0" date="2026-08-07">
+      <description>
+        <p>German translation and a language picker, a Flatpak of its own, a Support item in the menu, and a move to GPL-3.0-only.</p>
+      </description>
+    </release>
+    <release version="0.5.1" date="2026-07-21">
+      <description>
+        <p>The preview pane starts off and remembers your last choice; the sidebar tag list refreshes as tags change.</p>
+      </description>
+    </release>
+    <release version="0.5.0" date="2026-03-19">
+      <description>
+        <p>Tagging, and filtering documents by one or more tags.</p>
+      </description>
+    </release>
+    <release version="0.4.5" date="2026-03-17">
+      <description>
+        <p>Navigation between linked documents, Stenmark offered as an "Open with" handler, and fixes to the sidebar outside the root folder.</p>
+      </description>
+    </release>
+    <release version="0.4.0" date="2026-03-15">
+      <description>
+        <p>Renamed from Marklite to Stenmark, with a new icon and AppStream metadata.</p>
+      </description>
+    </release>
     <release version="0.3.3" date="2026-03-14">
       <description>
         <p>Switched to Phosphor Icons, fixed opening directories via CLI argument.</p>

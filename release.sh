@@ -72,6 +72,29 @@ else
         | sed -n 's/^[[:space:]]*[-*•][[:space:]]*/    • /p'
 fi
 
+# 0b. AppStream is where GNOME Software, KDE Discover and `flatpak info` read
+# the version from — not from meson.build. An unmaintained <releases> block
+# therefore makes every one of them name the wrong release, silently, which is
+# how this metadata sat at 0.3.3 while the app shipped 0.6.0. Checked here so
+# the entry is written before the tag rather than remembered after it.
+METAINFO="data/de.singular.$(echo "$PROJECT_NAME" | tr -d ' ').metainfo.xml.in"
+if [[ ! -f "$METAINFO" ]]; then
+    echo "ERROR: $METAINFO not found — adjust the path in release.sh."
+    exit 1
+fi
+METAINFO_VERSION=$(grep -oP '<release version="\K[^"]+' "$METAINFO" | head -1)
+if [[ "$METAINFO_VERSION" != "$VERSION" ]]; then
+    echo "ERROR: $METAINFO declares $METAINFO_VERSION as its newest release,"
+    echo "       but this is $VERSION. Add a <release> entry for $VERSION,"
+    echo "       or software centres will keep reporting $METAINFO_VERSION."
+    exit 1
+fi
+if ! git diff --quiet -- "$METAINFO" || ! git diff --cached --quiet -- "$METAINFO"; then
+    echo "ERROR: $METAINFO has uncommitted changes."
+    echo "       release.sh won't include them in $TAG. Commit them first."
+    exit 1
+fi
+
 # 1. Update version in meson.build, PKGBUILD, and Python package
 sed -i "0,/version: '[^']*'/{s/version: '[^']*'/version: '$VERSION'/}" meson.build
 sed -i "s/^pkgver=.*/pkgver=$VERSION/" PKGBUILD

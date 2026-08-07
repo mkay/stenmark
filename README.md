@@ -80,11 +80,11 @@ Settings are stored in `~/.config/stenmark/settings.json` and can be changed fro
 
 ## License
 
-GPL-3.0-or-later. See [LICENSE](LICENSE).
+GPL-3.0-only. See [LICENSE](LICENSE).
 
 Copyright (C) 2026 Kreuder <mk@singular.de>
 
-Stenmark is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+Stenmark is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License, version 3, as published by the Free Software Foundation. Version 3 only, not "or any later version" — every source file carries `SPDX-License-Identifier: GPL-3.0-only` saying so. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 ## Credits
 

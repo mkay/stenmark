@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Kreuder <mk@singular.de>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import os
 import re
 
@@ -1145,7 +1148,7 @@ class MainWindow(Adw.ApplicationWindow):
             version=VERSION,
             developer_name="Kreuder <mk@singular.de>",
             website="https://github.com/mkay/stenmark",
-            license_type=Gtk.License.MIT_X11,
+            license_type=Gtk.License.GPL_3_0,
         )
         # Left untranslated in a catalogue, this stays the msgid — which means
         # nobody has claimed the translation, so there is no one to credit.

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Kreuder <mk@singular.de>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gio, GLib

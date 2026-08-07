@@ -145,7 +145,7 @@ fi
 # 6. Build .deb package via meson install + nfpm
 echo "==> Building .deb package"
 PKGDESC=$(grep -oP "^pkgdesc=\"\K[^\"]+" PKGBUILD || echo "$PROJECT_NAME")
-PKGLICENSE=$(grep -oP "^license=\('\K[^']+" PKGBUILD || echo "MIT")
+PKGLICENSE=$(grep -oP "^license=\('\K[^']+" PKGBUILD || echo "GPL-3.0-or-later")
 
 # Install into a staging directory to capture all files
 rm -rf "$DEB_STAGING"

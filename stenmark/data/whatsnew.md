@@ -25,3 +25,4 @@ form: a full URL wraps mid-scheme in a dialog this narrow.
 - A new Support Stenmark item in the main menu, with three ways to help. Two of them are free.
 - The preview pane now starts off and remembers whichever way you last left it.
 - The sidebar tag list refreshes as soon as you add or remove a tag, instead of waiting for a reload.
+- Stenmark is now GPL-3.0-or-later. It was MIT before; the source is still yours to read, change and pass on.

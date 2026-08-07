@@ -1,4 +1,5 @@
-# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 Kreuder <mk@singular.de>
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 """The three ways to say Stenmark is worth keeping around.
 

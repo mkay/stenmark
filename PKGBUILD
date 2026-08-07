@@ -5,7 +5,7 @@ pkgrel=1
 pkgdesc='Lightweight GTK4 Markdown reader, organizer and editor'
 arch=('any')
 url='https://github.com/mkay/stenmark'
-license=('MIT')
+license=('GPL-3.0-or-later')
 depends=(
   'python'
   'python-gobject'

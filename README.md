@@ -80,11 +80,18 @@ Settings are stored in `~/.config/stenmark/settings.json` and can be changed fro
 
 ## License
 
-MIT
+GPL-3.0-or-later. See [LICENSE](LICENSE).
+
+Copyright (C) 2026 Kreuder <mk@singular.de>
+
+Stenmark is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 ## Credits
 
-Stenmark uses [Phosphor Icons](https://phosphoricons.com/) (MIT)
+Stenmark bundles or builds on the following, all under GPL-compatible terms:
+
+- [Phosphor Icons](https://phosphoricons.com/) (MIT)
+- [CodeMirror 6](https://codemirror.net/) (MIT) — the bundled editor
 
 Translations are contributed by native speakers — see [TRANSLATING.md](TRANSLATING.md) if you would like to add yours.
 

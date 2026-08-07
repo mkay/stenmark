@@ -6,6 +6,7 @@ build-backend = "setuptools.backends._legacy:_Backend"
 name = "stenmark"
 version = "0.1.0"
 description = "A lightweight GTK4 Markdown organizer and editor"
+license = "GPL-3.0-or-later"
 requires-python = ">=3.10"
 dependencies = [
     "markdown",

@@ -118,9 +118,9 @@ Translations are contributed by native speakers — see [TRANSLATING.md](TRANSLA
 
 ## Screenshots
 
-![View screen](assets/stenmark_view.png)
+![View screen](data/screenshots/reader.png)
 
-![Editor screen](assets/stenmark_edit.png)
+![Editor screen](data/screenshots/editor.png)
 
 ## Disclaimer
 

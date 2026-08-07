@@ -1,0 +1,73 @@
+id: de.singular.stenmark
+runtime: org.gnome.Platform
+runtime-version: '49'
+sdk: org.gnome.Sdk
+command: stenmark
+
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  # WebKitGTK renders both the preview and the CodeMirror editor; it wants GPU
+  # access.
+  - --device=dri
+  # Stenmark browses a folder tree, not one picked file: sidebar.py,
+  # document_panel.py and tag_index.py enumerate directories with os.walk and
+  # os.scandir. A document-portal grant covers the file a user picked, so
+  # anything narrower than this breaks "point Stenmark at any folder".
+  - --filesystem=home
+  # Notes on a USB stick, an external drive or a NAS mount live outside $HOME,
+  # and a librarian that cannot reach them is a narrower tool than intended.
+  # These three cover removable and system mounts without granting
+  # --filesystem=host, which would also expose /etc, /usr and other users.
+  - --filesystem=/media
+  - --filesystem=/run/media
+  - --filesystem=/mnt
+  # "Open in…" enumerates .desktop files via Gio.AppInfo. This exposes
+  # user-installed and Flatpak apps; host /usr/share/applications stays
+  # invisible.
+  - --filesystem=xdg-data/applications:ro
+  # Deliberately no --share=network. Stenmark reads local files and renders
+  # them locally; external links are handed to the portal, which opens them in
+  # the host's browser outside this sandbox.
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/doc
+  - /share/man
+  - '*.a'
+  - '*.la'
+
+modules:
+  # markdown / pygments / pyyaml.
+  # Regenerate with build-aux/flatpak/regen-python-deps.sh
+  - python-deps.json
+
+  - name: stenmark
+    buildsystem: meson
+    sources:
+      - type: dir
+        path: ../..
+        # Build artefacts, packaging leftovers and local scratch must not enter
+        # the sandbox build dir. node_modules matters most: it is tracked in
+        # git, runs to thousands of files, and nothing in it is installed —
+        # meson ships stenmark/data/editor/dist/editor.bundle.js, which is
+        # committed and needs no build step. That is why this manifest fetches
+        # no editor sources, unlike Edith's.
+        # These are literal paths, not globs; flatpak-builder does not expand
+        # wildcards here, so new release artefacts need adding by name.
+        skip:
+          - .git
+          - .claude
+          - .SRCINFO
+          - build
+          - builddir
+          - pkg
+          - src
+          - assets
+          - deb-staging
+          - PKGBUILD.local
+          - stenmark/__pycache__
+          - stenmark/data/editor/node_modules
+          - stenmark-0.5.1-1-any.pkg.tar.zst

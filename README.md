@@ -45,6 +45,23 @@ Your markdown librarian. A GTK4 Markdown reader, organizer and editor.
 
 ## Install
 
+### Flatpak
+
+Stenmark is not on Flathub — their policy doesn't allow AI-assisted apps, and
+Stenmark is — so it has [its own Flatpak repository](https://mkay.github.io/stenmark-flatpak/):
+
+```sh
+flatpak remote-add --user stenmark https://mkay.github.io/stenmark-flatpak/stenmark.flatpakrepo
+flatpak install stenmark de.singular.stenmark
+```
+
+Updates then arrive with `flatpak update`. The GNOME runtime comes from Flathub,
+so that remote has to exist too:
+
+```sh
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+```
+
 ### Arch Linux
 
 ```bash

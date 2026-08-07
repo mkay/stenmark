@@ -20,10 +20,12 @@ stenmark_sources = [
   'settings_dialog.py',
   'settings_manager.py',
   'sidebar.py',
+  'support_dialog.py',
   'tag_index.py',
   'tag_panel.py',
   'viewer.py',
   'welcome.py',
+  'whats_new_dialog.py',
   'window.py',
 ]
 

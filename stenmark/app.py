@@ -53,6 +53,10 @@ class Application(Adw.Application):
         self.add_action(quit_action)
         self.set_accels_for_action("app.quit", ["<Control>q"])
 
+        support = Gio.SimpleAction.new("support", None)
+        support.connect("activate", self._on_support)
+        self.add_action(support)
+
         window_size = Gio.SimpleAction.new("window-size", None)
         window_size.connect("activate", self._on_window_size)
         self.add_action(window_size)
@@ -162,6 +166,7 @@ class Application(Adw.Application):
 
     def do_activate(self):
         win = self.get_active_window()
+        first_window = win is None
         if not win:
             from stenmark.window import MainWindow
             open_file = self._open_file
@@ -172,6 +177,20 @@ class Application(Adw.Application):
             win.open_file(self._open_file)
             self._open_file = None
         win.present()
+
+        if first_window:
+            # After present(), and on an idle callback: Adw.Dialog needs a
+            # realized parent to attach to.
+            from stenmark.whats_new_dialog import present_if_updated
+            GLib.idle_add(present_if_updated, win, self.settings,
+                          self.settings.first_run)
+
+    def _on_support(self, _action, _param):
+        win = self.props.active_window
+        if not win:
+            return
+        from stenmark import support_dialog
+        support_dialog.present(win)
 
     def _on_new_window(self, _action, _param):
         from stenmark.window import MainWindow

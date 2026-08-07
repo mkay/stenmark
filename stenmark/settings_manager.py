@@ -28,6 +28,8 @@ DEFAULTS = {
     "show_sidebar_tags": False,
     "preview_enabled": False,
     "last_root_folder": "",
+    # Version whose release notes have been shown. See whats_new_dialog.
+    "whats_new_seen": "",
     "window_width": 1000,
     "window_height": 700,
 }
@@ -45,6 +47,10 @@ class SettingsManager(GObject.Object):
         super().__init__()
         self._data = dict(DEFAULTS)
         self._overrides = {}
+        #: Whether this is the very first launch, sampled before anything can
+        #: write the file. The what's-new dialog needs to tell a fresh install
+        #: apart from an upgrade, and by the time it runs the file exists.
+        self.first_run = not CONFIG_FILE.exists()
         self._load()
 
     def _load(self):

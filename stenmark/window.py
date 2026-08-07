@@ -130,6 +130,7 @@ class MainWindow(Adw.ApplicationWindow):
         menu.append_section(None, file_section)
         prefs_section = Gio.Menu()
         prefs_section.append(_("Preferences"), "win.preferences")
+        prefs_section.append(_("Support Stenmark"), "app.support")
         menu.append_section(None, prefs_section)
         about_section = Gio.Menu()
         about_section.append(_("About"), "win.about")
@@ -1151,6 +1152,27 @@ class MainWindow(Adw.ApplicationWindow):
         credits = _("translator-credits")
         if credits != "translator-credits":
             about.set_translator_credits(credits)
+
+        # The durable home for the invitation: the language row in Preferences
+        # carries it too, but only someone who goes looking for it sees it.
+        from stenmark.i18n import TRANSLATE_URL
+        about.add_link(_("Help Translate Stenmark"), TRANSLATE_URL)
+
+        # The same asks the Support dialog makes, as plain links: About is
+        # where someone lands when they go looking for the project, and the
+        # dialog is only reachable from the menu.
+        from stenmark.support_dialog import KOFI_URL, LIKE_URL
+        about.add_link(_("Give Stenmark a Like"), LIKE_URL)
+        about.add_link(_("Support Stenmark on Ko-fi"), KOFI_URL)
+
+        # Gives About its own "What's New" section, so the notes stay reachable
+        # after the one-off dialog has been dismissed.
+        from stenmark.whats_new_dialog import release_notes_markup
+        notes = release_notes_markup()
+        if notes:
+            about.set_release_notes(notes)
+            about.set_release_notes_version(VERSION)
+
         about.present(self)
 
     # ---- Open root folder (sidebar, file outside root) --------------------

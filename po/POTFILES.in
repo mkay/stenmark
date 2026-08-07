@@ -11,7 +11,9 @@ stenmark/markdown_renderer.py
 stenmark/search_panel.py
 stenmark/settings_dialog.py
 stenmark/sidebar.py
+stenmark/support_dialog.py
 stenmark/tag_panel.py
 stenmark/viewer.py
 stenmark/welcome.py
+stenmark/whats_new_dialog.py
 stenmark/window.py

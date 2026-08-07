@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/de/singular/stenmark">
+    <file alias="whatsnew.md">whatsnew.md</file>
+  </gresource>
   <gresource prefix="/de/singular/stenmark/icons/hicolor/scalable/actions">
 <file alias="stenmark-open-menu-symbolic.svg">icons/hicolor/scalable/actions/stenmark-open-menu-symbolic.svg</file>
     <file alias="stenmark-edit-symbolic.svg">icons/hicolor/scalable/actions/stenmark-edit-symbolic.svg</file>

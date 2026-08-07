@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-07 20:11+0300\n"
+"POT-Creation-Date: 2026-08-07 20:34+0300\n"
 "PO-Revision-Date: 2026-08-07 20:05+0300\n"
 "Last-Translator: Kreuder <mk@singular.de>\n"
 "Language-Team: German\n"
@@ -113,28 +113,28 @@ msgstr ""
 msgid "Show the application version"
 msgstr "Programmversion anzeigen"
 
-#: stenmark/app.py:186 stenmark/window.py:126
+#: stenmark/app.py:205 stenmark/window.py:126
 msgid "Window Size"
 msgstr "Fenstergröße"
 
-#: stenmark/app.py:191 stenmark/document_panel.py:732
+#: stenmark/app.py:210 stenmark/document_panel.py:732
 #: stenmark/document_panel.py:840 stenmark/document_panel.py:865
 #: stenmark/document_panel.py:1042 stenmark/document_panel.py:1079
 #: stenmark/document_panel.py:1123 stenmark/sidebar.py:456
 #: stenmark/sidebar.py:483 stenmark/sidebar.py:542 stenmark/sidebar.py:612
-#: stenmark/window.py:637
+#: stenmark/window.py:638
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: stenmark/app.py:195 stenmark/window.py:639
+#: stenmark/app.py:214 stenmark/window.py:640
 msgid "Save"
 msgstr "Speichern"
 
-#: stenmark/app.py:203
+#: stenmark/app.py:222
 msgid "Width"
 msgstr "Breite"
 
-#: stenmark/app.py:209
+#: stenmark/app.py:228
 msgid "Height"
 msgstr "Höhe"
 
@@ -332,8 +332,8 @@ msgid "“{name}” will be moved to the trash."
 msgstr "„{name}“ wird in den Papierkorb verschoben."
 
 #: stenmark/document_panel.py:1073 stenmark/sidebar.py:182
-#: stenmark/sidebar.py:539 stenmark/tag_panel.py:286 stenmark/window.py:450
-#: stenmark/window.py:528
+#: stenmark/sidebar.py:539 stenmark/tag_panel.py:286 stenmark/window.py:451
+#: stenmark/window.py:529
 msgid "No Folder"
 msgstr "Ohne Ordner"
 
@@ -426,8 +426,8 @@ msgstr "Durchsuche alle deine Markdown-Dateien nach Text."
 msgid "or filter by tags"
 msgstr "oder nach Schlagwörtern filtern"
 
-#: stenmark/search_panel.py:105 stenmark/sidebar.py:171 stenmark/window.py:448
-#: stenmark/window.py:526
+#: stenmark/search_panel.py:105 stenmark/sidebar.py:171 stenmark/window.py:449
+#: stenmark/window.py:527
 msgid "All Documents"
 msgstr "Alle Dokumente"
 
@@ -628,7 +628,7 @@ msgstr "Später"
 msgid "Restart Now"
 msgstr "Jetzt neu starten"
 
-#: stenmark/settings_dialog.py:290 stenmark/window.py:634
+#: stenmark/settings_dialog.py:290 stenmark/window.py:635
 msgid "Unsaved Changes"
 msgstr "Ungespeicherte Änderungen"
 
@@ -653,7 +653,7 @@ msgstr "Alle Dokumente durchsuchen"
 msgid "Open root folder"
 msgstr "Stammordner öffnen"
 
-#: stenmark/sidebar.py:209 stenmark/sidebar.py:678 stenmark/window.py:1091
+#: stenmark/sidebar.py:209 stenmark/sidebar.py:678 stenmark/window.py:1092
 msgid "Tags"
 msgstr "Schlagwörter"
 
@@ -664,6 +664,74 @@ msgstr "Ordner"
 #: stenmark/sidebar.py:610
 msgid "Enter a name for the new folder:"
 msgstr "Gib einen Namen für den neuen Ordner ein:"
+
+#. Translators: title of the "Support Stenmark" dialog.
+#: stenmark/support_dialog.py:42
+msgid "Keep this app alive"
+msgstr "Die App am Leben erhalten"
+
+#: stenmark/support_dialog.py:48 stenmark/viewer.py:100
+#: stenmark/whats_new_dialog.py:125
+msgid "Close"
+msgstr "Schließen"
+
+# The last clause deliberately parts company with the English: the German
+# voice for this joke is the tattoo, not a cult following.
+#: stenmark/support_dialog.py:55
+msgid ""
+"This app doesn't track. Anything.\n"
+"The downside is I have no idea if or how often it's used or downloaded. Could be zero, could be a secret cult following. I genuinely don't know."
+msgstr ""
+"Diese App trackt nicht. Gar nicht.\n"
+"Der Nachteil: Ich habe keine Ahnung, ob und wie oft sie benutzt oder heruntergeladen wird.\n"
+"Könnte null sein, es könnten bereits Tattoos davon existieren. Ich weiß es nicht."
+
+#: stenmark/support_dialog.py:59
+msgid "Am I wasting my time publishing it? You tell me."
+msgstr "Lohnt sich der Aufwand, sie zu veröffentlichen? Sag es mir."
+
+#: stenmark/support_dialog.py:60
+msgid "There are three (maybe more) ways to keep me motivated:"
+msgstr "Es gibt (mindestens) drei Wege, mich zu motivieren:"
+
+#: stenmark/support_dialog.py:67
+msgid "The easy way"
+msgstr "Der einfache Weg"
+
+# Deliberately not "Gib der App ein Like": that is the English sentence in
+# German words. The Like button itself is named in the note below, which is
+# where explaining belongs.
+#: stenmark/support_dialog.py:68
+msgid "Give it a like"
+msgstr "App bewerten"
+
+#: stenmark/support_dialog.py:70
+msgid "Opens a page on my website with a like button. Nothing is counted until you press it — just the press and an anonymised IP."
+msgstr "Öffnet eine Seite auf meiner Website mit einem Like-Button. Gezählt wird erst, wenn du ihn drückst — nur der Klick und eine anonymisierte IP."
+
+#: stenmark/support_dialog.py:78
+msgid "The nerdy way"
+msgstr "Der nerdige Weg"
+
+#: stenmark/support_dialog.py:79
+msgid "Star it on GitHub"
+msgstr "GitHub Stern"
+
+#: stenmark/support_dialog.py:81
+msgid "A star is a number I can actually see, and it helps others find it."
+msgstr "Ein Stern ist eine Zahl, die ich sehen kann, und er hilft anderen, die App zu finden."
+
+#: stenmark/support_dialog.py:86
+msgid "The generous way"
+msgstr "Der großzügige Weg"
+
+#: stenmark/support_dialog.py:87
+msgid "Support it on Ko-fi"
+msgstr "Unterstütze sie auf Ko-fi"
+
+#: stenmark/support_dialog.py:89
+msgid "Entirely optional. Stenmark is and stays free either way."
+msgstr "Völlig freiwillig. Stenmark ist und bleibt kostenlos."
 
 #: stenmark/tag_panel.py:39
 msgid "Filter tags…"
@@ -697,15 +765,11 @@ msgstr "Vorheriger Treffer"
 msgid "Next match"
 msgstr "Nächster Treffer"
 
-#: stenmark/viewer.py:100
-msgid "Close"
-msgstr "Schließen"
-
 #: stenmark/viewer.py:233
 msgid "No matches"
 msgstr "Keine Treffer"
 
-#: stenmark/viewer.py:350 stenmark/window.py:91 stenmark/window.py:1202
+#: stenmark/viewer.py:350 stenmark/window.py:91 stenmark/window.py:1224
 msgid "Back"
 msgstr "Zurück"
 
@@ -743,7 +807,7 @@ msgid ""
 "No root directory is set, or the configured directory is missing.\n"
 "Choose a folder to get started."
 msgstr ""
-"Dein Markdown-Bibliothekar\n"
+"Deine Markdown-Bibliothek\n"
 "Version {version}\n"
 "\n"
 "Es ist kein Stammverzeichnis festgelegt, oder das eingestellte Verzeichnis "
@@ -759,11 +823,18 @@ msgid ""
 "Stenmark is alpha software\n"
 "Features may appear, disappear, or spontaneously improve."
 msgstr ""
-"Dein Markdown-Bibliothekar\n"
+"Dein Markdown-Organizer\n"
 "Version {version}\n"
 "\n"
 "Stenmark ist Alpha-Software\n"
-"Funktionen kommen und gehen, wie sie wollen. Verbessern sich sogar gelegentlich."
+"Funktionen kommen und gehen, wie sie wollen. Verbessern sich sogar "
+"gelegentlich."
+
+#. Translators: dialog title for the release notes shown after an
+#. update. The notes themselves are always English.
+#: stenmark/whats_new_dialog.py:122
+msgid "What's New"
+msgstr "Neu in dieser Version"
 
 #: stenmark/window.py:100
 msgid "Toggle edit mode"
@@ -781,75 +852,91 @@ msgstr "Neues Fenster"
 msgid "Export to PDF"
 msgstr "Als PDF exportieren"
 
-#: stenmark/window.py:135
+#: stenmark/window.py:133
+msgid "Support Stenmark"
+msgstr "Stenmark unterstützen"
+
+#: stenmark/window.py:136
 msgid "About"
 msgstr "Info"
 
-#: stenmark/window.py:140
+#: stenmark/window.py:141
 msgid "Menu"
 msgstr "Menü"
 
-#: stenmark/window.py:148
+#: stenmark/window.py:149
 msgid "Toggle sidebar"
 msgstr "Seitenleiste umschalten"
 
-#: stenmark/window.py:156
+#: stenmark/window.py:157
 msgid "Open in…"
 msgstr "Öffnen in…"
 
-#: stenmark/window.py:165
+#: stenmark/window.py:166
 msgid "Copy as rich text"
 msgstr "Als formatierten Text kopieren"
 
-#: stenmark/window.py:174
+#: stenmark/window.py:175
 msgid "Edit tags"
 msgstr "Schlagwörter bearbeiten"
 
-#: stenmark/window.py:183
+#: stenmark/window.py:184
 msgid "Table of contents"
 msgstr "Inhaltsverzeichnis"
 
-#: stenmark/window.py:446 stenmark/window.py:524
+#: stenmark/window.py:447 stenmark/window.py:525
 #, python-brace-format
 msgid "Tagged: {tag}"
 msgstr "Schlagwort: {tag}"
 
-#: stenmark/window.py:635
+#: stenmark/window.py:636
 msgid "You have unsaved changes. What would you like to do?"
 msgstr "Du hast ungespeicherte Änderungen. Was möchtest du tun?"
 
-#: stenmark/window.py:638
+#: stenmark/window.py:639
 msgid "Discard"
 msgstr "Verwerfen"
 
-#: stenmark/window.py:860
+#: stenmark/window.py:861
 msgid "Copied as rich text"
 msgstr "Als formatierter Text kopiert"
 
-#: stenmark/window.py:866
+#: stenmark/window.py:867
 #, python-brace-format
 msgid "{n} word"
 msgid_plural "{n} words"
 msgstr[0] "{n} Wort"
 msgstr[1] "{n} Wörter"
 
-#: stenmark/window.py:869
+#: stenmark/window.py:870
 #, python-brace-format
 msgid "{n} min read"
 msgstr "{n} Min. Lesezeit"
 
-#: stenmark/window.py:1023
+#: stenmark/window.py:1024
 msgid "Add tag…"
 msgstr "Schlagwort hinzufügen…"
 
-#: stenmark/window.py:1123
+#: stenmark/window.py:1124
 msgid "Search"
 msgstr "Suche"
 
-#: stenmark/window.py:1151
+#: stenmark/window.py:1152
 msgid "translator-credits"
 msgstr ""
 
-#: stenmark/window.py:1231
+#: stenmark/window.py:1159
+msgid "Help Translate Stenmark"
+msgstr "Hilf mit, Stenmark zu übersetzen"
+
+#: stenmark/window.py:1165
+msgid "Give Stenmark a Like"
+msgstr "Gib Stenmark ein Like"
+
+#: stenmark/window.py:1166
+msgid "Support Stenmark on Ko-fi"
+msgstr "Stenmark auf Ko-fi unterstützen"
+
+#: stenmark/window.py:1253
 msgid "No subfolders"
 msgstr "Keine Unterordner"

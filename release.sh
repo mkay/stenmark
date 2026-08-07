@@ -28,20 +28,63 @@ fi
 AUR_DIR=""
 DEB_STAGING="$(pwd)/deb-staging"
 cleanup() {
+    # Preserve the script's real exit status — the tests below must not set it
+    local status=$?
     [[ -n "$AUR_DIR" && -d "$AUR_DIR" ]] && rm -rf "$AUR_DIR"
     [[ -d "$DEB_STAGING" ]] && rm -rf "$DEB_STAGING"
+    return $status
 }
 trap cleanup EXIT
 
 echo "==> Releasing $PROJECT_NAME $TAG"
 
+# 0. The release notes must actually describe this release. The what's-new
+# dialog shows whatsnew.md verbatim under the new version number, so shipping
+# the previous release's bullets tells every updating user something false.
+# Checked before anything is bumped, tagged or pushed, so a failure here costs
+# nothing but a re-run.
+WHATSNEW="$PROJECT_NAME/data/whatsnew.md"
+PREV_TAG=$(git tag --sort=-version:refname | head -1)
+
+if [[ ! -f "$WHATSNEW" ]]; then
+    echo "ERROR: $WHATSNEW is missing — the release notes dialog reads it."
+    exit 1
+elif [[ -n "${SKIP_WHATSNEW_CHECK:-}" ]]; then
+    echo "==> SKIP_WHATSNEW_CHECK set, not checking $WHATSNEW"
+elif [[ -z "$PREV_TAG" ]]; then
+    echo "==> First release, not checking $WHATSNEW"
+else
+    # release.sh only commits meson.build, PKGBUILD and __init__.py, so an
+    # uncommitted edit here would be left out of the tag it was written for.
+    if ! git diff --quiet -- "$WHATSNEW" || ! git diff --cached --quiet -- "$WHATSNEW"; then
+        echo "ERROR: $WHATSNEW has uncommitted changes."
+        echo "       release.sh won't include them in $TAG. Commit them first."
+        exit 1
+    fi
+    if [[ -z "$(git log --oneline "$PREV_TAG..HEAD" -- "$WHATSNEW")" ]]; then
+        echo "ERROR: $WHATSNEW has not changed since $PREV_TAG."
+        echo "       The what's-new dialog would show $PREV_TAG's notes under $TAG."
+        echo "       Rewrite it, or re-run with SKIP_WHATSNEW_CHECK=1."
+        exit 1
+    fi
+    echo "==> Release notes for $TAG:"
+    awk '/<!--/{c=1} /-->/{c=0;next} !c' "$WHATSNEW" \
+        | sed -n 's/^[[:space:]]*[-*•][[:space:]]*/    • /p'
+fi
+
 # 1. Update version in meson.build, PKGBUILD, and Python package
 sed -i "0,/version: '[^']*'/{s/version: '[^']*'/version: '$VERSION'/}" meson.build
 sed -i "s/^pkgver=.*/pkgver=$VERSION/" PKGBUILD
 sed -i "s/^VERSION = \".*\"/VERSION = \"$VERSION\"/" "$PROJECT_NAME/__init__.py"
+# PKGBUILD.local isn't released and isn't tracked, so it is bumped but never
+# committed: a stale pkgver makes local test installs report the wrong
+# version to pacman. It's absent in a fresh clone, hence the test — a
+# missing local-testing file must not abort a release.
+if [[ -f PKGBUILD.local ]]; then
+    sed -i "s/^pkgver=.*/pkgver=$VERSION/" PKGBUILD.local
+fi
 
-# 2. Generate release notes before tagging
-PREV_TAG=$(git tag --sort=-version:refname | head -1)
+# 2. Generate the changelog for the forge releases (PREV_TAG set in step 0)
 if [[ -n "$PREV_TAG" ]]; then
     RELEASE_NOTES=$(git log --pretty=format:"- %s" "$PREV_TAG..HEAD" | grep -v -E "^- (Release |first commit)")
 else
@@ -67,14 +110,25 @@ done
 
 # 5. Build Arch package
 echo "==> Updating checksums"
-# GitHub may need a moment to generate the tarball after the tag push
-for _attempt in 1 2 3; do
-    if updpkgsums 2>/dev/null; then
+# GitHub needs a moment to generate the tarball after the tag push — and the
+# download itself takes a few seconds, so give it a generous window. Aborting
+# here is far better than building against a stale checksum.
+CHECKSUMS_OK=0
+for _attempt in $(seq 1 10); do
+    if updpkgsums; then
+        CHECKSUMS_OK=1
         break
     fi
-    echo "==> Tarball not ready yet, retrying in 5s..."
-    sleep 5
+    echo "==> Tarball not ready yet (attempt $_attempt/10), retrying in 15s..."
+    sleep 15
 done
+if [[ "$CHECKSUMS_OK" -ne 1 ]]; then
+    echo "ERROR: updpkgsums never succeeded — the release tarball for $TAG is not"
+    echo "       downloadable yet. The tag is already pushed, so re-run:"
+    echo "         git checkout PKGBUILD && git tag -d $TAG"
+    echo "         ./release.sh $VERSION \"$TITLE\""
+    exit 1
+fi
 echo "==> Building Arch package"
 makepkg -sf --noconfirm
 ARCH_PKG=$(ls -t ./*.pkg.tar.zst 2>/dev/null | grep -v debug | head -1)

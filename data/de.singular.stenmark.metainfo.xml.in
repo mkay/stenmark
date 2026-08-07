@@ -10,8 +10,8 @@
 
   <description>
     <p>
-      Stenmark is a lightweight GTK4 Markdown reader and editor built with
-      libadwaita. It features a split-pane editor with live preview, syntax
+      Stenmark is your markdown librarian: a GTK4 Markdown reader,
+      organizer and editor built with libadwaita. It features a split-pane editor with live preview, syntax
       highlighting, table of contents navigation, and a folder-based document
       browser.
     </p>

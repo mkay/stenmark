@@ -70,7 +70,7 @@ class WelcomeView(Adw.Bin):
         missing = self._root_is_missing()
         if missing:
             self._status.set_description(
-                _("Your Markdown Librarian\nVersion {version}\n\n"
+                _("Your markdown librarian\nVersion {version}\n\n"
                   "No root directory is set, or the configured directory is "
                   "missing.\nChoose a folder to get started.").format(version=VERSION)
             )  # nosec B608
@@ -78,7 +78,7 @@ class WelcomeView(Adw.Bin):
             self._create_label.set_visible(False)
         else:
             self._status.set_description(
-                _("Your Markdown Librarian\nVersion {version}\n\n"
+                _("Your markdown librarian\nVersion {version}\n\n"
                   "Stenmark is alpha software\n"
                   "Features may appear, disappear, or spontaneously "
                   "improve.").format(version=VERSION)

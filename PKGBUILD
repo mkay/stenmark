@@ -2,7 +2,7 @@
 pkgname=stenmark
 pkgver=0.5.1
 pkgrel=1
-pkgdesc='Lightweight GTK4 Markdown reader, organizer and editor'
+pkgdesc='Your markdown librarian. A GTK4 Markdown reader, organizer and editor'
 arch=('any')
 url='https://github.com/mkay/stenmark'
 license=('GPL-3.0-only')

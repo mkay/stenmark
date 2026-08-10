@@ -185,8 +185,14 @@ class MarkdownEditor(Gtk.Box):
                 self._js(f"window.insertText({json.dumps(char)})")
                 return True
             # dead key + letter → composed character (e.g. è, ñ)
+            #
+            # Only printable keys compose. Gdk.keyval_to_unicode() reports a
+            # codepoint for control keys too — Escape is 27, Backspace 8,
+            # Return 13 — so an unguarded check swallows them and inserts a
+            # control character into the document instead. A pending dead key
+            # followed by Escape used to leave edit mode unexitable.
             composed = Gdk.keyval_to_unicode(keyval)
-            if composed:
+            if composed and composed >= 32 and composed != 127:
                 letter = chr(composed)
                 import unicodedata
                 accent_map = {

@@ -246,6 +246,35 @@ class SettingsDialog(Adw.PreferencesDialog):
         theme_group.add(viewer_theme_row)
 
         general_page.add(theme_group)
+
+        # Neither this nor the window you are looking at changes size when
+        # these move — say so, rather than leave "Window Size" to imply it.
+        window_group = Adw.PreferencesGroup(
+            title=_("Window"),
+            description=_("Size used for newly opened windows."),
+        )
+
+        width_row = Adw.SpinRow(
+            title=_("Width"),
+            adjustment=Gtk.Adjustment(
+                value=self._settings.window_width,
+                lower=800, upper=3840, step_increment=10,
+            ),
+        )
+        width_row.connect("notify::value", self._on_window_width_changed)
+        window_group.add(width_row)
+
+        height_row = Adw.SpinRow(
+            title=_("Height"),
+            adjustment=Gtk.Adjustment(
+                value=self._settings.window_height,
+                lower=600, upper=2160, step_increment=10,
+            ),
+        )
+        height_row.connect("notify::value", self._on_window_height_changed)
+        window_group.add(height_row)
+
+        general_page.add(window_group)
         self.add(general_page)
 
         # --- Fonts page ---
@@ -363,7 +392,6 @@ class SettingsDialog(Adw.PreferencesDialog):
 
         editor_page.add(editor_shortcuts_group)
         self.add(editor_page)
-        self._editor_page = editor_page
 
     def _on_choose_root_dir(self, _btn):
         dialog = Gtk.FileDialog(title=_("Choose Root Directory"))
@@ -442,6 +470,12 @@ class SettingsDialog(Adw.PreferencesDialog):
         except OSError:
             pass
         return GLib.SOURCE_REMOVE
+
+    def _on_window_width_changed(self, row, _pspec):
+        self._settings.set("window_width", int(row.get_value()))
+
+    def _on_window_height_changed(self, row, _pspec):
+        self._settings.set("window_height", int(row.get_value()))
 
     def _on_file_watching_changed(self, row, _pspec):
         self._settings.set("file_watching", row.get_active())

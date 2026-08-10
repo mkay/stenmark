@@ -60,10 +60,6 @@ class Application(Adw.Application):
         support.connect("activate", self._on_support)
         self.add_action(support)
 
-        window_size = Gio.SimpleAction.new("window-size", None)
-        window_size.connect("activate", self._on_window_size)
-        self.add_action(window_size)
-
     def _register_icons(self):
         pkg_dir = Path(__file__).parent
         gresource = pkg_dir / "data" / "de.singular.stenmark.gresource"
@@ -200,47 +196,3 @@ class Application(Adw.Application):
         win = MainWindow(application=self, settings=self.settings)
         win.present()
 
-    def _on_window_size(self, _action, _param):
-        win = self.props.active_window
-        if not win:
-            return
-
-        dialog = Adw.Dialog(title=_("Window Size"), content_width=320, content_height=220)
-
-        toolbar_view = Adw.ToolbarView()
-        header = Adw.HeaderBar(show_start_title_buttons=False, show_end_title_buttons=False)
-
-        cancel_btn = Gtk.Button(label=_("Cancel"))
-        cancel_btn.connect("clicked", lambda _: dialog.close())
-        header.pack_start(cancel_btn)
-
-        save_btn = Gtk.Button(label=_("Save"), css_classes=["suggested-action"])
-        header.pack_end(save_btn)
-        toolbar_view.add_top_bar(header)
-
-        clamp = Adw.Clamp(maximum_size=320, margin_top=16, margin_bottom=16, margin_start=16, margin_end=16)
-        group = Adw.PreferencesGroup()
-
-        width_row = Adw.SpinRow(
-            title=_("Width"),
-            adjustment=Gtk.Adjustment(value=self.settings.window_width, lower=800, upper=3840, step_increment=10),
-        )
-        group.add(width_row)
-
-        height_row = Adw.SpinRow(
-            title=_("Height"),
-            adjustment=Gtk.Adjustment(value=self.settings.window_height, lower=600, upper=2160, step_increment=10),
-        )
-        group.add(height_row)
-
-        clamp.set_child(group)
-        toolbar_view.set_content(clamp)
-        dialog.set_child(toolbar_view)
-
-        def on_save(_):
-            self.settings.set("window_width", int(width_row.get_value()))
-            self.settings.set("window_height", int(height_row.get_value()))
-            dialog.close()
-
-        save_btn.connect("clicked", on_save)
-        dialog.present(win)

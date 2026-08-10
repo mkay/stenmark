@@ -131,7 +131,6 @@ class MainWindow(Adw.ApplicationWindow):
         menu = Gio.Menu()
         window_section = Gio.Menu()
         window_section.append(_("New Window"), "app.new-window")
-        window_section.append(_("Window Size"), "app.window-size")
         menu.append_section(None, window_section)
         file_section = Gio.Menu()
         file_section.append(_("Export to PDF"), "win.export-pdf")

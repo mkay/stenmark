@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-10 13:21+0300\n"
+"POT-Creation-Date: 2026-08-10 13:44+0300\n"
 "PO-Revision-Date: 2026-08-07 20:05+0300\n"
 "Last-Translator: Kreuder <mk@singular.de>\n"
 "Language-Team: German\n"
@@ -162,31 +162,6 @@ msgstr ""
 msgid "Show the application version"
 msgstr "Programmversion anzeigen"
 
-#: stenmark/app.py:208 stenmark/window.py:134
-msgid "Window Size"
-msgstr "Fenstergröße"
-
-#: stenmark/app.py:213 stenmark/document_panel.py:735
-#: stenmark/document_panel.py:843 stenmark/document_panel.py:868
-#: stenmark/document_panel.py:1045 stenmark/document_panel.py:1082
-#: stenmark/document_panel.py:1126 stenmark/sidebar.py:459
-#: stenmark/sidebar.py:486 stenmark/sidebar.py:545 stenmark/sidebar.py:615
-#: stenmark/window.py:703
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: stenmark/app.py:217 stenmark/window.py:705
-msgid "Save"
-msgstr "Speichern"
-
-#: stenmark/app.py:225
-msgid "Width"
-msgstr "Breite"
-
-#: stenmark/app.py:231
-msgid "Height"
-msgstr "Höhe"
-
 #: stenmark/document_panel.py:102
 #, python-brace-format
 msgid "{n} B"
@@ -301,6 +276,14 @@ msgstr "Aktualisieren"
 msgid "New Document"
 msgstr "Neues Dokument"
 
+#: stenmark/document_panel.py:735 stenmark/document_panel.py:843
+#: stenmark/document_panel.py:868 stenmark/document_panel.py:1045
+#: stenmark/document_panel.py:1082 stenmark/document_panel.py:1126
+#: stenmark/sidebar.py:459 stenmark/sidebar.py:486 stenmark/sidebar.py:545
+#: stenmark/sidebar.py:615 stenmark/window.py:702
+msgid "Cancel"
+msgstr "Abbrechen"
+
 #: stenmark/document_panel.py:736 stenmark/sidebar.py:546
 #: stenmark/sidebar.py:616
 msgid "Create"
@@ -342,7 +325,7 @@ msgstr ""
 "„{name}“ enthält noch Dateien oder Ordner.\n"
 "Leere ihn zuerst."
 
-#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:316
+#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:446
 #: stenmark/sidebar.py:449
 msgid "OK"
 msgstr "OK"
@@ -381,8 +364,8 @@ msgid "“{name}” will be moved to the trash."
 msgstr "„{name}“ wird in den Papierkorb verschoben."
 
 #: stenmark/document_panel.py:1076 stenmark/sidebar.py:185
-#: stenmark/sidebar.py:542 stenmark/tag_panel.py:289 stenmark/window.py:516
-#: stenmark/window.py:594
+#: stenmark/sidebar.py:542 stenmark/tag_panel.py:289 stenmark/window.py:515
+#: stenmark/window.py:593
 msgid "No Folder"
 msgstr "Ohne Ordner"
 
@@ -403,51 +386,51 @@ msgstr "Verschieben"
 msgid "A file with that name already exists in the destination folder"
 msgstr "Im Zielordner existiert bereits eine Datei dieses Namens"
 
-#: stenmark/editor.py:119
+#: stenmark/editor.py:137
 msgid "Heading 1"
 msgstr "Überschrift 1"
 
-#: stenmark/editor.py:120
+#: stenmark/editor.py:138
 msgid "Heading 2"
 msgstr "Überschrift 2"
 
-#: stenmark/editor.py:121
+#: stenmark/editor.py:139
 msgid "Heading 3"
 msgstr "Überschrift 3"
 
-#: stenmark/editor.py:125
+#: stenmark/editor.py:143
 msgid "Bold (Ctrl+B)"
 msgstr "Fett (Strg+B)"
 
-#: stenmark/editor.py:126
+#: stenmark/editor.py:144
 msgid "Italic (Ctrl+I)"
 msgstr "Kursiv (Strg+I)"
 
-#: stenmark/editor.py:127
+#: stenmark/editor.py:145
 msgid "Strikethrough"
 msgstr "Durchgestrichen"
 
-#: stenmark/editor.py:128
+#: stenmark/editor.py:146
 msgid "Inline code (Ctrl+`)"
 msgstr "Code im Text (Strg+`)"
 
-#: stenmark/editor.py:129
+#: stenmark/editor.py:147
 msgid "Code block (Ctrl+Shift+K)"
 msgstr "Codeblock (Strg+Umschalt+K)"
 
-#: stenmark/editor.py:133
+#: stenmark/editor.py:151
 msgid "Link (Ctrl+K)"
 msgstr "Link (Strg+K)"
 
-#: stenmark/editor.py:134
+#: stenmark/editor.py:152
 msgid "Blockquote"
 msgstr "Zitatblock"
 
-#: stenmark/editor.py:138
+#: stenmark/editor.py:156
 msgid "Bullet list (Ctrl+Shift+U)"
 msgstr "Aufzählung (Strg+Umschalt+U)"
 
-#: stenmark/editor.py:139
+#: stenmark/editor.py:157
 msgid "Numbered list (Ctrl+Shift+O)"
 msgstr "Nummerierte Liste (Strg+Umschalt+O)"
 
@@ -524,192 +507,208 @@ msgid_plural "{n} results"
 msgstr[0] "{n} Treffer"
 msgstr[1] "{n} Treffer"
 
-#: stenmark/settings_dialog.py:16 stenmark/window.py:140
+#: stenmark/settings_dialog.py:111 stenmark/window.py:139
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: stenmark/settings_dialog.py:23
+#: stenmark/settings_dialog.py:118
 msgid "General"
 msgstr "Allgemein"
 
-#: stenmark/settings_dialog.py:28
+#: stenmark/settings_dialog.py:123
 msgid "Files"
 msgstr "Dateien"
 
-#: stenmark/settings_dialog.py:30
+#: stenmark/settings_dialog.py:125
 msgid "Root Directory"
 msgstr "Stammverzeichnis"
 
-#: stenmark/settings_dialog.py:45
+#: stenmark/settings_dialog.py:140
 msgid "File Watching"
 msgstr "Dateiüberwachung"
 
-#: stenmark/settings_dialog.py:46
+#: stenmark/settings_dialog.py:141
 msgid "Auto-reload when files change on disk"
 msgstr "Automatisch neu laden, wenn Dateien auf der Festplatte geändert werden"
 
-#: stenmark/settings_dialog.py:53
+#: stenmark/settings_dialog.py:148
 msgid "Remember Last Folder"
 msgstr "Letzten Ordner merken"
 
-#: stenmark/settings_dialog.py:54
+#: stenmark/settings_dialog.py:149
 msgid "Restore the last navigated folder on startup"
 msgstr "Beim Start den zuletzt geöffneten Ordner wiederherstellen"
 
-#: stenmark/settings_dialog.py:64
+#: stenmark/settings_dialog.py:159
 msgid "Show Tags in Sidebar"
 msgstr "Schlagwörter in der Seitenleiste anzeigen"
 
-#: stenmark/settings_dialog.py:65
+#: stenmark/settings_dialog.py:160
 msgid "Display tags section in the sidebar"
 msgstr "Den Schlagwortbereich in der Seitenleiste einblenden"
 
-#: stenmark/settings_dialog.py:77 stenmark/settings_dialog.py:199
+#: stenmark/settings_dialog.py:172 stenmark/settings_dialog.py:323
 msgid "Appearance"
 msgstr "Erscheinungsbild"
 
-#: stenmark/settings_dialog.py:83
+#: stenmark/settings_dialog.py:178
 msgid "System default"
 msgstr "Systemvorgabe"
 
-#: stenmark/settings_dialog.py:86
+#: stenmark/settings_dialog.py:181
 msgid "Language"
 msgstr "Sprache"
 
-#: stenmark/settings_dialog.py:87
+#: stenmark/settings_dialog.py:182
 msgid "Applied when Stenmark restarts"
 msgstr "Wird nach einem Neustart von Stenmark übernommen"
 
-#: stenmark/settings_dialog.py:102
+#: stenmark/settings_dialog.py:197
 msgid "Your language missing?"
 msgstr "Deine Sprache fehlt?"
 
-#: stenmark/settings_dialog.py:103
+#: stenmark/settings_dialog.py:198
 msgid ""
 "Stenmark can be translated into any language — it's a text file, not code."
 msgstr ""
 "Stenmark lässt sich in jede Sprache übersetzen – es ist eine Textdatei, kein "
 "Code."
 
-#: stenmark/settings_dialog.py:116
+#: stenmark/settings_dialog.py:211
 msgid "App Theme"
 msgstr "Erscheinungsbild der App"
 
-#: stenmark/settings_dialog.py:117
+#: stenmark/settings_dialog.py:212
 msgid "System"
 msgstr "System"
 
-#: stenmark/settings_dialog.py:117
+#: stenmark/settings_dialog.py:212
 msgid "Light"
 msgstr "Hell"
 
-#: stenmark/settings_dialog.py:117
+#: stenmark/settings_dialog.py:212
 msgid "Dark"
 msgstr "Dunkel"
 
-#: stenmark/settings_dialog.py:125
+#: stenmark/settings_dialog.py:220
 msgid "Viewer Theme"
 msgstr "Darstellung im Betrachter"
 
-#: stenmark/settings_dialog.py:126
+#: stenmark/settings_dialog.py:221
 msgid "Style used when reading documents"
 msgstr "Stil beim Lesen von Dokumenten"
 
-#: stenmark/settings_dialog.py:130 stenmark/settings_dialog.py:205
+#: stenmark/settings_dialog.py:225 stenmark/settings_dialog.py:329
 msgid "Auto"
 msgstr "Automatisch"
 
-#: stenmark/settings_dialog.py:158
+#: stenmark/settings_dialog.py:253
+msgid "Window"
+msgstr "Fenster"
+
+#: stenmark/settings_dialog.py:254
+msgid "Size used for newly opened windows."
+msgstr "Größe für neu geöffnete Fenster."
+
+#: stenmark/settings_dialog.py:258
+msgid "Width"
+msgstr "Breite"
+
+#: stenmark/settings_dialog.py:268
+msgid "Height"
+msgstr "Höhe"
+
+#: stenmark/settings_dialog.py:282
 msgid "Fonts"
 msgstr "Schriften"
 
-#: stenmark/settings_dialog.py:162
+#: stenmark/settings_dialog.py:286
 msgid "Viewer Font"
 msgstr "Schrift im Betrachter"
 
-#: stenmark/settings_dialog.py:164 stenmark/settings_dialog.py:179
+#: stenmark/settings_dialog.py:288 stenmark/settings_dialog.py:303
 msgid "Font Family"
 msgstr "Schriftfamilie"
 
-#: stenmark/settings_dialog.py:170 stenmark/settings_dialog.py:185
+#: stenmark/settings_dialog.py:294 stenmark/settings_dialog.py:309
 msgid "Font Size"
 msgstr "Schriftgröße"
 
-#: stenmark/settings_dialog.py:177
+#: stenmark/settings_dialog.py:301
 msgid "Editor Font"
 msgstr "Schrift im Editor"
 
-#: stenmark/settings_dialog.py:195
+#: stenmark/settings_dialog.py:319
 msgid "Editor"
 msgstr "Editor"
 
-#: stenmark/settings_dialog.py:210
+#: stenmark/settings_dialog.py:334
 msgid "Color Theme"
 msgstr "Farbschema"
 
-#: stenmark/settings_dialog.py:225
+#: stenmark/settings_dialog.py:354
 msgid "Line Numbers"
 msgstr "Zeilennummern"
 
-#: stenmark/settings_dialog.py:230
+#: stenmark/settings_dialog.py:359
 msgid "Line Wrap"
 msgstr "Zeilenumbruch"
 
-#: stenmark/settings_dialog.py:237
+#: stenmark/settings_dialog.py:366
 msgid "Behaviour"
 msgstr "Verhalten"
 
-#: stenmark/settings_dialog.py:240
+#: stenmark/settings_dialog.py:369
 msgid "Double-Click to Edit"
 msgstr "Doppelklick zum Bearbeiten"
 
-#: stenmark/settings_dialog.py:241
+#: stenmark/settings_dialog.py:370
 msgid "Double-clicking text in the reader opens the editor at that spot"
 msgstr ""
 "Ein Doppelklick auf Text im Betrachter öffnet den Editor an genau dieser "
 "Stelle"
 
-#: stenmark/settings_dialog.py:248
+#: stenmark/settings_dialog.py:377
 msgid "Hide Sidebar While Editing"
 msgstr "Seitenleiste beim Bearbeiten ausblenden"
 
-#: stenmark/settings_dialog.py:249
+#: stenmark/settings_dialog.py:378
 msgid "Gives the editor and preview pane the full window width"
 msgstr "Gibt Editor und Vorschau die volle Fensterbreite"
 
-#: stenmark/settings_dialog.py:257
+#: stenmark/settings_dialog.py:386
 msgid "Shortcuts"
 msgstr "Tastenkürzel"
 
-#: stenmark/settings_dialog.py:259
+#: stenmark/settings_dialog.py:388
 msgid "Toggle Edit Mode"
 msgstr "Bearbeitungsmodus umschalten"
 
-#: stenmark/settings_dialog.py:268
+#: stenmark/settings_dialog.py:398
 msgid "Choose Root Directory"
 msgstr "Stammverzeichnis wählen"
 
-#: stenmark/settings_dialog.py:295
+#: stenmark/settings_dialog.py:425
 msgid "Restart Stenmark?"
 msgstr "Stenmark neu starten?"
 
-#: stenmark/settings_dialog.py:296
+#: stenmark/settings_dialog.py:426
 msgid "The new language takes effect after Stenmark restarts."
 msgstr "Die neue Sprache wird nach einem Neustart von Stenmark wirksam."
 
-#: stenmark/settings_dialog.py:298
+#: stenmark/settings_dialog.py:428
 msgid "Later"
 msgstr "Später"
 
-#: stenmark/settings_dialog.py:299
+#: stenmark/settings_dialog.py:429
 msgid "Restart Now"
 msgstr "Jetzt neu starten"
 
-#: stenmark/settings_dialog.py:313 stenmark/window.py:700
+#: stenmark/settings_dialog.py:443 stenmark/window.py:699
 msgid "Unsaved Changes"
 msgstr "Ungespeicherte Änderungen"
 
-#: stenmark/settings_dialog.py:314
+#: stenmark/settings_dialog.py:444
 msgid "Save your open document before restarting."
 msgstr "Speichere dein geöffnetes Dokument vor dem Neustart."
 
@@ -730,11 +729,11 @@ msgstr "Alle Dokumente durchsuchen"
 msgid "Open root folder"
 msgstr "Stammordner öffnen"
 
-#: stenmark/sidebar.py:174 stenmark/window.py:514 stenmark/window.py:592
+#: stenmark/sidebar.py:174 stenmark/window.py:513 stenmark/window.py:591
 msgid "All Documents"
 msgstr "Alle Dokumente"
 
-#: stenmark/sidebar.py:212 stenmark/sidebar.py:681 stenmark/window.py:1161
+#: stenmark/sidebar.py:212 stenmark/sidebar.py:681 stenmark/window.py:1162
 msgid "Tags"
 msgstr "Schlagwörter"
 
@@ -859,7 +858,7 @@ msgstr "Nächster Treffer"
 msgid "No matches"
 msgstr "Keine Treffer"
 
-#: stenmark/viewer.py:382 stenmark/window.py:99 stenmark/window.py:1293
+#: stenmark/viewer.py:382 stenmark/window.py:99 stenmark/window.py:1296
 msgid "Back"
 msgstr "Zurück"
 
@@ -938,95 +937,102 @@ msgstr "Live-Vorschau umschalten"
 msgid "New Window"
 msgstr "Neues Fenster"
 
-#: stenmark/window.py:137
+#: stenmark/window.py:136
 msgid "Export to PDF"
 msgstr "Als PDF exportieren"
 
-#: stenmark/window.py:141
+#: stenmark/window.py:140
 msgid "Support Stenmark"
 msgstr "Stenmark unterstützen"
 
-#: stenmark/window.py:144
+#: stenmark/window.py:143
 msgid "About"
 msgstr "Info"
 
-#: stenmark/window.py:149
+#: stenmark/window.py:148
 msgid "Menu"
 msgstr "Menü"
 
-#: stenmark/window.py:157
+#: stenmark/window.py:156
 msgid "Toggle sidebar"
 msgstr "Seitenleiste umschalten"
 
-#: stenmark/window.py:165
+#: stenmark/window.py:164
 msgid "Open in…"
 msgstr "Öffnen in…"
 
-#: stenmark/window.py:174
+#: stenmark/window.py:173
 msgid "Copy as rich text"
 msgstr "Als formatierten Text kopieren"
 
-#: stenmark/window.py:183
+#: stenmark/window.py:182
 msgid "Edit tags"
 msgstr "Schlagwörter bearbeiten"
 
-#: stenmark/window.py:192
+#: stenmark/window.py:191
 msgid "Table of contents"
 msgstr "Inhaltsverzeichnis"
 
-#: stenmark/window.py:512 stenmark/window.py:590
+#: stenmark/window.py:511 stenmark/window.py:589
 #, python-brace-format
 msgid "Tagged: {tag}"
 msgstr "Schlagwort: {tag}"
 
-#: stenmark/window.py:701
+#: stenmark/window.py:700
 msgid "You have unsaved changes. What would you like to do?"
 msgstr "Du hast ungespeicherte Änderungen. Was möchtest du tun?"
 
-#: stenmark/window.py:704
+#: stenmark/window.py:703
 msgid "Discard"
 msgstr "Verwerfen"
 
-#: stenmark/window.py:930
+#: stenmark/window.py:704
+msgid "Save"
+msgstr "Speichern"
+
+#: stenmark/window.py:929
 msgid "Copied as rich text"
 msgstr "Als formatierter Text kopiert"
 
-#: stenmark/window.py:936
+#: stenmark/window.py:935
 #, python-brace-format
 msgid "{n} word"
 msgid_plural "{n} words"
 msgstr[0] "{n} Wort"
 msgstr[1] "{n} Wörter"
 
-#: stenmark/window.py:939
+#: stenmark/window.py:938
 #, python-brace-format
 msgid "{n} min read"
 msgstr "{n} Min. Lesezeit"
 
-#: stenmark/window.py:1093
+#: stenmark/window.py:1092
 msgid "Add tag…"
 msgstr "Schlagwort hinzufügen…"
 
-#: stenmark/window.py:1193
+#: stenmark/window.py:1194
 msgid "Search"
 msgstr "Suche"
 
-#: stenmark/window.py:1221
+#: stenmark/window.py:1224
 msgid "translator-credits"
 msgstr ""
 
-#: stenmark/window.py:1228
+#: stenmark/window.py:1231
 msgid "Help Translate Stenmark"
 msgstr "Hilf mit, Stenmark zu übersetzen"
 
-#: stenmark/window.py:1234
+#: stenmark/window.py:1237
 msgid "Give Stenmark a Like"
 msgstr "Gib Stenmark ein Like"
 
-#: stenmark/window.py:1235
+#: stenmark/window.py:1238
 msgid "Support Stenmark on Ko-fi"
 msgstr "Stenmark auf Ko-fi unterstützen"
 
-#: stenmark/window.py:1322
+#: stenmark/window.py:1325
 msgid "No subfolders"
 msgstr "Keine Unterordner"
+
+#~ msgid "Window Size"
+#~ msgstr "Fenstergröße"

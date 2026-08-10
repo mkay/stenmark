@@ -4,10 +4,106 @@
 import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Adw, GLib, Gtk, Gio
+from gi.repository import Adw, Gdk, GLib, Gtk, Gio
 
+from stenmark.editor import available_themes, theme_colors
 from stenmark.i18n import (_, LANGUAGE_KEY, SUPPORTED_LANGUAGES,
                            TRANSLATE_URL)
+
+
+class ThemePreview(Gtk.DrawingArea):
+    """A mock editor line drawn in a theme's own colours.
+
+    The editor itself is only a live preview when it happens to be on screen —
+    open Preferences from the document list and changing the theme shows
+    nothing at all. This does not care what is behind the dialog.
+    """
+
+    _HEIGHT = 88
+    _GUTTER = 20
+    _LINES = (0.52, 0.70, 0.38, 0.61)
+
+    def __init__(self):
+        super().__init__()
+        self.set_content_height(self._HEIGHT)
+        self.set_hexpand(True)
+        self.add_css_class("card")
+        self._colors = {}
+        self.set_draw_func(self._draw)
+
+    def set_colors(self, colors):
+        self._colors = colors or {}
+        self.queue_draw()
+
+    def _rgba(self, field, fallback):
+        rgba = Gdk.RGBA()
+        value = self._colors.get(field)
+        if value and rgba.parse(value):
+            return rgba
+        rgba.parse(fallback)
+        return rgba
+
+    @staticmethod
+    def _set(cr, rgba, alpha=1.0):
+        cr.set_source_rgba(rgba.red, rgba.green, rgba.blue, rgba.alpha * alpha)
+
+    @staticmethod
+    def _rounded(cr, x, y, w, h, r):
+        import math
+        cr.new_sub_path()
+        cr.arc(x + w - r, y + r, r, -math.pi / 2, 0)
+        cr.arc(x + w - r, y + h - r, r, 0, math.pi / 2)
+        cr.arc(x + r, y + h - r, r, math.pi / 2, math.pi)
+        cr.arc(x + r, y + r, r, math.pi, 3 * math.pi / 2)
+        cr.close_path()
+
+    def _draw(self, _area, cr, width, height):
+        bg = self._rgba("background", "#ffffff")
+        fg = self._rgba("foreground", "#2e2e2e")
+        gutter = self._rgba("gutterBackground", "#f0f0f0")
+        caret = self._rgba("caret", "#2e2e2e")
+        selection = self._rgba("selection", "#c8def5")
+        line_hl = self._rgba("lineHighlight", "rgba(0,0,0,0.04)")
+
+        self._rounded(cr, 0, 0, width, height, 8)
+        cr.clip()
+
+        self._set(cr, bg)
+        cr.paint()
+
+        self._set(cr, gutter)
+        cr.rectangle(0, 0, self._GUTTER, height)
+        cr.fill()
+
+        top, step, bar_h = 14, 16, 6
+        text_x = self._GUTTER + 10
+        avail = width - text_x - 14
+
+        # active line band
+        self._set(cr, line_hl)
+        cr.rectangle(0, top - 4, width, step)
+        cr.fill()
+
+        for i, frac in enumerate(self._LINES):
+            y = top + i * step
+            # line number
+            self._set(cr, fg, 0.35)
+            cr.rectangle(7, y, 6, bar_h)
+            cr.fill()
+            # selection sits behind the third line
+            if i == 2:
+                self._set(cr, selection)
+                cr.rectangle(text_x - 3, y - 3, avail * frac + 6, bar_h + 6)
+                cr.fill()
+            # alternating emphasis stands in for syntax colouring
+            self._set(cr, fg, 0.9 if i % 2 == 0 else 0.55)
+            cr.rectangle(text_x, y, avail * frac, bar_h)
+            cr.fill()
+
+        # caret at the end of the first line
+        self._set(cr, caret)
+        cr.rectangle(text_x + avail * self._LINES[0] + 4, top - 2, 2, bar_h + 4)
+        cr.fill()
 
 
 class SettingsDialog(Adw.PreferencesDialog):
@@ -197,16 +293,12 @@ class SettingsDialog(Adw.PreferencesDialog):
 
         editor_appearance_group = Adw.PreferencesGroup(title=_("Appearance"))
 
+        # Read from the bundle's own theme manifest. Names are proper nouns
+        # (Dracula, Nord, Xcode) and stay untranslated — "Auto" is the one
+        # word rather than a name, as with the viewer themes above.
         _EDITOR_THEMES = [
-            (_("Auto"), "auto"),
-            ("Adwaita Light", "adwaita-light"),
-            ("One Dark", "one-dark"),
-            ("GitHub Light", "github-light"),
-            ("GitHub Dark", "github-dark"),
-            ("Dracula", "dracula"),
-            ("Solarized Light", "solarized-light"),
-            ("Solarized Dark", "solarized-dark"),
-            ("Tokyo Night", "tokyo-night"),
+            (_("Auto") if key == "auto" else label, key)
+            for key, label in available_themes()
         ]
         self._editor_theme_keys = [key for _label, key in _EDITOR_THEMES]
 
@@ -214,6 +306,9 @@ class SettingsDialog(Adw.PreferencesDialog):
         theme_row.set_model(
             Gtk.StringList.new([label for label, _key in _EDITOR_THEMES])
         )
+        # Long enough to be worth typing into
+        if hasattr(theme_row, "set_enable_search"):
+            theme_row.set_enable_search(True)
         current_et = self._settings.editor_theme
         theme_row.set_selected(
             self._editor_theme_keys.index(current_et)
@@ -221,6 +316,11 @@ class SettingsDialog(Adw.PreferencesDialog):
         )
         theme_row.connect("notify::selected", self._on_editor_theme_changed)
         editor_appearance_group.add(theme_row)
+
+        self._theme_preview = ThemePreview()
+        self._theme_preview.set_margin_top(12)
+        editor_appearance_group.add(self._theme_preview)
+        self._update_theme_preview(current_et)
 
         line_numbers_row = Adw.SwitchRow(title=_("Line Numbers"))
         line_numbers_row.set_active(self._settings.editor_line_numbers)
@@ -263,6 +363,7 @@ class SettingsDialog(Adw.PreferencesDialog):
 
         editor_page.add(editor_shortcuts_group)
         self.add(editor_page)
+        self._editor_page = editor_page
 
     def _on_choose_root_dir(self, _btn):
         dialog = Gtk.FileDialog(title=_("Choose Root Directory"))
@@ -361,8 +462,14 @@ class SettingsDialog(Adw.PreferencesDialog):
     def _on_editor_font_size_changed(self, row, _pspec):
         self._settings.set("editor_font_size", int(row.get_value()))
 
+    def _update_theme_preview(self, key):
+        dark = Adw.StyleManager.get_default().get_dark()
+        self._theme_preview.set_colors(theme_colors(key, system_dark=dark))
+
     def _on_editor_theme_changed(self, row, _pspec):
-        self._settings.set("editor_theme", self._editor_theme_keys[row.get_selected()])
+        key = self._editor_theme_keys[row.get_selected()]
+        self._settings.set("editor_theme", key)
+        self._update_theme_preview(key)
 
     def _on_line_numbers_changed(self, row, _pspec):
         self._settings.set("editor_line_numbers", row.get_active())

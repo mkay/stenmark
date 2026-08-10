@@ -15,10 +15,7 @@
     "@codemirror/state": "^6.5.0",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.35.3",
-    "@uiw/codemirror-theme-dracula": "^4.25.7",
-    "@uiw/codemirror-theme-github": "^4.25.7",
-    "@uiw/codemirror-theme-solarized": "^4.25.7",
-    "@uiw/codemirror-theme-tokyo-night": "^4.25.7"
+    "@uiw/codemirror-themes-all": "^4.25.11"
   },
   "devDependencies": {
     "esbuild": "^0.25.0"

@@ -20,6 +20,7 @@ Your markdown librarian. A GTK4 Markdown reader, organizer and editor.
 - Find in document (`Ctrl+F` in viewer) with customizable highlight colors
 - WebKit-based rendered markdown view with syntax highlighting
 - CodeMirror 6 editor with live preview pane and scroll sync
+- 48 editor colour themes — Dracula, Nord, Gruvbox, Tokyo Night, VS Code, Solarized and friends — searchable in Preferences, with a colour preview beside the picker
 - Edit where you were reading — double-click any text to open the editor with the caret on that word; switching back scrolls the reader to the line you were editing (double-click can be turned off in Preferences)
 - Sidebar hides while editing, giving the editor and preview pane the full window width (optional, in Preferences)
 - `Esc` leaves edit mode and saves (when the editor's find panel is open, the first `Esc` closes that instead)

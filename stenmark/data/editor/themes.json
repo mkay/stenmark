@@ -1,0 +1,674 @@
+[
+  {
+    "key": "auto",
+    "export": null,
+    "label": "Auto",
+    "dark": null
+  },
+  {
+    "key": "adwaita-light",
+    "export": "__adwaita_light",
+    "label": "Adwaita Light",
+    "dark": false,
+    "colors": {
+      "background": "#ffffff",
+      "foreground": "#2e2e2e",
+      "caret": "#2e2e2e",
+      "selection": "#c8def5",
+      "gutterBackground": "#f0f0f0",
+      "lineHighlight": "rgba(0, 0, 0, 0.04)"
+    }
+  },
+  {
+    "key": "one-dark",
+    "export": "__one_dark",
+    "label": "One Dark",
+    "dark": true,
+    "colors": {
+      "background": "#282c34",
+      "foreground": "#abb2bf",
+      "caret": "#528bff",
+      "selection": "#3E4451",
+      "gutterBackground": "#282c34",
+      "lineHighlight": "#2c313a"
+    }
+  },
+  {
+    "key": "abcdef",
+    "export": "abcdef",
+    "label": "abcdef",
+    "dark": true,
+    "colors": {
+      "background": "#0f0f0f",
+      "foreground": "#defdef",
+      "caret": "#00FF00",
+      "selection": "#515151",
+      "gutterBackground": "#555",
+      "lineHighlight": "#0a6bcb3d"
+    }
+  },
+  {
+    "key": "abyss",
+    "export": "abyss",
+    "label": "Abyss",
+    "dark": true,
+    "colors": {
+      "background": "#000c18",
+      "foreground": "#6688cc",
+      "caret": "#ddbb88",
+      "selection": "#770811",
+      "gutterBackground": "#000c18",
+      "lineHighlight": "#0055ff30"
+    }
+  },
+  {
+    "key": "androidstudio",
+    "export": "androidstudio",
+    "label": "Android Studio",
+    "dark": true,
+    "colors": {
+      "background": "#282b2e",
+      "foreground": "#a9b7c6",
+      "caret": "#00FF00",
+      "selection": "#4e5254",
+      "lineHighlight": "#7f85891f"
+    }
+  },
+  {
+    "key": "andromeda",
+    "export": "andromeda",
+    "label": "Andromeda",
+    "dark": true,
+    "colors": {
+      "background": "#23262E",
+      "foreground": "#D5CED9",
+      "caret": "#FFF",
+      "selection": "#db45a280",
+      "gutterBackground": "#23262E",
+      "lineHighlight": "#596a992e"
+    }
+  },
+  {
+    "key": "atomone",
+    "export": "atomone",
+    "label": "Atom One",
+    "dark": true,
+    "colors": {
+      "background": "#272C35",
+      "foreground": "#9d9b97",
+      "caret": "#797977",
+      "selection": "#3d4c64",
+      "gutterBackground": "#272C35",
+      "lineHighlight": "#2e3f5940"
+    }
+  },
+  {
+    "key": "aura",
+    "export": "aura",
+    "label": "Aura",
+    "dark": true,
+    "colors": {
+      "background": "#21202e",
+      "foreground": "#edecee",
+      "caret": "#a277ff",
+      "selection": "#5a51898f",
+      "gutterBackground": "#21202e",
+      "lineHighlight": "#a394f033"
+    }
+  },
+  {
+    "key": "basic-dark",
+    "export": "basicDark",
+    "label": "Basic Dark",
+    "dark": true,
+    "colors": {
+      "background": "#2E3235",
+      "foreground": "#DDDDDD",
+      "caret": "#DDDDDD",
+      "selection": "#202325",
+      "gutterBackground": "#292d30",
+      "lineHighlight": "#B9D2FF30"
+    }
+  },
+  {
+    "key": "basic-light",
+    "export": "basicLight",
+    "label": "Basic Light",
+    "dark": false,
+    "colors": {
+      "background": "#ffffff",
+      "foreground": "#2e3440",
+      "caret": "#3b4252",
+      "selection": "#eceff4",
+      "gutterBackground": "#eceff4",
+      "lineHighlight": "#02255f11"
+    }
+  },
+  {
+    "key": "bbedit",
+    "export": "bbedit",
+    "label": "BBEdit",
+    "dark": false,
+    "colors": {
+      "background": "#FFFFFF",
+      "foreground": "#000000",
+      "caret": "#FBAC52",
+      "selection": "#FFD420",
+      "gutterBackground": "#f5f5f5",
+      "lineHighlight": "#00000012"
+    }
+  },
+  {
+    "key": "bespin",
+    "export": "bespin",
+    "label": "Bespin",
+    "dark": true,
+    "colors": {
+      "background": "#28211c",
+      "foreground": "#9d9b97",
+      "caret": "#797977",
+      "selection": "#4f382b",
+      "gutterBackground": "#28211c",
+      "lineHighlight": "#ffffff1a"
+    }
+  },
+  {
+    "key": "console-dark",
+    "export": "consoleDark",
+    "label": "Console Dark",
+    "dark": true,
+    "colors": {
+      "background": "#000",
+      "foreground": "#fff",
+      "caret": "#fff",
+      "selection": "#5c6c9b",
+      "gutterBackground": "#000",
+      "lineHighlight": "#82828275"
+    }
+  },
+  {
+    "key": "console-light",
+    "export": "consoleLight",
+    "label": "Console Light",
+    "dark": false,
+    "colors": {
+      "background": "#fff",
+      "foreground": "#000",
+      "caret": "#000",
+      "selection": "#c2d2ff",
+      "gutterBackground": "#fff",
+      "lineHighlight": "#c7c5c575"
+    }
+  },
+  {
+    "key": "copilot",
+    "export": "copilot",
+    "label": "Copilot",
+    "dark": true,
+    "colors": {
+      "background": "#232a2f",
+      "foreground": "#939da5",
+      "caret": "#939da5",
+      "selection": "#204062",
+      "gutterBackground": "#232a2f",
+      "lineHighlight": "#4469832b"
+    }
+  },
+  {
+    "key": "darcula",
+    "export": "darcula",
+    "label": "Darcula",
+    "dark": true,
+    "colors": {
+      "background": "#2B2B2B",
+      "foreground": "#f8f8f2",
+      "caret": "#FFFFFF",
+      "selection": "rgba(255, 255, 255, 0.1)",
+      "gutterBackground": "rgba(255, 255, 255, 0.1)",
+      "lineHighlight": "rgba(255, 255, 255, 0.1)"
+    }
+  },
+  {
+    "key": "dracula",
+    "export": "dracula",
+    "label": "Dracula",
+    "dark": true,
+    "colors": {
+      "background": "#282a36",
+      "foreground": "#f8f8f2",
+      "caret": "#f8f8f0",
+      "selection": "rgba(255, 255, 255, 0.1)",
+      "gutterBackground": "#282a36",
+      "lineHighlight": "rgba(255, 255, 255, 0.1)"
+    }
+  },
+  {
+    "key": "duotone-dark",
+    "export": "duotoneDark",
+    "label": "Duotone Dark",
+    "dark": true,
+    "colors": {
+      "background": "#2a2734",
+      "foreground": "#6c6783",
+      "caret": "#ffad5c",
+      "selection": "#91ff6c26",
+      "gutterBackground": "#2a2734",
+      "lineHighlight": "#36334280"
+    }
+  },
+  {
+    "key": "duotone-light",
+    "export": "duotoneLight",
+    "label": "Duotone Light",
+    "dark": false,
+    "colors": {
+      "background": "#faf8f5",
+      "foreground": "#b29762",
+      "caret": "#93abdc",
+      "selection": "#e3dcce",
+      "gutterBackground": "#faf8f5",
+      "lineHighlight": "#ddceb154"
+    }
+  },
+  {
+    "key": "eclipse",
+    "export": "eclipse",
+    "label": "Eclipse",
+    "dark": false,
+    "colors": {
+      "background": "#fff",
+      "foreground": "#000",
+      "caret": "#FFFFFF",
+      "selection": "#d7d4f0",
+      "gutterBackground": "#f7f7f7",
+      "lineHighlight": "#006fff1c"
+    }
+  },
+  {
+    "key": "github-dark",
+    "export": "githubDark",
+    "label": "GitHub Dark",
+    "dark": true,
+    "colors": {
+      "background": "#0d1117",
+      "foreground": "#c9d1d9",
+      "caret": "#c9d1d9",
+      "selection": "#003d73",
+      "lineHighlight": "#36334280"
+    }
+  },
+  {
+    "key": "github-light",
+    "export": "githubLight",
+    "label": "GitHub Light",
+    "dark": false,
+    "colors": {
+      "background": "#fff",
+      "foreground": "#24292e",
+      "selection": "#BBDFFF",
+      "gutterBackground": "#fff"
+    }
+  },
+  {
+    "key": "gruvbox-dark",
+    "export": "gruvboxDark",
+    "label": "Gruvbox Dark",
+    "dark": true,
+    "colors": {
+      "background": "#282828",
+      "foreground": "#ebdbb2",
+      "caret": "#ebdbb2",
+      "selection": "#b99d555c",
+      "gutterBackground": "#282828",
+      "lineHighlight": "#baa1602b"
+    }
+  },
+  {
+    "key": "gruvbox-light",
+    "export": "gruvboxLight",
+    "label": "Gruvbox Light",
+    "dark": false,
+    "colors": {
+      "background": "#fbf1c7",
+      "foreground": "#3c3836",
+      "caret": "#af3a03",
+      "selection": "#bdae9391",
+      "gutterBackground": "#ebdbb2",
+      "lineHighlight": "#a37f2238"
+    }
+  },
+  {
+    "key": "kimbie",
+    "export": "kimbie",
+    "label": "Kimbie",
+    "dark": true,
+    "colors": {
+      "background": "#221a0f",
+      "foreground": "#d3af86",
+      "caret": "#d3af86",
+      "selection": "#84613daa",
+      "gutterBackground": "#221a0f",
+      "lineHighlight": "#5e452b52"
+    }
+  },
+  {
+    "key": "material",
+    "export": "material",
+    "label": "Material",
+    "dark": true,
+    "colors": {
+      "background": "#2e3235",
+      "foreground": "#bdbdbd",
+      "caret": "#a0a4ae",
+      "selection": "#d7d4f063",
+      "gutterBackground": "#2e3235",
+      "lineHighlight": "#545b6130"
+    }
+  },
+  {
+    "key": "material-dark",
+    "export": "materialDark",
+    "label": "Material Dark",
+    "dark": true,
+    "colors": {
+      "background": "#2e3235",
+      "foreground": "#bdbdbd",
+      "caret": "#a0a4ae",
+      "selection": "#d7d4f063",
+      "gutterBackground": "#2e3235",
+      "lineHighlight": "#545b6130"
+    }
+  },
+  {
+    "key": "material-light",
+    "export": "materialLight",
+    "label": "Material Light",
+    "dark": false,
+    "colors": {
+      "background": "#FAFAFA",
+      "foreground": "#90A4AE",
+      "caret": "#272727",
+      "selection": "#80CBC440",
+      "gutterBackground": "#FAFAFA",
+      "lineHighlight": "#CCD7DA50"
+    }
+  },
+  {
+    "key": "monokai",
+    "export": "monokai",
+    "label": "Monokai",
+    "dark": true,
+    "colors": {
+      "background": "#272822",
+      "foreground": "#f8f8f2",
+      "caret": "#f8f8f0",
+      "selection": "#4a4a76",
+      "gutterBackground": "#272822",
+      "lineHighlight": "#3e3d3257"
+    }
+  },
+  {
+    "key": "monokai-dimmed",
+    "export": "monokaiDimmed",
+    "label": "Monokai Dimmed",
+    "dark": true,
+    "colors": {
+      "background": "#1e1e1e",
+      "foreground": "#c5c8c6",
+      "caret": "#c07020",
+      "selection": "#4747a1",
+      "gutterBackground": "#1e1e1e",
+      "lineHighlight": "#30303078"
+    }
+  },
+  {
+    "key": "noctis-lilac",
+    "export": "noctisLilac",
+    "label": "Noctis Lilac",
+    "dark": false,
+    "colors": {
+      "background": "#f2f1f8",
+      "foreground": "#0c006b",
+      "caret": "#5c49e9",
+      "selection": "#d5d1f2",
+      "gutterBackground": "#f2f1f8",
+      "lineHighlight": "#16067911"
+    }
+  },
+  {
+    "key": "nord",
+    "export": "nord",
+    "label": "Nord",
+    "dark": true,
+    "colors": {
+      "background": "#2e3440",
+      "foreground": "#FFFFFF",
+      "caret": "#FFFFFF",
+      "selection": "#00000073",
+      "gutterBackground": "#2e3440",
+      "lineHighlight": "#4c566a29"
+    }
+  },
+  {
+    "key": "okaidia",
+    "export": "okaidia",
+    "label": "Okaidia",
+    "dark": true,
+    "colors": {
+      "background": "#272822",
+      "foreground": "#FFFFFF",
+      "caret": "#FFFFFF",
+      "selection": "#49483E",
+      "gutterBackground": "#272822",
+      "lineHighlight": "#0000003b"
+    }
+  },
+  {
+    "key": "quietlight",
+    "export": "quietlight",
+    "label": "Quiet Light",
+    "dark": false,
+    "colors": {
+      "background": "#F5F5F5",
+      "foreground": "#333333",
+      "caret": "#54494B",
+      "selection": "#C9D0D9",
+      "gutterBackground": "#F5F5F5",
+      "lineHighlight": "#79ff002b"
+    }
+  },
+  {
+    "key": "red",
+    "export": "red",
+    "label": "Red",
+    "dark": true,
+    "colors": {
+      "background": "#390000",
+      "foreground": "#F8F8F8",
+      "caret": "#970000",
+      "selection": "#750000",
+      "gutterBackground": "#390000",
+      "lineHighlight": "#ff000033"
+    }
+  },
+  {
+    "key": "solarized-dark",
+    "export": "solarizedDark",
+    "label": "Solarized Dark",
+    "dark": true,
+    "colors": {
+      "background": "#002B36",
+      "foreground": "#839496",
+      "caret": "#D30102",
+      "selection": "#004454AA",
+      "gutterBackground": "#002B36",
+      "lineHighlight": "#00cafe11"
+    }
+  },
+  {
+    "key": "solarized-light",
+    "export": "solarizedLight",
+    "label": "Solarized Light",
+    "dark": false,
+    "colors": {
+      "background": "#FDF6E3",
+      "foreground": "#657B83",
+      "caret": "#657B83",
+      "selection": "#EEE8D5",
+      "gutterBackground": "#FDF6E3",
+      "lineHighlight": "#3d392d11"
+    }
+  },
+  {
+    "key": "sublime",
+    "export": "sublime",
+    "label": "Sublime",
+    "dark": true,
+    "colors": {
+      "background": "#303841",
+      "foreground": "#FFFFFF",
+      "caret": "#FBAC52",
+      "selection": "#4C5964",
+      "gutterBackground": "#303841",
+      "lineHighlight": "#00000059"
+    }
+  },
+  {
+    "key": "tokyo-night",
+    "export": "tokyoNight",
+    "label": "Tokyo Night",
+    "dark": true,
+    "colors": {
+      "background": "#1a1b26",
+      "foreground": "#787c99",
+      "caret": "#c0caf5",
+      "selection": "#515c7e40",
+      "gutterBackground": "#1a1b26",
+      "lineHighlight": "#474b6611"
+    }
+  },
+  {
+    "key": "tokyo-night-day",
+    "export": "tokyoNightDay",
+    "label": "Tokyo Night Day",
+    "dark": false,
+    "colors": {
+      "background": "#e1e2e7",
+      "foreground": "#3760bf",
+      "caret": "#3760bf",
+      "selection": "#99a7df",
+      "gutterBackground": "#e1e2e7",
+      "lineHighlight": "#5f5faf11"
+    }
+  },
+  {
+    "key": "tokyo-night-storm",
+    "export": "tokyoNightStorm",
+    "label": "Tokyo Night Storm",
+    "dark": true,
+    "colors": {
+      "background": "#24283b",
+      "foreground": "#7982a9",
+      "caret": "#c0caf5",
+      "selection": "#6f7bb630",
+      "gutterBackground": "#24283b",
+      "lineHighlight": "#292e427a"
+    }
+  },
+  {
+    "key": "tomorrow-night-blue",
+    "export": "tomorrowNightBlue",
+    "label": "Tomorrow Night Blue",
+    "dark": true,
+    "colors": {
+      "background": "#002451",
+      "foreground": "#ffffff",
+      "caret": "#ffffff",
+      "selection": "#003f8e",
+      "gutterBackground": "#002451",
+      "lineHighlight": "#00346e7a"
+    }
+  },
+  {
+    "key": "vscode-dark",
+    "export": "vscodeDark",
+    "label": "VS Code Dark",
+    "dark": true,
+    "colors": {
+      "background": "#1e1e1e",
+      "foreground": "#9cdcfe",
+      "caret": "#c6c6c6",
+      "selection": "#6199ff2f",
+      "gutterBackground": "#1e1e1e",
+      "lineHighlight": "#ffffff0f"
+    }
+  },
+  {
+    "key": "vscode-light",
+    "export": "vscodeLight",
+    "label": "VS Code Light",
+    "dark": false,
+    "colors": {
+      "background": "#ffffff",
+      "foreground": "#383a42",
+      "caret": "#000",
+      "selection": "#add6ff",
+      "gutterBackground": "#fff",
+      "lineHighlight": "#99999926"
+    }
+  },
+  {
+    "key": "white-dark",
+    "export": "whiteDark",
+    "label": "White Dark",
+    "dark": true,
+    "colors": {
+      "background": "#000",
+      "foreground": "#fff",
+      "caret": "#7d46fc",
+      "selection": "#7d46fc3f",
+      "gutterBackground": "#000",
+      "lineHighlight": "#00346eb0"
+    }
+  },
+  {
+    "key": "white-light",
+    "export": "whiteLight",
+    "label": "White Light",
+    "dark": false,
+    "colors": {
+      "background": "#fff",
+      "foreground": "#000",
+      "caret": "#004bff",
+      "selection": "#0064ff26",
+      "gutterBackground": "#fff",
+      "lineHighlight": "#0064ff0c"
+    }
+  },
+  {
+    "key": "xcode-dark",
+    "export": "xcodeDark",
+    "label": "Xcode Dark",
+    "dark": true,
+    "colors": {
+      "background": "#292A30",
+      "foreground": "#CECFD0",
+      "caret": "#fff",
+      "selection": "#727377",
+      "lineHighlight": "#ffffff0f"
+    }
+  },
+  {
+    "key": "xcode-light",
+    "export": "xcodeLight",
+    "label": "Xcode Light",
+    "dark": false,
+    "colors": {
+      "background": "#fff",
+      "foreground": "#3D3D3D",
+      "selection": "#BBDFFF",
+      "gutterBackground": "#fff",
+      "lineHighlight": "#d5e6ff69"
+    }
+  }
+]

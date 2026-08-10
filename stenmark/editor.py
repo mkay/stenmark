@@ -17,6 +17,41 @@ _EDITOR_HTML = os.path.join(
     os.path.dirname(__file__), "data", "editor", "editor.html"
 )
 
+#: Theme list shared with the bundle — editor.js builds its theme map from the
+#: very same file, so the picker can never offer a key the editor lacks.
+_THEMES_JSON = os.path.join(
+    os.path.dirname(__file__), "data", "editor", "themes.json"
+)
+
+
+def _load_theme_manifest():
+    try:
+        with open(_THEMES_JSON, encoding="utf-8") as f:
+            entries = json.load(f)
+        return [e for e in entries if "key" in e and "label" in e]
+    except (OSError, ValueError, TypeError):
+        # Without the manifest the editor still runs: resolveTheme() falls
+        # back to Adwaita Light for any key it does not know.
+        return [{"key": "auto", "label": "Auto"}]
+
+
+def available_themes():
+    """Return (key, English label) pairs for the editor theme picker."""
+    return [(e["key"], e["label"]) for e in _load_theme_manifest()]
+
+
+def theme_colors(key, system_dark=False):
+    """Return the palette dict for a theme key, or None if it has none.
+
+    "auto" has no palette of its own — it reports whichever theme it would
+    actually resolve to, so a preview of it is not a blank.
+    """
+    entries = {e["key"]: e for e in _load_theme_manifest()}
+    if key == "auto":
+        key = "one-dark" if system_dark else "adwaita-light"
+    entry = entries.get(key) or entries.get("adwaita-light")
+    return (entry or {}).get("colors")
+
 
 class MarkdownEditor(Gtk.Box):
     def __init__(self, settings):

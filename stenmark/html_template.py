@@ -84,7 +84,8 @@ def _pygments_css(style_name):
         return HtmlFormatter(style=fallback).get_style_defs(".highlight")
 
 
-def wrap_html(body_html, font_family="Sans", font_size=16, dark=False, viewer_theme="auto"):
+def wrap_html(body_html, font_family="Sans", font_size=16, dark=False, viewer_theme="auto",
+              edit_on_dblclick=False):
     if viewer_theme == "auto":
         t = _THEMES["dark" if dark else "light"]
     else:
@@ -98,6 +99,8 @@ def wrap_html(body_html, font_family="Sans", font_size=16, dark=False, viewer_th
     # apostrophe or quote mark must not break out of the JS string literal.
     copy_code_label = json.dumps(_("Copy code"))[1:-1]
     copied_label = json.dumps(_("Copied!"))[1:-1]
+
+    dblclick_js = "true" if edit_on_dblclick else "false"
 
     return f"""<!DOCTYPE html>
 <html>
@@ -250,6 +253,45 @@ document.addEventListener("DOMContentLoaded", function() {{
         pre.appendChild(btn);
     }});
 }});
+window.editOnDoubleClick = {dblclick_js};
+
+// Source line of the first block still visible at the top of the viewport.
+// Used to hand the reading position over to the editor.
+window.topSourceLine = function() {{
+    var els = document.querySelectorAll("[data-source-line]");
+    for (var i = 0; i < els.length; i++) {{
+        if (els[i].getBoundingClientRect().bottom > 0) {{
+            return parseInt(els[i].getAttribute("data-source-line"), 10) || 1;
+        }}
+    }}
+    return 1;
+}};
+
+document.addEventListener("dblclick", function(ev) {{
+    if (!window.editOnDoubleClick) return;
+    if (!(window.webkit && window.webkit.messageHandlers.editRequest)) return;
+
+    var el = ev.target;
+    while (el && el !== document.body) {{
+        var tag = el.tagName;
+        // Links, checkboxes and the copy button have their own behaviour
+        if (tag === "A" || tag === "INPUT" || tag === "BUTTON") return;
+        if (el.hasAttribute && el.hasAttribute("data-source-line")) break;
+        el = el.parentNode;
+    }}
+
+    var line = 0;
+    if (el && el.getAttribute) {{
+        line = parseInt(el.getAttribute("data-source-line"), 10) || 0;
+    }}
+    // The double click selected a word — pass it along so the editor can
+    // land on it rather than at the start of the block.
+    var word = String(window.getSelection() || "").trim().slice(0, 80);
+    window.webkit.messageHandlers.editRequest.postMessage(
+        JSON.stringify({{line: line, word: word}})
+    );
+}});
+
 window.scrollToSourceLine = function(line) {{
     // Find the element with the closest data-source-line <= line
     var els = document.querySelectorAll("[data-source-line]");

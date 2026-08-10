@@ -22,6 +22,8 @@ class MarkdownViewer(Gtk.Box):
         "link-activated": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
         "navigate-back": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "navigate-forward": (GObject.SignalFlags.RUN_FIRST, None, ()),
+        # (source line, double-clicked word) — 0 / "" when unknown
+        "edit-requested": (GObject.SignalFlags.RUN_FIRST, None, (int, str)),
     }
 
     def __init__(self, settings):
@@ -34,11 +36,19 @@ class MarkdownViewer(Gtk.Box):
 
         self._skip_next_load = False
 
+        # Applied once the page has finished loading — render_text() reloads
+        # the whole document, so a scroll request can arrive too early.
+        self._pending_scroll_line = None
+        self._loading = False
+        self._edit_on_dblclick = False
+
         ucm = WebKit.UserContentManager()
         ucm.register_script_message_handler("copyCode")
         ucm.connect("script-message-received::copyCode", self._on_copy_code)
         ucm.register_script_message_handler("checkboxToggled")
         ucm.connect("script-message-received::checkboxToggled", self._on_checkbox_toggled)
+        ucm.register_script_message_handler("editRequest")
+        ucm.connect("script-message-received::editRequest", self._on_edit_request)
 
         # Custom find highlight styles (JS-driven, not FindController)
         find_css = WebKit.UserStyleSheet(
@@ -64,6 +74,7 @@ class MarkdownViewer(Gtk.Box):
         self._webview.set_hexpand(True)
         self._webview.connect("decide-policy", self._on_decide_policy)
         self._webview.connect("context-menu", self._on_context_menu)
+        self._webview.connect("load-changed", self._on_load_changed)
 
         ws = self._webview.get_settings()
         ws.set_enable_developer_extras(False)
@@ -286,6 +297,24 @@ class MarkdownViewer(Gtk.Box):
             return
         self._skip_next_load = True
 
+    def _on_edit_request(self, _ucm, result):
+        try:
+            data = json.loads(result.to_string())
+            line = int(data.get("line", 0))
+            word = str(data.get("word", ""))
+        except (ValueError, TypeError, AttributeError):
+            return
+        self.emit("edit-requested", line, word)
+
+    def _on_load_changed(self, _webview, event):
+        if event != WebKit.LoadEvent.FINISHED:
+            return
+        self._loading = False
+        if self._pending_scroll_line is not None:
+            line = self._pending_scroll_line
+            self._pending_scroll_line = None
+            self._js(f"window.scrollToSourceLine && window.scrollToSourceLine({line})")
+
     def _on_copy_code(self, _ucm, result):
         text = result.to_string()
         clipboard = Gdk.Display.get_default().get_clipboard()
@@ -372,6 +401,7 @@ class MarkdownViewer(Gtk.Box):
             dark=self._is_dark(),
             viewer_theme=self._settings.viewer_theme,
         )
+        self._loading = True
         self._webview.load_html(html, "file:///")
 
     def load_file(self, path):
@@ -393,10 +423,12 @@ class MarkdownViewer(Gtk.Box):
             self._current_path = path
         body = self._renderer.render(text)
         html = wrap_html(body, self._settings.font_family, self._settings.font_size,
-                         dark=self._is_dark(), viewer_theme=self._settings.viewer_theme)
+                         dark=self._is_dark(), viewer_theme=self._settings.viewer_theme,
+                         edit_on_dblclick=self._edit_on_dblclick)
         base_uri = "file://"
         if self._current_path:
             base_uri = "file://" + os.path.dirname(os.path.abspath(self._current_path)) + "/"
+        self._loading = True
         self._webview.load_html(html, base_uri)
 
     def reload(self):
@@ -408,10 +440,33 @@ class MarkdownViewer(Gtk.Box):
         op.run_dialog(parent)
 
     def scroll_to_line(self, line):
+        if self._loading:
+            # Applied by _on_load_changed once the new page is up
+            self._pending_scroll_line = line
+            return
+        self._js(f"window.scrollToSourceLine && window.scrollToSourceLine({int(line)})")
+
+    def get_top_source_line(self, callback):
+        """Async: hand `callback` the source line of the topmost visible block."""
+        if self._loading:
+            callback(1)
+            return
+
+        def done(webview, result, _data=None):
+            try:
+                value = webview.evaluate_javascript_finish(result)
+                callback(int(value.to_string()))
+            except Exception:
+                callback(1)
+
         self._webview.evaluate_javascript(
-            f"window.scrollToSourceLine && window.scrollToSourceLine({line})",
-            -1, None, None, None, None,
+            "window.topSourceLine ? window.topSourceLine() : 1",
+            -1, None, None, None, done,
         )
+
+    def set_edit_on_dblclick(self, enabled):
+        self._edit_on_dblclick = enabled
+        self._js(f"window.editOnDoubleClick = {'true' if enabled else 'false'}")
 
     def update_style(self):
         if self._current_path:

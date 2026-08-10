@@ -23,6 +23,8 @@ DEFAULTS = {
     "editor_theme": "auto",
     "editor_line_numbers": True,
     "editor_line_wrap": True,
+    "double_click_to_edit": True,
+    "hide_sidebar_on_edit": True,
     "edit_shortcut": "<Control>e",
     "pinned_files": [],
     "pinned_folders": [],
@@ -135,6 +137,14 @@ class SettingsManager(GObject.Object):
     @property
     def editor_line_wrap(self):
         return self.get("editor_line_wrap")
+
+    @property
+    def double_click_to_edit(self):
+        return self.get("double_click_to_edit")
+
+    @property
+    def hide_sidebar_on_edit(self):
+        return self.get("hide_sidebar_on_edit")
 
     @property
     def pinned_files(self):

@@ -25,17 +25,22 @@ class MarkdownEditor(Gtk.Box):
         self._text_cache = ""
         self._ready = False
         self._pending_text = None
+        # (line, word, center) requested before the document was in place
+        self._pending_goto = None
         self._save_callback = None
         self._preview_callback = None
         self._scroll_callback = None
+        self._escape_callback = None
 
         ucm = WebKit.UserContentManager()
         ucm.register_script_message_handler("textChanged")
         ucm.register_script_message_handler("saveRequest")
         ucm.register_script_message_handler("scrollLine")
+        ucm.register_script_message_handler("escapeRequest")
         ucm.connect("script-message-received::textChanged", self._on_text_changed)
         ucm.connect("script-message-received::saveRequest", self._on_save_request)
         ucm.connect("script-message-received::scrollLine", self._on_scroll_line)
+        ucm.connect("script-message-received::escapeRequest", self._on_escape_request)
 
         self._webview = WebKit.WebView(user_content_manager=ucm)
         self._webview.set_vexpand(True)
@@ -132,6 +137,7 @@ class MarkdownEditor(Gtk.Box):
         if self._pending_text is not None:
             self._js_set_content(self._pending_text)
             self._pending_text = None
+        self._flush_goto()
         return GLib.SOURCE_REMOVE
 
     def _on_text_changed(self, _ucm, result):
@@ -142,6 +148,10 @@ class MarkdownEditor(Gtk.Box):
     def _on_save_request(self, _ucm, _result):
         if self._save_callback:
             self._save_callback()
+
+    def _on_escape_request(self, _ucm, _result):
+        if self._escape_callback:
+            self._escape_callback()
 
     def _on_scroll_line(self, _ucm, result):
         try:
@@ -248,7 +258,55 @@ class MarkdownEditor(Gtk.Box):
         if self._pending_text is not None:
             self._js_set_content(self._pending_text)
             self._pending_text = None
+        self._flush_goto()
         return GLib.SOURCE_REMOVE
+
+    def goto_line(self, line, word="", center=False):
+        """Put the caret on `line` (at `word`, if found there).
+
+        Safe to call right after load_text() — the jump is held back until
+        the document has actually been handed to CodeMirror.
+        """
+        self._pending_goto = (int(line or 1), word or "", bool(center))
+        if self._ready and self._pending_text is None:
+            self._flush_goto()
+
+    def _flush_goto(self):
+        if self._pending_goto is None:
+            return
+        line, word, center = self._pending_goto
+        self._pending_goto = None
+        self._js(
+            f"window.gotoLine({line}, {json.dumps(word)}, "
+            f"{'true' if center else 'false'})"
+        )
+
+    def focus_editor(self):
+        """Give the editor keyboard focus, at the GTK level as well.
+
+        CodeMirror's own view.focus() is not enough: unless the WebView holds
+        the window's focus, keys never reach the page at all — which left
+        Escape doing nothing until the user clicked into the text.
+        """
+        self._webview.grab_focus()
+        self._js("window.focusEditor && window.focusEditor()")
+
+    def get_top_line(self, callback):
+        """Async: hand `callback` the first line visible in the viewport."""
+        if not self._ready:
+            callback(1)
+            return
+
+        def done(webview, result, _data=None):
+            try:
+                value = webview.evaluate_javascript_finish(result)
+                callback(int(value.to_string()))
+            except Exception:
+                callback(1)
+
+        self._webview.evaluate_javascript(
+            "window.topLine ? window.topLine() : 1", -1, None, None, None, done,
+        )
 
     def get_text(self):
         return self._text_cache
@@ -261,6 +319,9 @@ class MarkdownEditor(Gtk.Box):
 
     def set_scroll_callback(self, callback):
         self._scroll_callback = callback
+
+    def set_escape_callback(self, callback):
+        self._escape_callback = callback
 
     def toggle_search(self):
         self._js("toggleSearch()")

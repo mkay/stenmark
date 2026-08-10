@@ -33,6 +33,11 @@ class MainWindow(Adw.ApplicationWindow):
         self._toc_headings = []
         self._nav_history = []   # list of file paths
         self._nav_index = -1     # current position in history
+        # (line, word) the editor should open at, set by double-click in the reader
+        self._pending_edit_pos = None
+        # Sidebar visibility to put back when edit mode ends; None when we
+        # did not hide it ourselves.
+        self._sidebar_before_edit = None
 
         self.set_default_size(settings.window_width, settings.window_height)
         self.set_title(APP_NAME)
@@ -229,6 +234,10 @@ class MainWindow(Adw.ApplicationWindow):
         self._preview_viewer = MarkdownViewer(self._settings)
         self._preview_viewer.set_visible(self._preview_btn.get_active())
 
+        dbl = self._settings.double_click_to_edit
+        self._viewer.set_edit_on_dblclick(dbl)
+        self._preview_viewer.set_edit_on_dblclick(dbl)
+
         self._edit_paned = Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
         self._edit_paned.set_start_child(self._editor)
         self._edit_paned.set_end_child(self._preview_viewer)
@@ -305,6 +314,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._editor.set_save_callback(self._on_editor_save)
         self._editor.set_preview_callback(self._on_preview_text_changed)
         self._editor.set_scroll_callback(self._on_editor_scroll)
+        self._editor.set_escape_callback(self._on_editor_escape)
         self._search_panel.connect("file-selected", self._on_file_selected)
         self._search_panel.connect("close-requested", lambda _p: self._on_back_clicked(None))
         self._search_panel.connect("tag-filter-requested", lambda _p: self._open_tag_panel())
@@ -313,7 +323,9 @@ class MainWindow(Adw.ApplicationWindow):
         self._viewer.connect("link-activated", self._on_viewer_link)
         self._viewer.connect("navigate-back", lambda *_: self._navigate_back())
         self._viewer.connect("navigate-forward", lambda *_: self._navigate_forward())
+        self._viewer.connect("edit-requested", self._on_edit_requested)
         self._preview_viewer.connect("link-activated", self._on_viewer_link)
+        self._preview_viewer.connect("edit-requested", self._on_edit_requested_preview)
         self._preview_btn.connect("toggled", self._on_preview_toggled)
         self._copy_rich_btn.connect("clicked", self._on_copy_rich_text)
         self._open_in_btn.connect("clicked", self._on_open_in)
@@ -374,6 +386,11 @@ class MainWindow(Adw.ApplicationWindow):
             pass
         self._tag_index.update_file(self._current_file)
 
+    def _on_editor_escape(self):
+        """Escape in the editor — same exit as the edit button, saving included."""
+        if self._editing:
+            self._edit_btn.set_active(False)
+
     def _on_find(self, *_args):
         page = self._stack.get_visible_child_name()
         if page == "documents":
@@ -387,6 +404,9 @@ class MainWindow(Adw.ApplicationWindow):
         self._split_view.set_show_sidebar(not self._split_view.get_show_sidebar())
 
     def _on_split_sidebar_changed(self, split_view, _param):
+        if self._editing:
+            # Changed by hand mid-edit — leave it alone when edit mode ends
+            self._sidebar_before_edit = None
         showing = split_view.get_show_sidebar()
         if showing:
             self._sidebar_btn.set_icon_name("stenmark-sidebar-hide-symbolic")
@@ -394,8 +414,16 @@ class MainWindow(Adw.ApplicationWindow):
             self._sidebar_btn.set_icon_name("stenmark-sidebar-show-symbolic")
         self._content_header.set_show_start_title_buttons(not showing)
 
+    def _restore_sidebar_after_edit(self):
+        if self._sidebar_before_edit is None:
+            return
+        show = self._sidebar_before_edit
+        self._sidebar_before_edit = None
+        self._split_view.set_show_sidebar(show)
+
     def _on_edit_toggled(self, btn):
         if not self._current_file:
+            self._restore_sidebar_after_edit()
             btn.set_active(False)
             return
 
@@ -410,13 +438,33 @@ class MainWindow(Adw.ApplicationWindow):
             self._editor.load_text(text)
             if self._preview_btn.get_active():
                 self._preview_viewer.render_text(text, self._current_file)
+
+            # Land where the reader was, so editing picks up mid-document
+            # instead of at line 1.
+            pos = self._pending_edit_pos
+            self._pending_edit_pos = None
+            if pos and pos[0]:
+                self._editor.goto_line(pos[0], pos[1], center=True)
+            else:
+                self._viewer.get_top_source_line(self._editor.goto_line)
+
+            # Editing wants the width — the sidebar comes back on the way out
+            if (self._settings.hide_sidebar_on_edit
+                    and self._split_view.get_show_sidebar()):
+                self._sidebar_before_edit = True
+                self._split_view.set_show_sidebar(False)
+
             self._stack.set_visible_child_name("edit")
             self._editing = True
             self._preview_btn.set_visible(True)
+            # After the stack has actually swapped, or the WebView is not yet
+            # mapped and cannot take focus
+            GLib.idle_add(lambda: (self._editor.focus_editor(), GLib.SOURCE_REMOVE)[1])
             self._open_in_btn.set_sensitive(False)
             self._stop_watching()
         else:
             # Exit edit mode — save and re-render
+            self._restore_sidebar_after_edit()
             text = self._editor.get_text()
             try:
                 with open(self._current_file, "w", encoding="utf-8") as f:
@@ -424,12 +472,26 @@ class MainWindow(Adw.ApplicationWindow):
             except OSError:
                 pass
             self._viewer.render_text(text, self._current_file)
+            # ... and the other way round: show the reader the line being edited
+            self._editor.get_top_line(self._viewer.scroll_to_line)
             self._stack.set_visible_child_name("view")
             self._editing = False
             self._preview_btn.set_visible(False)
             self._open_in_btn.set_sensitive(True)
             self._tag_index.update_file(self._current_file)
             self._start_watching()
+
+    def _on_edit_requested(self, _viewer, line, word):
+        """Double-click in the reader — edit this very spot."""
+        if self._editing or not self._current_file:
+            return
+        self._pending_edit_pos = (line, word)
+        self._edit_btn.set_active(True)
+
+    def _on_edit_requested_preview(self, _viewer, line, word):
+        """Double-click in the preview pane — move the caret there."""
+        if self._editing and line:
+            self._editor.goto_line(line, word, center=True)
 
     def _on_folder_selected(self, _sidebar, folder_path):
         if self._editing:
@@ -737,6 +799,10 @@ class MainWindow(Adw.ApplicationWindow):
                 self._stop_watching()
         elif key == "show_sidebar_tags":
             self._sidebar.refresh()
+        elif key == "double_click_to_edit":
+            enabled = self._settings.double_click_to_edit
+            self._viewer.set_edit_on_dblclick(enabled)
+            self._preview_viewer.set_edit_on_dblclick(enabled)
 
     def _on_preview_toggled(self, btn):
         active = btn.get_active()

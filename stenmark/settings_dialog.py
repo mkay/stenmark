@@ -234,6 +234,26 @@ class SettingsDialog(Adw.PreferencesDialog):
 
         editor_page.add(editor_appearance_group)
 
+        editor_behaviour_group = Adw.PreferencesGroup(title=_("Behaviour"))
+
+        dblclick_row = Adw.SwitchRow(
+            title=_("Double-Click to Edit"),
+            subtitle=_("Double-clicking text in the reader opens the editor at that spot"),
+        )
+        dblclick_row.set_active(self._settings.double_click_to_edit)
+        dblclick_row.connect("notify::active", self._on_double_click_to_edit_changed)
+        editor_behaviour_group.add(dblclick_row)
+
+        hide_sidebar_row = Adw.SwitchRow(
+            title=_("Hide Sidebar While Editing"),
+            subtitle=_("Gives the editor and preview pane the full window width"),
+        )
+        hide_sidebar_row.set_active(self._settings.hide_sidebar_on_edit)
+        hide_sidebar_row.connect("notify::active", self._on_hide_sidebar_on_edit_changed)
+        editor_behaviour_group.add(hide_sidebar_row)
+
+        editor_page.add(editor_behaviour_group)
+
         editor_shortcuts_group = Adw.PreferencesGroup(title=_("Shortcuts"))
 
         edit_shortcut_row = Adw.EntryRow(title=_("Toggle Edit Mode"))
@@ -347,6 +367,12 @@ class SettingsDialog(Adw.PreferencesDialog):
 
     def _on_line_wrap_changed(self, row, _pspec):
         self._settings.set("editor_line_wrap", row.get_active())
+
+    def _on_double_click_to_edit_changed(self, row, _pspec):
+        self._settings.set("double_click_to_edit", row.get_active())
+
+    def _on_hide_sidebar_on_edit_changed(self, row, _pspec):
+        self._settings.set("hide_sidebar_on_edit", row.get_active())
 
     def _on_edit_shortcut_changed(self, row):
         self._settings.set("edit_shortcut", row.get_text())

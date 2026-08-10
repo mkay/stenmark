@@ -1136,7 +1136,9 @@ class MainWindow(Adw.ApplicationWindow):
         """Open preferences dialog so the user can set a root directory."""
         from stenmark.settings_dialog import SettingsDialog
         dialog = SettingsDialog(self._settings)
-        dialog.present(self)
+        # Presented without a parent it gets its own window, so no dimming
+        # backdrop lies over the editor while a theme is being chosen.
+        dialog.present(None)
 
     def _on_new_file_from_welcome(self):
         """Trigger the sidebar's new-file dialog."""
@@ -1205,7 +1207,9 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_preferences(self, *_args):
         from stenmark.settings_dialog import SettingsDialog
         dialog = SettingsDialog(self._settings)
-        dialog.present(self)
+        # Presented without a parent it gets its own window, so no dimming
+        # backdrop lies over the editor while a theme is being chosen.
+        dialog.present(None)
 
     def _on_about(self, *_args):
         about = Adw.AboutDialog(

@@ -321,8 +321,10 @@ class SettingsDialog(Adw.PreferencesDialog):
 
     def _editing_windows(self):
         """Windows currently in edit mode, i.e. holding an unsaved buffer."""
-        win = self.get_root()
-        app = win.get_application() if win else None
+        # Not via get_root(): presented parentless the dialog lives in a window
+        # of its own, which carries no application — and silently returning no
+        # windows here would drop the unsaved-buffer warning before a restart.
+        app = Gio.Application.get_default()
         if app is None:
             return []
         return [w for w in app.get_windows() if getattr(w, "_editing", False)]

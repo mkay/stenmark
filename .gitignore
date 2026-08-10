@@ -1,6 +1,6 @@
 builddir/
 pkg/
-src/
+/src/
 *.pkg.tar.zst
 *.tar.gz
 .SRCINFO

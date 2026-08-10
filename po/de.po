@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-10 13:44+0300\n"
+"POT-Creation-Date: 2026-08-10 13:57+0300\n"
 "PO-Revision-Date: 2026-08-07 20:05+0300\n"
 "Last-Translator: Kreuder <mk@singular.de>\n"
 "Language-Team: German\n"
@@ -89,8 +89,9 @@ msgstr "CodeMirror-6-Editor mit Markdown-Syntaxhervorhebung"
 #: data/de.singular.stenmark.metainfo.xml.in:65
 msgid ""
 "Editing picks up where you were reading: double-click any text to open the "
-"editor at that word, and Esc leaves edit mode again. The sidebar steps aside "
-"while you edit."
+"editor at that word, and Esc leaves edit mode again. 48 editor themes with a "
+"colour preview, and Preferences in a window of its own so nothing dims the "
+"editor while you choose one."
 msgstr ""
 
 #: data/de.singular.stenmark.metainfo.xml.in:70
@@ -325,7 +326,7 @@ msgstr ""
 "„{name}“ enthält noch Dateien oder Ordner.\n"
 "Leere ihn zuerst."
 
-#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:446
+#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:445
 #: stenmark/sidebar.py:449
 msgid "OK"
 msgstr "OK"
@@ -684,31 +685,31 @@ msgstr "Tastenkürzel"
 msgid "Toggle Edit Mode"
 msgstr "Bearbeitungsmodus umschalten"
 
-#: stenmark/settings_dialog.py:398
+#: stenmark/settings_dialog.py:397
 msgid "Choose Root Directory"
 msgstr "Stammverzeichnis wählen"
 
-#: stenmark/settings_dialog.py:425
+#: stenmark/settings_dialog.py:424
 msgid "Restart Stenmark?"
 msgstr "Stenmark neu starten?"
 
-#: stenmark/settings_dialog.py:426
+#: stenmark/settings_dialog.py:425
 msgid "The new language takes effect after Stenmark restarts."
 msgstr "Die neue Sprache wird nach einem Neustart von Stenmark wirksam."
 
-#: stenmark/settings_dialog.py:428
+#: stenmark/settings_dialog.py:427
 msgid "Later"
 msgstr "Später"
 
-#: stenmark/settings_dialog.py:429
+#: stenmark/settings_dialog.py:428
 msgid "Restart Now"
 msgstr "Jetzt neu starten"
 
-#: stenmark/settings_dialog.py:443 stenmark/window.py:699
+#: stenmark/settings_dialog.py:442 stenmark/window.py:699
 msgid "Unsaved Changes"
 msgstr "Ungespeicherte Änderungen"
 
-#: stenmark/settings_dialog.py:444
+#: stenmark/settings_dialog.py:443
 msgid "Save your open document before restarting."
 msgstr "Speichere dein geöffnetes Dokument vor dem Neustart."
 

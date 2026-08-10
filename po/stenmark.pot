@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-10 13:44+0300\n"
+"POT-Creation-Date: 2026-08-10 13:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,8 +87,9 @@ msgstr ""
 #: data/de.singular.stenmark.metainfo.xml.in:65
 msgid ""
 "Editing picks up where you were reading: double-click any text to open the "
-"editor at that word, and Esc leaves edit mode again. The sidebar steps aside "
-"while you edit."
+"editor at that word, and Esc leaves edit mode again. 48 editor themes with a "
+"colour preview, and Preferences in a window of its own so nothing dims the "
+"editor while you choose one."
 msgstr ""
 
 #: data/de.singular.stenmark.metainfo.xml.in:70
@@ -312,7 +313,7 @@ msgid ""
 "Remove its contents first."
 msgstr ""
 
-#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:446
+#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:445
 #: stenmark/sidebar.py:449
 msgid "OK"
 msgstr ""
@@ -667,31 +668,31 @@ msgstr ""
 msgid "Toggle Edit Mode"
 msgstr ""
 
-#: stenmark/settings_dialog.py:398
+#: stenmark/settings_dialog.py:397
 msgid "Choose Root Directory"
 msgstr ""
 
-#: stenmark/settings_dialog.py:425
+#: stenmark/settings_dialog.py:424
 msgid "Restart Stenmark?"
 msgstr ""
 
-#: stenmark/settings_dialog.py:426
+#: stenmark/settings_dialog.py:425
 msgid "The new language takes effect after Stenmark restarts."
 msgstr ""
 
-#: stenmark/settings_dialog.py:428
+#: stenmark/settings_dialog.py:427
 msgid "Later"
 msgstr ""
 
-#: stenmark/settings_dialog.py:429
+#: stenmark/settings_dialog.py:428
 msgid "Restart Now"
 msgstr ""
 
-#: stenmark/settings_dialog.py:443 stenmark/window.py:699
+#: stenmark/settings_dialog.py:442 stenmark/window.py:699
 msgid "Unsaved Changes"
 msgstr ""
 
-#: stenmark/settings_dialog.py:444
+#: stenmark/settings_dialog.py:443
 msgid "Save your open document before restarting."
 msgstr ""
 

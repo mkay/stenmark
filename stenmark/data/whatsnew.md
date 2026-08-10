@@ -21,6 +21,7 @@ form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
 - Editing now starts where you were reading. Double-click any text and the editor opens with the caret on that very word; switch back and the reader returns to the line you were editing.
-- The sidebar steps out of the way while you edit, so the editor and preview get the whole window. It comes back exactly as you left it.
-- Esc leaves edit mode and saves. If the editor's find panel is open, the first Esc closes that instead.
-- Both new habits can be turned off under Preferences → Editor → Behaviour.
+- Esc leaves edit mode and saves. Typing a backtick first no longer swallows it — a pending dead key used to eat the next Escape, Backspace or Return.
+- The sidebar steps out of the way while you edit, giving the editor and preview the whole window. Both new habits can be switched off under Preferences → Editor → Behaviour.
+- 48 editor themes — Dracula, Nord, Gruvbox, Tokyo Night, VS Code, Solarized — with a colour preview beside the picker.
+- Preferences opens in a window of its own, so nothing dims the editor while you try a theme on. The window size setting has moved in there too.

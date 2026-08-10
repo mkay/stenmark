@@ -62,7 +62,7 @@
   <releases>
     <release version="0.7.0" date="2026-08-10">
       <description>
-        <p>Editing picks up where you were reading: double-click any text to open the editor at that word, and Esc leaves edit mode again. The sidebar steps aside while you edit.</p>
+        <p>Editing picks up where you were reading: double-click any text to open the editor at that word, and Esc leaves edit mode again. 48 editor themes with a colour preview, and Preferences in a window of its own so nothing dims the editor while you choose one.</p>
       </description>
     </release>
     <release version="0.6.1" date="2026-08-07">

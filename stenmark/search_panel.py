@@ -8,7 +8,7 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gtk, GLib, GObject, Gdk
 
-from stenmark.i18n import _, ngettext
+from stenmark.i18n import _, ngettext, C_
 
 from stenmark.document_panel import (
     _collect_md_files,
@@ -33,7 +33,8 @@ class SearchPanel(Gtk.Box):
         self._search_generation = 0
         self._debounce_id = None
         self._folder = Sidebar.ALL_DOCUMENTS  # search scope
-        self._scope_name = "All Documents"
+        # Translators: search scope, as it reads inside "Search in {scope}".
+        self._scope_name = C_("search scope", "All Documents")
 
         # Search bar
         bar = Gtk.Box(
@@ -105,9 +106,13 @@ class SearchPanel(Gtk.Box):
         """Set search scope: a directory path, ALL_DOCUMENTS, or NO_FOLDER."""
         self._folder = folder
         if folder == Sidebar.ALL_DOCUMENTS:
-            self._scope_name = _("All Documents")
+            # Translators: search scope, as it reads inside "Search in {scope}".
+            # Inflect for that frame if your language needs it — the sidebar
+            # row of the same name is a separate string.
+            self._scope_name = C_("search scope", "All Documents")
         elif folder == Sidebar.NO_FOLDER:
-            self._scope_name = _("Files without Folder")
+            # Translators: search scope, as it reads inside "Search in {scope}".
+            self._scope_name = C_("search scope", "Files without Folder")
         else:
             self._scope_name = f"\u201c{os.path.basename(folder)}\u201d"
         self._entry.set_placeholder_text(

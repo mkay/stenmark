@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-07 21:04+0300\n"
+"POT-Creation-Date: 2026-08-10 10:40+0300\n"
 "PO-Revision-Date: 2026-08-07 20:05+0300\n"
 "Last-Translator: Kreuder <mk@singular.de>\n"
 "Language-Team: German\n"
@@ -30,8 +30,16 @@ msgid "markdown;editor;viewer;notes;"
 msgstr "markdown;editor;betrachter;notizen;"
 
 #: data/de.singular.stenmark.metainfo.xml.in:12
-msgid "Stenmark is your markdown librarian: a GTK4 Markdown reader, organizer and editor built with libadwaita. It features a split-pane editor with live preview, syntax highlighting, table of contents navigation, and a folder-based document browser."
-msgstr "Stenmark ist dein Markdown-Organizer: ein Betrachter, Verwalter und Editor für Markdown, gebaut mit GTK4 und libadwaita. Er bietet einen geteilten Editor mit Live-Vorschau, Syntaxhervorhebung, Navigation über das Inhaltsverzeichnis und einen ordnerbasierten Dokumentenbrowser."
+msgid ""
+"Stenmark is your markdown librarian: a GTK4 Markdown reader, organizer and "
+"editor built with libadwaita. It features a split-pane editor with live "
+"preview, syntax highlighting, table of contents navigation, and a folder-"
+"based document browser."
+msgstr ""
+"Stenmark ist dein Markdown-Organizer: ein Betrachter, Verwalter und Editor "
+"für Markdown, gebaut mit GTK4 und libadwaita. Er bietet einen geteilten "
+"Editor mit Live-Vorschau, Syntaxhervorhebung, Navigation über das "
+"Inhaltsverzeichnis und einen ordnerbasierten Dokumentenbrowser."
 
 #: data/de.singular.stenmark.metainfo.xml.in:18
 msgid "Features:"
@@ -69,19 +77,61 @@ msgstr "Helles und dunkles Erscheinungsbild"
 msgid "Kreuder"
 msgstr ""
 
-#: data/de.singular.stenmark.metainfo.xml.in:50
+#: data/de.singular.stenmark.metainfo.xml.in:47
+msgid "Reading a document beside the folder sidebar"
+msgstr ""
+
+#: data/de.singular.stenmark.metainfo.xml.in:51
+#, fuzzy
+msgid "Editing Markdown with syntax highlighting"
+msgstr "CodeMirror-6-Editor mit Markdown-Syntaxhervorhebung"
+
+#: data/de.singular.stenmark.metainfo.xml.in:65
+msgid ""
+"Corrected the version this metadata reports: it had stopped at 0.3.3, so "
+"software centres named the wrong release."
+msgstr ""
+
+#: data/de.singular.stenmark.metainfo.xml.in:70
+msgid ""
+"German translation and a language picker, a Flatpak of its own, a Support "
+"item in the menu, and a move to GPL-3.0-only."
+msgstr ""
+
+#: data/de.singular.stenmark.metainfo.xml.in:75
+msgid ""
+"The preview pane starts off and remembers your last choice; the sidebar tag "
+"list refreshes as tags change."
+msgstr ""
+
+#: data/de.singular.stenmark.metainfo.xml.in:80
+msgid "Tagging, and filtering documents by one or more tags."
+msgstr ""
+
+#: data/de.singular.stenmark.metainfo.xml.in:85
+msgid ""
+"Navigation between linked documents, Stenmark offered as an \"Open with\" "
+"handler, and fixes to the sidebar outside the root folder."
+msgstr ""
+
+#: data/de.singular.stenmark.metainfo.xml.in:90
+msgid ""
+"Renamed from Marklite to Stenmark, with a new icon and AppStream metadata."
+msgstr ""
+
+#: data/de.singular.stenmark.metainfo.xml.in:95
 msgid "Switched to Phosphor Icons, fixed opening directories via CLI argument."
 msgstr ""
 "Wechsel zu Phosphor Icons, Öffnen von Verzeichnissen über das "
 "Kommandozeilenargument korrigiert."
 
-#: data/de.singular.stenmark.metainfo.xml.in:55
+#: data/de.singular.stenmark.metainfo.xml.in:100
 msgid "Better new document behaviour, minor UI improvements."
 msgstr ""
 "Besseres Verhalten beim Anlegen neuer Dokumente, kleinere Verbesserungen an "
 "der Oberfläche."
 
-#: data/de.singular.stenmark.metainfo.xml.in:60
+#: data/de.singular.stenmark.metainfo.xml.in:105
 msgid "Added pin-to-top for folders, various fixes and cleanup."
 msgstr ""
 "Ordner lassen sich nun oben anheften, diverse Korrekturen und "
@@ -402,59 +452,65 @@ msgstr "Code kopieren"
 msgid "Copied!"
 msgstr "Kopiert!"
 
-#: stenmark/search_panel.py:50
+#. Translators: search scope, as it reads inside "Search in {scope}".
+#. Translators: search scope, as it reads inside "Search in {scope}".
+#. Inflect for that frame if your language needs it — the sidebar
+#. row of the same name is a separate string.
+#: stenmark/search_panel.py:37 stenmark/search_panel.py:112
+msgctxt "search scope"
+msgid "All Documents"
+msgstr "allen Dokumenten"
+
+#: stenmark/search_panel.py:51
 msgid "Search all documents…"
 msgstr "Alle Dokumente durchsuchen…"
 
-#: stenmark/search_panel.py:85
+#: stenmark/search_panel.py:86
 msgid "Search Documents"
 msgstr "Dokumente durchsuchen"
 
-#: stenmark/search_panel.py:86
+#: stenmark/search_panel.py:87
 msgid "Search for text across all your markdown files."
 msgstr "Durchsuche alle deine Markdown-Dateien nach Text."
 
-#: stenmark/search_panel.py:90
+#: stenmark/search_panel.py:91
 msgid "or filter by tags"
 msgstr "oder nach Schlagwörtern filtern"
 
-#: stenmark/search_panel.py:108 stenmark/sidebar.py:174 stenmark/window.py:452
-#: stenmark/window.py:530
-msgid "All Documents"
-msgstr "Alle Dokumente"
-
-#: stenmark/search_panel.py:110
+#. Translators: search scope, as it reads inside "Search in {scope}".
+#: stenmark/search_panel.py:115
+msgctxt "search scope"
 msgid "Files without Folder"
 msgstr "Dateien ohne Ordner"
 
-#: stenmark/search_panel.py:114
+#: stenmark/search_panel.py:119
 #, python-brace-format
 msgid "Search in {scope}…"
 msgstr "In {scope} suchen…"
 
-#: stenmark/search_panel.py:115 stenmark/search_panel.py:126
+#: stenmark/search_panel.py:120 stenmark/search_panel.py:131
 #, python-brace-format
 msgid "Search {scope}"
-msgstr "{scope} durchsuchen"
+msgstr "In {scope} suchen"
 
-#: stenmark/search_panel.py:116
+#: stenmark/search_panel.py:121
 msgid "What are you looking for?"
 msgstr "Wonach suchst du?"
 
-#: stenmark/search_panel.py:128
+#: stenmark/search_panel.py:133
 #, python-brace-format
 msgid "Search for text in {scope}."
 msgstr "Suche in {scope} nach Text."
 
-#: stenmark/search_panel.py:230 stenmark/tag_panel.py:265
+#: stenmark/search_panel.py:235 stenmark/tag_panel.py:265
 msgid "No Results"
 msgstr "Keine Treffer"
 
-#: stenmark/search_panel.py:231
+#: stenmark/search_panel.py:236
 msgid "No documents match your search."
 msgstr "Keine Dokumente passen zu deiner Suche."
 
-#: stenmark/search_panel.py:235
+#: stenmark/search_panel.py:240
 #, python-brace-format
 msgid "{n} result"
 msgid_plural "{n} results"
@@ -645,6 +701,10 @@ msgstr "Alle Dokumente durchsuchen"
 msgid "Open root folder"
 msgstr "Stammordner öffnen"
 
+#: stenmark/sidebar.py:174 stenmark/window.py:452 stenmark/window.py:530
+msgid "All Documents"
+msgstr "Alle Dokumente"
+
 #: stenmark/sidebar.py:212 stenmark/sidebar.py:681 stenmark/window.py:1095
 msgid "Tags"
 msgstr "Schlagwörter"
@@ -811,7 +871,8 @@ msgstr ""
 "Dein Markdown-Organizer\n"
 "Version {version}\n"
 "\n"
-"Es ist kein Stammverzeichnis festgelegt, oder das eingestellte Verzeichnis fehlt.\n"
+"Es ist kein Stammverzeichnis festgelegt, oder das eingestellte Verzeichnis "
+"fehlt.\n"
 "Wähle einen Ordner, um loszulegen."
 
 #: stenmark/welcome.py:81
@@ -827,7 +888,8 @@ msgstr ""
 "Version {version}\n"
 "\n"
 "Stenmark ist Alpha-Software\n"
-"Funktionen kommen und gehen, wie sie wollen. Verbessern sich sogar gelegentlich."
+"Funktionen kommen und gehen, wie sie wollen. Verbessern sich sogar "
+"gelegentlich."
 
 #. Translators: dialog title for the release notes shown after an
 #. update. The notes themselves are always English.

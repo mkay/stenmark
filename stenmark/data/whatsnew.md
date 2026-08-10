@@ -20,5 +20,7 @@ Links may be written as [label](https://…) or as a bare URL. Prefer the labell
 form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
-- Your software centre will finally name the right version. Stenmark's metadata had reported 0.3.3 since March, whatever was actually installed.
-- Everything from 0.6.0, if you are coming from further back: German and a language picker, a Flatpak of its own, a Support item in the menu, and a move to GPL-3.0-only.
+- Editing now starts where you were reading. Double-click any text and the editor opens with the caret on that very word; switch back and the reader returns to the line you were editing.
+- The sidebar steps out of the way while you edit, so the editor and preview get the whole window. It comes back exactly as you left it.
+- Esc leaves edit mode and saves. If the editor's find panel is open, the first Esc closes that instead.
+- Both new habits can be turned off under Preferences → Editor → Behaviour.

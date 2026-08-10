@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-10 13:57+0300\n"
-"PO-Revision-Date: 2026-08-07 20:05+0300\n"
-"Last-Translator: Kreuder <mk@singular.de>\n"
+"PO-Revision-Date: 2026-08-10 14:10+0300\n"
+"Last-Translator: Kreuder <mail@singular.de>\n"
 "Language-Team: German\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1017,7 +1017,7 @@ msgstr "Suche"
 
 #: stenmark/window.py:1224
 msgid "translator-credits"
-msgstr ""
+msgstr "Kreuder <mail@singular.de>"
 
 #: stenmark/window.py:1231
 msgid "Help Translate Stenmark"

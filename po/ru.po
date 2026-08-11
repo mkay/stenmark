@@ -997,7 +997,7 @@ msgstr "Не сохранять"
 
 #: stenmark/window.py:704
 msgid "Save"
-msgstr ""
+msgstr "Сохранить"
 
 #: stenmark/window.py:929
 msgid "Copied as rich text"

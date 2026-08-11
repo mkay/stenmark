@@ -61,52 +61,52 @@
 
   <releases>
     <release version="0.7.0" date="2026-08-10">
-      <description>
+      <description translate="no">
         <p>Editing picks up where you were reading: double-click any text to open the editor at that word, and Esc leaves edit mode again. 48 editor themes with a colour preview, and Preferences in a window of its own so nothing dims the editor while you choose one.</p>
       </description>
     </release>
     <release version="0.6.1" date="2026-08-07">
-      <description>
+      <description translate="no">
         <p>Corrected the version this metadata reports: it had stopped at 0.3.3, so software centres named the wrong release.</p>
       </description>
     </release>
     <release version="0.6.0" date="2026-08-07">
-      <description>
+      <description translate="no">
         <p>German translation and a language picker, a Flatpak of its own, a Support item in the menu, and a move to GPL-3.0-only.</p>
       </description>
     </release>
     <release version="0.5.1" date="2026-07-21">
-      <description>
+      <description translate="no">
         <p>The preview pane starts off and remembers your last choice; the sidebar tag list refreshes as tags change.</p>
       </description>
     </release>
     <release version="0.5.0" date="2026-03-19">
-      <description>
+      <description translate="no">
         <p>Tagging, and filtering documents by one or more tags.</p>
       </description>
     </release>
     <release version="0.4.5" date="2026-03-17">
-      <description>
+      <description translate="no">
         <p>Navigation between linked documents, Stenmark offered as an "Open with" handler, and fixes to the sidebar outside the root folder.</p>
       </description>
     </release>
     <release version="0.4.0" date="2026-03-15">
-      <description>
+      <description translate="no">
         <p>Renamed from Marklite to Stenmark, with a new icon and AppStream metadata.</p>
       </description>
     </release>
     <release version="0.3.3" date="2026-03-14">
-      <description>
+      <description translate="no">
         <p>Switched to Phosphor Icons, fixed opening directories via CLI argument.</p>
       </description>
     </release>
     <release version="0.3.2" date="2026-03-12">
-      <description>
+      <description translate="no">
         <p>Better new document behaviour, minor UI improvements.</p>
       </description>
     </release>
     <release version="0.3.0" date="2026-03-11">
-      <description>
+      <description translate="no">
         <p>Added pin-to-top for folders, various fixes and cleanup.</p>
       </description>
     </release>

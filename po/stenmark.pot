@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-10 13:57+0300\n"
+"POT-Creation-Date: 2026-08-11 11:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,59 +82,6 @@ msgstr ""
 
 #: data/de.singular.stenmark.metainfo.xml.in:51
 msgid "Editing Markdown with syntax highlighting"
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:65
-msgid ""
-"Editing picks up where you were reading: double-click any text to open the "
-"editor at that word, and Esc leaves edit mode again. 48 editor themes with a "
-"colour preview, and Preferences in a window of its own so nothing dims the "
-"editor while you choose one."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:70
-msgid ""
-"Corrected the version this metadata reports: it had stopped at 0.3.3, so "
-"software centres named the wrong release."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:75
-msgid ""
-"German translation and a language picker, a Flatpak of its own, a Support "
-"item in the menu, and a move to GPL-3.0-only."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:80
-msgid ""
-"The preview pane starts off and remembers your last choice; the sidebar tag "
-"list refreshes as tags change."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:85
-msgid "Tagging, and filtering documents by one or more tags."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:90
-msgid ""
-"Navigation between linked documents, Stenmark offered as an \"Open with\" "
-"handler, and fixes to the sidebar outside the root folder."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:95
-msgid ""
-"Renamed from Marklite to Stenmark, with a new icon and AppStream metadata."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:100
-msgid "Switched to Phosphor Icons, fixed opening directories via CLI argument."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:105
-msgid "Better new document behaviour, minor UI improvements."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:110
-msgid "Added pin-to-top for folders, various fixes and cleanup."
 msgstr ""
 
 #: stenmark/app.py:26

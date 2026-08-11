@@ -27,6 +27,7 @@ GETTEXT_DOMAIN = "stenmark"
 SUPPORTED_LANGUAGES = [
     ("en", "English"),
     ("de", "Deutsch"),
+    ("ru", "Русский"),
 ]
 
 #: Settings key holding the override. Empty/absent means "follow the system".

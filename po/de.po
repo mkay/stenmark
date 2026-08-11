@@ -79,12 +79,11 @@ msgstr ""
 
 #: data/de.singular.stenmark.metainfo.xml.in:47
 msgid "Reading a document beside the folder sidebar"
-msgstr ""
+msgstr "Ein Dokument neben der Ordner-Seitenleiste lesen"
 
 #: data/de.singular.stenmark.metainfo.xml.in:51
-#, fuzzy
 msgid "Editing Markdown with syntax highlighting"
-msgstr "CodeMirror-6-Editor mit Markdown-Syntaxhervorhebung"
+msgstr "Markdown mit Syntaxhervorhebung bearbeiten"
 
 #: data/de.singular.stenmark.metainfo.xml.in:65
 msgid ""

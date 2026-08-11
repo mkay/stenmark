@@ -59,7 +59,17 @@
 
   <content_rating type="oars-1.1" />
 
+  <!-- Release descriptions are translate="no" deliberately: they are written
+       when the release is tagged, and software centres show them in the window
+       where they offer that update — which opens before any translation of one
+       could exist. Keep the attribute on new entries; a release genuinely
+       worth translating can drop it. -->
   <releases>
+    <release version="0.7.1" date="2026-08-11">
+      <description translate="no">
+        <p>A Russian translation, contributed by derVedro.</p>
+      </description>
+    </release>
     <release version="0.7.0" date="2026-08-10">
       <description translate="no">
         <p>Editing picks up where you were reading: double-click any text to open the editor at that word, and Esc leaves edit mode again. 48 editor themes with a colour preview, and Preferences in a window of its own so nothing dims the editor while you choose one.</p>

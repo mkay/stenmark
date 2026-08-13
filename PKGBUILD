@@ -1,6 +1,6 @@
 # Maintainer: Kreuder <mk@singular.de>
 pkgname=stenmark
-pkgver=0.7.0
+pkgver=0.7.1
 pkgrel=1
 pkgdesc='Your markdown librarian. A GTK4 Markdown reader, organizer and editor'
 arch=('any')

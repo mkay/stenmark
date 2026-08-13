@@ -65,7 +65,7 @@
        could exist. Keep the attribute on new entries; a release genuinely
        worth translating can drop it. -->
   <releases>
-    <release version="0.7.1" date="2026-08-11">
+    <release version="0.7.1" date="2026-08-13">
       <description translate="no">
         <p>A Russian translation, contributed by derVedro.</p>
       </description>

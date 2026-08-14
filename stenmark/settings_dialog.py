@@ -361,6 +361,14 @@ class SettingsDialog(Adw.PreferencesDialog):
         line_wrap_row.connect("notify::active", self._on_line_wrap_changed)
         editor_appearance_group.add(line_wrap_row)
 
+        typewriter_row = Adw.SwitchRow(
+            title=_("Typewriter Mode"),
+            subtitle=_("Keeps the line you are writing centred in the window"),
+        )
+        typewriter_row.set_active(self._settings.editor_typewriter)
+        typewriter_row.connect("notify::active", self._on_typewriter_changed)
+        editor_appearance_group.add(typewriter_row)
+
         editor_page.add(editor_appearance_group)
 
         editor_behaviour_group = Adw.PreferencesGroup(title=_("Behaviour"))
@@ -510,6 +518,9 @@ class SettingsDialog(Adw.PreferencesDialog):
 
     def _on_line_wrap_changed(self, row, _pspec):
         self._settings.set("editor_line_wrap", row.get_active())
+
+    def _on_typewriter_changed(self, row, _pspec):
+        self._settings.set("editor_typewriter", row.get_active())
 
     def _on_double_click_to_edit_changed(self, row, _pspec):
         self._settings.set("double_click_to_edit", row.get_active())

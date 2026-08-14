@@ -23,6 +23,7 @@ DEFAULTS = {
     "editor_theme": "auto",
     "editor_line_numbers": True,
     "editor_line_wrap": True,
+    "editor_typewriter": False,
     "double_click_to_edit": True,
     "hide_sidebar_on_edit": True,
     "edit_shortcut": "<Control>e",
@@ -137,6 +138,10 @@ class SettingsManager(GObject.Object):
     @property
     def editor_line_wrap(self):
         return self.get("editor_line_wrap")
+
+    @property
+    def editor_typewriter(self):
+        return self.get("editor_typewriter")
 
     @property
     def double_click_to_edit(self):

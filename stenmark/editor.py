@@ -273,11 +273,13 @@ class MarkdownEditor(Gtk.Box):
         size = self._settings.editor_font_size
         line_nums = "true" if self._settings.editor_line_numbers else "false"
         line_wrap = "true" if self._settings.editor_line_wrap else "false"
+        typewriter = "true" if self._settings.editor_typewriter else "false"
         self._js(
             f"setTheme({theme}, {dark_js});"
             f"setFont({family}, {size});"
             f"setLineNumbers({line_nums});"
             f"setLineWrap({line_wrap});"
+            f"setTypewriter({typewriter});"
         )
 
     # ------------------------------------------------------------------

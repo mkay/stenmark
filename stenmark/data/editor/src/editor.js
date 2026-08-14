@@ -21,6 +21,7 @@ const themeCompartment       = new Compartment();
 const fontCompartment        = new Compartment();
 const lineNumbersCompartment = new Compartment();
 const lineWrapCompartment    = new Compartment();
+const typewriterCompartment  = new Compartment();
 
 // Adwaita-inspired light theme (custom, matches GTK window)
 const adwaitaLight = EditorView.theme(
@@ -194,6 +195,44 @@ function prefixLine(prefix) {
 
 // --- Editor setup ---
 
+// Typewriter mode: the line being written stays put and the document moves
+// under it. Two halves — the padding is what lets the last line reach the
+// middle at all, since without it the document simply stops at the bottom
+// edge and the caret rides down to meet it.
+function typewriterExtension() {
+  let frame = 0;
+  return [
+    EditorView.theme({ ".cm-content": { paddingBottom: "50vh" } }),
+    EditorView.updateListener.of((update) => {
+      // Recentre for edits, and for the caret changing line. Not for moving
+      // along a line, and not for plain scrolling: yanking the view back on
+      // every keypress in a line, or fighting the wheel, both read as a bug.
+      const before = update.startState.doc.lineAt(
+        update.startState.selection.main.head
+      ).number;
+      const after = update.state.doc.lineAt(
+        update.state.selection.main.head
+      ).number;
+      if (!update.docChanged && before === after) return;
+      // Dispatching straight from an update listener re-enters the update
+      // cycle, so defer a frame; that also collapses a burst into one scroll.
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        centreCaret();
+      });
+    }),
+  ];
+}
+
+function centreCaret() {
+  view.dispatch({
+    effects: EditorView.scrollIntoView(view.state.selection.main.head, {
+      y: "center",
+    }),
+  });
+}
+
 const view = new EditorView({
   state: EditorState.create({
     doc: "",
@@ -204,6 +243,7 @@ const view = new EditorView({
       drawSelection(),
       fontCompartment.of([]),
       lineWrapCompartment.of(EditorView.lineWrapping),
+      typewriterCompartment.of([]),
       markdown({ codeLanguages: languages }),
       search({ top: true }),
       themeCompartment.of(resolveTheme("auto", false)),
@@ -303,6 +343,15 @@ window.setLineWrap = (wrap) => {
   view.dispatch({
     effects: lineWrapCompartment.reconfigure(wrap ? EditorView.lineWrapping : []),
   });
+};
+
+window.setTypewriter = (on) => {
+  view.dispatch({
+    effects: typewriterCompartment.reconfigure(on ? typewriterExtension() : []),
+  });
+  // Switching it on should take effect where the caret already is, rather
+  // than waiting for the next keystroke.
+  if (on) centreCaret();
 };
 
 window.toggleSearch = () => {

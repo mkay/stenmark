@@ -296,6 +296,21 @@ class MainWindow(Adw.ApplicationWindow):
         self._status_bar.append(self._word_count_label)
         self._status_bar.append(self._reading_time_label)
 
+        # Typewriter belongs beside the stats: both are about the document
+        # you are writing, and the bar is only up while you are writing it.
+        # Preferences stays the durable home; this is the reach-for-it copy.
+        self._typewriter_btn = Gtk.ToggleButton(
+            label=_("Typewriter"),
+            tooltip_text=_("Keep the current line centred (Ctrl+Shift+T)"),
+            css_classes=["flat", "caption"],
+            active=self._settings.editor_typewriter,
+        )
+        self._typewriter_btn.set_focus_on_click(False)
+        self._typewriter_btn.connect("toggled", self._on_typewriter_toggled)
+        self._status_bar.append(self._typewriter_btn)
+        # Set when the button is following the setting rather than driving it.
+        self._typewriter_syncing = False
+
         content_toolbar = Adw.ToolbarView()
         content_toolbar.add_top_bar(self._content_header)
         content_toolbar.add_bottom_bar(self._status_bar)
@@ -391,6 +406,13 @@ class MainWindow(Adw.ApplicationWindow):
         tag_filter.connect("activate", self._on_tag_filter)
         self.add_action(tag_filter)
         self.get_application().set_accels_for_action("win.tag-filter", ["<Control>t"])
+
+        typewriter = Gio.SimpleAction.new("typewriter", None)
+        typewriter.connect("activate", self._on_typewriter_action)
+        self.add_action(typewriter)
+        self.get_application().set_accels_for_action(
+            "win.typewriter", ["<Control><Shift>t"]
+        )
 
         nav_back = Gio.SimpleAction.new("nav-back", None)
         nav_back.connect("activate", lambda *_: self._navigate_back())
@@ -563,6 +585,14 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_folder_navigated(self, _panel, folder_path):
         self._title_widget.set_subtitle(os.path.basename(folder_path))
         self._update_back_btn()
+
+    def _on_typewriter_toggled(self, btn):
+        if self._typewriter_syncing:
+            return
+        self._settings.set("editor_typewriter", btn.get_active())
+
+    def _on_typewriter_action(self, *_args):
+        self._settings.set("editor_typewriter", not self._settings.editor_typewriter)
 
     def _update_back_btn(self):
         page = self._stack.get_visible_child_name()
@@ -830,7 +860,14 @@ class MainWindow(Adw.ApplicationWindow):
             self._viewer.update_style()
             self._preview_viewer.update_style()
         elif key in ("editor_font_family", "editor_font_size",
-                     "editor_theme", "editor_line_numbers", "editor_line_wrap"):
+                     "editor_theme", "editor_line_numbers", "editor_line_wrap",
+                     "editor_typewriter"):
+            if key == "editor_typewriter":
+                # Preferences or the shortcut may have moved it; the button
+                # must follow without reporting the change back as its own.
+                self._typewriter_syncing = True
+                self._typewriter_btn.set_active(self._settings.editor_typewriter)
+                self._typewriter_syncing = False
             self._editor.update_style()
         elif key == "edit_shortcut":
             self._apply_edit_shortcut()

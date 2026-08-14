@@ -43,15 +43,15 @@
        actually see. -->
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/mkay/stenmark/a29e90bc1f6062fb5efc66341550851b04ff1081/data/screenshots/reader.png</image>
+      <image>https://raw.githubusercontent.com/mkay/stenmark/8337da9c08508b4dc94d0575f9093a1b0a886af6/data/screenshots/reader.png</image>
       <caption>Reading a document beside the folder sidebar</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/mkay/stenmark/a29e90bc1f6062fb5efc66341550851b04ff1081/data/screenshots/editor.png</image>
+      <image>https://raw.githubusercontent.com/mkay/stenmark/8337da9c08508b4dc94d0575f9093a1b0a886af6/data/screenshots/editor.png</image>
       <caption>Editing Markdown beside a live preview</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/mkay/stenmark/a29e90bc1f6062fb5efc66341550851b04ff1081/data/screenshots/documents.png</image>
+      <image>https://raw.githubusercontent.com/mkay/stenmark/8337da9c08508b4dc94d0575f9093a1b0a886af6/data/screenshots/documents.png</image>
       <caption>Every document in the root folder, grouped by subfolder</caption>
     </screenshot>
   </screenshots>

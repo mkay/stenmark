@@ -249,6 +249,23 @@ for remote in $(git remote); do
         break
     fi
 done
+
+# The token is only needed for the two API calls below, so it is fetched here
+# rather than exported from a shell profile: an exported secret sits in the
+# environment of every process started from that shell, where any stray `echo`
+# or crash dump can spill it. Kept in the login keyring, like gh's own token:
+#   secret-tool store --label='Forgejo release token' service forgejo host git.singular.de
+# An already-set FORGEJO_TOKEN still wins, so a one-off run can override it.
+if [[ -z "${FORGEJO_TOKEN:-}" && -n "$FORGEJO_URL" ]] && command -v secret-tool &>/dev/null; then
+    FORGEJO_TOKEN=$(secret-tool lookup service forgejo host "$FORGEJO_URL" 2>/dev/null || true)
+fi
+# A missing token used to skip the Forgejo release in silence, which is how a
+# release ends up published in one place and not the other.
+if [[ -n "$FORGEJO_URL" && -z "${FORGEJO_TOKEN:-}" ]]; then
+    echo "WARNING: no FORGEJO_TOKEN and none in the keyring for $FORGEJO_URL —"
+    echo "         skipping the Forgejo release. The tag and its pushes are unaffected."
+fi
+
 if [[ -n "$FORGEJO_URL" && -n "${FORGEJO_TOKEN:-}" ]]; then
     echo "==> Creating Forgejo release on $FORGEJO_URL ($REPO_PATH)"
 

@@ -1268,6 +1268,14 @@ class MainWindow(Adw.ApplicationWindow):
         if credits != "translator-credits":
             about.set_translator_credits(credits)
 
+        # translator-credits above only ever shows the language being read, so
+        # a translator is credited to the people already reading their own
+        # work. This section is the permanent roll, visible in every locale.
+        # German is not listed: that is the developer, credited above.
+        about.add_credit_section(_("Translators"), [
+            "derVedro (Русский)",
+        ])
+
         # The durable home for the invitation: the language row in Preferences
         # carries it too, but only someone who goes looking for it sees it.
         from stenmark.i18n import TRANSLATE_URL

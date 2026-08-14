@@ -79,6 +79,21 @@ class MainWindow(Adw.ApplicationWindow):
         if open_file:
             self.open_file(open_file)
 
+    # A property so the status-bar readout can't fall out of step with it:
+    # edit mode is left from ten different places — toggling, saving,
+    # navigating away, closing a document — and only some of them refresh the
+    # status bar. The readout has to dim with every one of them.
+    @property
+    def _editing(self):
+        return self._editing_state
+
+    @_editing.setter
+    def _editing(self, value):
+        self._editing_state = value
+        # __init__ sets this before the status bar exists.
+        if hasattr(self, "_typewriter_btn"):
+            self._update_typewriter_label()
+
     def _build_ui(self):
         # === Sidebar ToolbarView ===
         sidebar_header = Adw.HeaderBar(show_end_title_buttons=False)

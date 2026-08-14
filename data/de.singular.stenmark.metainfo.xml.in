@@ -65,6 +65,11 @@
        could exist. Keep the attribute on new entries; a release genuinely
        worth translating can drop it. -->
   <releases>
+    <release version="0.8.0" date="2026-08-14">
+      <description translate="no">
+        <p>Typewriter mode keeps the line you are writing centred in the window. The root folder picker drills down one level at a time instead of listing every folder at once, and changing the root now starts fresh in the folder you picked.</p>
+      </description>
+    </release>
     <release version="0.7.1" date="2026-08-13">
       <description translate="no">
         <p>A Russian translation, contributed by derVedro.</p>

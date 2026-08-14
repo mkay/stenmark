@@ -126,6 +126,8 @@ Translations are contributed by native speakers — see [TRANSLATING.md](TRANSLA
 
 ![Editor screen](data/screenshots/editor.png)
 
+![Document list](data/screenshots/documents.png)
+
 ## Disclaimer
 
 This project was developed with AI assistance. The code has been analysed with Codacy and Bandit. Use at your own discretion.  

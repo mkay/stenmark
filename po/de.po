@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-10 13:57+0300\n"
+"POT-Creation-Date: 2026-08-14 17:27+0300\n"
 "PO-Revision-Date: 2026-08-10 14:10+0300\n"
 "Last-Translator: Kreuder <mk@singular.de>\n"
 "Language-Team: German\n"
@@ -84,65 +84,6 @@ msgstr "Ein Dokument neben der Ordner-Seitenleiste lesen"
 #: data/de.singular.stenmark.metainfo.xml.in:51
 msgid "Editing Markdown with syntax highlighting"
 msgstr "Markdown mit Syntaxhervorhebung bearbeiten"
-
-#: data/de.singular.stenmark.metainfo.xml.in:65
-msgid ""
-"Editing picks up where you were reading: double-click any text to open the "
-"editor at that word, and Esc leaves edit mode again. 48 editor themes with a "
-"colour preview, and Preferences in a window of its own so nothing dims the "
-"editor while you choose one."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:70
-msgid ""
-"Corrected the version this metadata reports: it had stopped at 0.3.3, so "
-"software centres named the wrong release."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:75
-msgid ""
-"German translation and a language picker, a Flatpak of its own, a Support "
-"item in the menu, and a move to GPL-3.0-only."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:80
-msgid ""
-"The preview pane starts off and remembers your last choice; the sidebar tag "
-"list refreshes as tags change."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:85
-msgid "Tagging, and filtering documents by one or more tags."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:90
-msgid ""
-"Navigation between linked documents, Stenmark offered as an \"Open with\" "
-"handler, and fixes to the sidebar outside the root folder."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:95
-msgid ""
-"Renamed from Marklite to Stenmark, with a new icon and AppStream metadata."
-msgstr ""
-
-#: data/de.singular.stenmark.metainfo.xml.in:100
-msgid "Switched to Phosphor Icons, fixed opening directories via CLI argument."
-msgstr ""
-"Wechsel zu Phosphor Icons, Öffnen von Verzeichnissen über das "
-"Kommandozeilenargument korrigiert."
-
-#: data/de.singular.stenmark.metainfo.xml.in:105
-msgid "Better new document behaviour, minor UI improvements."
-msgstr ""
-"Besseres Verhalten beim Anlegen neuer Dokumente, kleinere Verbesserungen an "
-"der Oberfläche."
-
-#: data/de.singular.stenmark.metainfo.xml.in:110
-msgid "Added pin-to-top for folders, various fixes and cleanup."
-msgstr ""
-"Ordner lassen sich nun oben anheften, diverse Korrekturen und "
-"Aufräumarbeiten."
 
 #: stenmark/app.py:26
 msgid "[FOLDER | FILE.md]"
@@ -241,7 +182,7 @@ msgstr "Öffnen mit…"
 #: stenmark/document_panel.py:606 stenmark/document_panel.py:780
 #: stenmark/document_panel.py:865 stenmark/document_panel.py:869
 #: stenmark/document_panel.py:1123 stenmark/document_panel.py:1127
-#: stenmark/sidebar.py:343 stenmark/sidebar.py:483 stenmark/sidebar.py:487
+#: stenmark/sidebar.py:404 stenmark/sidebar.py:544 stenmark/sidebar.py:548
 msgid "Rename"
 msgstr "Umbenennen"
 
@@ -254,12 +195,12 @@ msgid "Move to Trash"
 msgstr "In den Papierkorb verschieben"
 
 #: stenmark/document_panel.py:609 stenmark/document_panel.py:782
-#: stenmark/sidebar.py:345
+#: stenmark/sidebar.py:406
 msgid "Reveal in File Manager"
 msgstr "Im Dateimanager anzeigen"
 
 #: stenmark/document_panel.py:612 stenmark/document_panel.py:785
-#: stenmark/sidebar.py:355
+#: stenmark/sidebar.py:416
 msgid "Copy Path"
 msgstr "Pfad kopieren"
 
@@ -267,56 +208,56 @@ msgstr "Pfad kopieren"
 msgid "Create new Document here"
 msgstr "Hier ein neues Dokument anlegen"
 
-#: stenmark/document_panel.py:691 stenmark/sidebar.py:356
+#: stenmark/document_panel.py:691 stenmark/sidebar.py:417
 msgid "Refresh"
 msgstr "Aktualisieren"
 
-#: stenmark/document_panel.py:734 stenmark/sidebar.py:98
-#: stenmark/sidebar.py:349 stenmark/sidebar.py:544
+#: stenmark/document_panel.py:734 stenmark/sidebar.py:124
+#: stenmark/sidebar.py:410 stenmark/sidebar.py:605
 msgid "New Document"
 msgstr "Neues Dokument"
 
 #: stenmark/document_panel.py:735 stenmark/document_panel.py:843
 #: stenmark/document_panel.py:868 stenmark/document_panel.py:1045
 #: stenmark/document_panel.py:1082 stenmark/document_panel.py:1126
-#: stenmark/sidebar.py:459 stenmark/sidebar.py:486 stenmark/sidebar.py:545
-#: stenmark/sidebar.py:615 stenmark/window.py:702
+#: stenmark/sidebar.py:520 stenmark/sidebar.py:547 stenmark/sidebar.py:606
+#: stenmark/sidebar.py:676 stenmark/window.py:735
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: stenmark/document_panel.py:736 stenmark/sidebar.py:546
-#: stenmark/sidebar.py:616
+#: stenmark/document_panel.py:736 stenmark/sidebar.py:607
+#: stenmark/sidebar.py:677
 msgid "Create"
 msgstr "Anlegen"
 
-#: stenmark/document_panel.py:741 stenmark/sidebar.py:553
+#: stenmark/document_panel.py:741 stenmark/sidebar.py:614
 msgid "Untitled.md"
 msgstr "Unbenannt.md"
 
 #: stenmark/document_panel.py:760 stenmark/document_panel.py:892
-#: stenmark/document_panel.py:1157 stenmark/sidebar.py:599
-#: stenmark/sidebar.py:639
+#: stenmark/document_panel.py:1157 stenmark/sidebar.py:660
+#: stenmark/sidebar.py:700
 #, python-brace-format
 msgid "“{name}” already exists"
 msgstr "„{name}“ existiert bereits"
 
-#: stenmark/document_panel.py:776 stenmark/sidebar.py:339
+#: stenmark/document_panel.py:776 stenmark/sidebar.py:400
 msgid "Unpin"
 msgstr "Lösen"
 
-#: stenmark/document_panel.py:776 stenmark/sidebar.py:339
+#: stenmark/document_panel.py:776 stenmark/sidebar.py:400
 msgid "Pin to Top"
 msgstr "Oben anheften"
 
-#: stenmark/document_panel.py:781 stenmark/sidebar.py:344
+#: stenmark/document_panel.py:781 stenmark/sidebar.py:405
 msgid "Delete Folder"
 msgstr "Ordner löschen"
 
-#: stenmark/document_panel.py:829 stenmark/sidebar.py:445
+#: stenmark/document_panel.py:829 stenmark/sidebar.py:506
 msgid "Folder is not empty"
 msgstr "Ordner ist nicht leer"
 
-#: stenmark/document_panel.py:830 stenmark/sidebar.py:446
+#: stenmark/document_panel.py:830 stenmark/sidebar.py:507
 #, python-brace-format
 msgid ""
 "“{name}” still contains files or folders.\n"
@@ -326,31 +267,31 @@ msgstr ""
 "Leere ihn zuerst."
 
 #: stenmark/document_panel.py:833 stenmark/settings_dialog.py:445
-#: stenmark/sidebar.py:449
+#: stenmark/sidebar.py:510
 msgid "OK"
 msgstr "OK"
 
-#: stenmark/document_panel.py:840 stenmark/sidebar.py:456
+#: stenmark/document_panel.py:840 stenmark/sidebar.py:517
 msgid "Delete Folder?"
 msgstr "Ordner löschen?"
 
-#: stenmark/document_panel.py:841 stenmark/sidebar.py:457
+#: stenmark/document_panel.py:841 stenmark/sidebar.py:518
 #, python-brace-format
 msgid "“{name}” will be deleted."
 msgstr "„{name}“ wird gelöscht."
 
-#: stenmark/document_panel.py:844 stenmark/sidebar.py:460
+#: stenmark/document_panel.py:844 stenmark/sidebar.py:521
 msgid "Delete"
 msgstr "Löschen"
 
 #: stenmark/document_panel.py:866 stenmark/document_panel.py:1124
-#: stenmark/sidebar.py:484
+#: stenmark/sidebar.py:545
 #, python-brace-format
 msgid "Enter a new name for “{name}”:"
 msgstr "Gib einen neuen Namen für „{name}“ ein:"
 
 #: stenmark/document_panel.py:920 stenmark/document_panel.py:1035
-#: stenmark/sidebar.py:416
+#: stenmark/sidebar.py:477
 msgid "Path copied to clipboard"
 msgstr "Pfad in die Zwischenablage kopiert"
 
@@ -363,9 +304,9 @@ msgstr "In den Papierkorb verschieben?"
 msgid "“{name}” will be moved to the trash."
 msgstr "„{name}“ wird in den Papierkorb verschoben."
 
-#: stenmark/document_panel.py:1076 stenmark/sidebar.py:185
-#: stenmark/sidebar.py:542 stenmark/tag_panel.py:289 stenmark/window.py:515
-#: stenmark/window.py:593
+#: stenmark/document_panel.py:1076 stenmark/sidebar.py:230
+#: stenmark/sidebar.py:603 stenmark/tag_panel.py:289 stenmark/window.py:548
+#: stenmark/window.py:626
 msgid "No Folder"
 msgstr "Ohne Ordner"
 
@@ -442,6 +383,22 @@ msgstr "Code kopieren"
 msgid "Copied!"
 msgstr "Kopiert!"
 
+#: stenmark/root_selector.py:49 stenmark/window.py:108
+msgid "Change root folder"
+msgstr "Stammordner wechseln"
+
+#: stenmark/root_selector.py:124
+msgid "No subfolders"
+msgstr "Keine Unterordner"
+
+#: stenmark/root_selector.py:147
+msgid "Use this folder as root"
+msgstr "Diesen Ordner als Stammordner verwenden"
+
+#: stenmark/root_selector.py:184
+msgid "Show subfolders"
+msgstr "Unterordner anzeigen"
+
 #. Translators: search scope, as it reads inside "Search in {scope}".
 #. Translators: search scope, as it reads inside "Search in {scope}".
 #. Inflect for that frame if your language needs it — the sidebar
@@ -507,7 +464,7 @@ msgid_plural "{n} results"
 msgstr[0] "{n} Treffer"
 msgstr[1] "{n} Treffer"
 
-#: stenmark/settings_dialog.py:111 stenmark/window.py:139
+#: stenmark/settings_dialog.py:111 stenmark/window.py:172
 msgid "Preferences"
 msgstr "Einstellungen"
 
@@ -704,7 +661,7 @@ msgstr "Später"
 msgid "Restart Now"
 msgstr "Jetzt neu starten"
 
-#: stenmark/settings_dialog.py:442 stenmark/window.py:699
+#: stenmark/settings_dialog.py:442 stenmark/window.py:732
 msgid "Unsaved Changes"
 msgstr "Ungespeicherte Änderungen"
 
@@ -712,36 +669,40 @@ msgstr "Ungespeicherte Änderungen"
 msgid "Save your open document before restarting."
 msgstr "Speichere dein geöffnetes Dokument vor dem Neustart."
 
-#: stenmark/sidebar.py:105 stenmark/sidebar.py:350 stenmark/sidebar.py:612
-#: stenmark/sidebar.py:621
+#: stenmark/sidebar.py:131 stenmark/sidebar.py:411 stenmark/sidebar.py:673
+#: stenmark/sidebar.py:682
 msgid "New Folder"
 msgstr "Neuer Ordner"
 
-#: stenmark/sidebar.py:112 stenmark/tag_panel.py:123 stenmark/tag_panel.py:160
+#: stenmark/sidebar.py:138 stenmark/tag_panel.py:123 stenmark/tag_panel.py:160
 msgid "Filter by Tag"
 msgstr "Nach Schlagwort filtern"
 
-#: stenmark/sidebar.py:119
+#: stenmark/sidebar.py:145
 msgid "Search All Documents"
 msgstr "Alle Dokumente durchsuchen"
 
-#: stenmark/sidebar.py:141
+#: stenmark/sidebar.py:167
 msgid "Open root folder"
 msgstr "Stammordner öffnen"
 
-#: stenmark/sidebar.py:174 stenmark/window.py:513 stenmark/window.py:591
+#: stenmark/sidebar.py:188
+msgid "Root folder"
+msgstr "Stammordner"
+
+#: stenmark/sidebar.py:219 stenmark/window.py:546 stenmark/window.py:624
 msgid "All Documents"
 msgstr "Alle Dokumente"
 
-#: stenmark/sidebar.py:212 stenmark/sidebar.py:681 stenmark/window.py:1162
+#: stenmark/sidebar.py:257 stenmark/sidebar.py:751 stenmark/window.py:1205
 msgid "Tags"
 msgstr "Schlagwörter"
 
-#: stenmark/sidebar.py:565
+#: stenmark/sidebar.py:626
 msgid "Folder"
 msgstr "Ordner"
 
-#: stenmark/sidebar.py:613
+#: stenmark/sidebar.py:674
 msgid "Enter a name for the new folder:"
 msgstr "Gib einen Namen für den neuen Ordner ein:"
 
@@ -858,7 +819,7 @@ msgstr "Nächster Treffer"
 msgid "No matches"
 msgstr "Keine Treffer"
 
-#: stenmark/viewer.py:382 stenmark/window.py:99 stenmark/window.py:1296
+#: stenmark/viewer.py:382 stenmark/window.py:132
 msgid "Back"
 msgstr "Zurück"
 
@@ -925,114 +886,130 @@ msgstr ""
 msgid "What's New"
 msgstr "Neu in dieser Version"
 
-#: stenmark/window.py:108
+#: stenmark/window.py:141
 msgid "Toggle edit mode"
 msgstr "Bearbeitungsmodus umschalten"
 
-#: stenmark/window.py:119
+#: stenmark/window.py:152
 msgid "Toggle live preview"
 msgstr "Live-Vorschau umschalten"
 
-#: stenmark/window.py:133
+#: stenmark/window.py:166
 msgid "New Window"
 msgstr "Neues Fenster"
 
-#: stenmark/window.py:136
+#: stenmark/window.py:169
 msgid "Export to PDF"
 msgstr "Als PDF exportieren"
 
-#: stenmark/window.py:140
+#: stenmark/window.py:173
 msgid "Support Stenmark"
 msgstr "Stenmark unterstützen"
 
-#: stenmark/window.py:143
+#: stenmark/window.py:176
 msgid "About"
 msgstr "Info"
 
-#: stenmark/window.py:148
+#: stenmark/window.py:181
 msgid "Menu"
 msgstr "Menü"
 
-#: stenmark/window.py:156
+#: stenmark/window.py:189
 msgid "Toggle sidebar"
 msgstr "Seitenleiste umschalten"
 
-#: stenmark/window.py:164
+#: stenmark/window.py:197
 msgid "Open in…"
 msgstr "Öffnen in…"
 
-#: stenmark/window.py:173
+#: stenmark/window.py:206
 msgid "Copy as rich text"
 msgstr "Als formatierten Text kopieren"
 
-#: stenmark/window.py:182
+#: stenmark/window.py:215
 msgid "Edit tags"
 msgstr "Schlagwörter bearbeiten"
 
-#: stenmark/window.py:191
+#: stenmark/window.py:224
 msgid "Table of contents"
 msgstr "Inhaltsverzeichnis"
 
-#: stenmark/window.py:511 stenmark/window.py:589
+#: stenmark/window.py:544 stenmark/window.py:622
 #, python-brace-format
 msgid "Tagged: {tag}"
 msgstr "Schlagwort: {tag}"
 
-#: stenmark/window.py:700
+#: stenmark/window.py:733
 msgid "You have unsaved changes. What would you like to do?"
 msgstr "Du hast ungespeicherte Änderungen. Was möchtest du tun?"
 
-#: stenmark/window.py:703
+#: stenmark/window.py:736
 msgid "Discard"
 msgstr "Verwerfen"
 
-#: stenmark/window.py:704
+#: stenmark/window.py:737
 msgid "Save"
 msgstr "Speichern"
 
-#: stenmark/window.py:929
+#: stenmark/window.py:972
 msgid "Copied as rich text"
 msgstr "Als formatierter Text kopiert"
 
-#: stenmark/window.py:935
+#: stenmark/window.py:978
 #, python-brace-format
 msgid "{n} word"
 msgid_plural "{n} words"
 msgstr[0] "{n} Wort"
 msgstr[1] "{n} Wörter"
 
-#: stenmark/window.py:938
+#: stenmark/window.py:981
 #, python-brace-format
 msgid "{n} min read"
 msgstr "{n} Min. Lesezeit"
 
-#: stenmark/window.py:1092
+#: stenmark/window.py:1135
 msgid "Add tag…"
 msgstr "Schlagwort hinzufügen…"
 
-#: stenmark/window.py:1194
+#: stenmark/window.py:1237
 msgid "Search"
 msgstr "Suche"
 
-#: stenmark/window.py:1224
+#: stenmark/window.py:1267
 msgid "translator-credits"
 msgstr "Kreuder <mk@singular.de>"
 
-#: stenmark/window.py:1231
+#: stenmark/window.py:1275
+msgid "Translators"
+msgstr "Übersetzer"
+
+#: stenmark/window.py:1282
 msgid "Help Translate Stenmark"
 msgstr "Hilf mit, Stenmark zu übersetzen"
 
-#: stenmark/window.py:1237
+#: stenmark/window.py:1288
 msgid "Give Stenmark a Like"
 msgstr "Gib Stenmark ein Like"
 
-#: stenmark/window.py:1238
+#: stenmark/window.py:1289
 msgid "Support Stenmark on Ko-fi"
 msgstr "Stenmark auf Ko-fi unterstützen"
 
-#: stenmark/window.py:1325
-msgid "No subfolders"
-msgstr "Keine Unterordner"
+#~ msgid ""
+#~ "Switched to Phosphor Icons, fixed opening directories via CLI argument."
+#~ msgstr ""
+#~ "Wechsel zu Phosphor Icons, Öffnen von Verzeichnissen über das "
+#~ "Kommandozeilenargument korrigiert."
+
+#~ msgid "Better new document behaviour, minor UI improvements."
+#~ msgstr ""
+#~ "Besseres Verhalten beim Anlegen neuer Dokumente, kleinere Verbesserungen "
+#~ "an der Oberfläche."
+
+#~ msgid "Added pin-to-top for folders, various fixes and cleanup."
+#~ msgstr ""
+#~ "Ordner lassen sich nun oben anheften, diverse Korrekturen und "
+#~ "Aufräumarbeiten."
 
 #~ msgid "Window Size"
 #~ msgstr "Fenstergröße"

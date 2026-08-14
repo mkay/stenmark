@@ -20,6 +20,13 @@ from stenmark.search_panel import SearchPanel
 from stenmark.tag_index import TagIndex
 from stenmark.tag_panel import TagPanel
 from stenmark.frontmatter import read_tags, update_tags
+from stenmark.root_selector import RootSelector
+
+
+# Prototype switch for the sidebar's root-folder selector. True gives the
+# drill-down popover from root_selector.py; False restores the flat
+# GtkDropDown, which is kept intact below.
+ROOT_DRILLDOWN = True
 
 
 class RootFolder(GObject.Object):
@@ -81,22 +88,31 @@ class MainWindow(Adw.ApplicationWindow):
 
         # The "ceiling" is the configured root from settings (ignoring session overrides)
         self._root_ceiling = self._settings._data.get("root_directory", self._settings.get("root_directory"))
+        # Which ceiling the drill-down has already been handed, so a plain
+        # folder change refreshes its pages instead of resetting the stack.
+        self._root_ceiling_shown = None
 
-        # Root selector: the ceiling folder plus every folder beneath it, flat.
+        # Root selector: the ceiling folder plus every folder beneath it.
         self._root_paths = []
         self._root_model = Gio.ListStore(item_type=RootFolder)
-        self._root_dropdown = Gtk.DropDown(
-            model=self._root_model,
-            tooltip_text=_("Change root folder"),
-            # Lets the stylesheet reach the popup's rows, which carry the
-            # dividers and their own tightened padding.
-            css_classes=["root-dropdown"],
-            list_factory=self._root_row_factory(indent=True),
-            factory=self._root_row_factory(indent=False),
-        )
         # Guards the handler while we set the selection to match settings
         self._root_syncing = False
-        self._root_dropdown.connect("notify::selected", self._on_root_selected)
+        if ROOT_DRILLDOWN:
+            self._root_dropdown = RootSelector()
+            self._root_dropdown.connect(
+                "folder-selected", self._on_root_folder_selected
+            )
+        else:
+            self._root_dropdown = Gtk.DropDown(
+                model=self._root_model,
+                tooltip_text=_("Change root folder"),
+                # Lets the stylesheet reach the popup's rows, which carry the
+                # dividers and their own tightened padding.
+                css_classes=["root-dropdown"],
+                list_factory=self._root_row_factory(indent=True),
+                factory=self._root_row_factory(indent=False),
+            )
+            self._root_dropdown.connect("notify::selected", self._on_root_selected)
         self._rebuild_root_model()
 
         self._sidebar = Sidebar(self._settings, tag_index=self._tag_index)
@@ -797,6 +813,16 @@ class MainWindow(Adw.ApplicationWindow):
                 self._root_ceiling = persisted
             self._tag_index.set_root(self._settings.root_directory)
             self._rebuild_root_model()
+            # A new root starts fresh. Both panes still hold a selection made
+            # against the tree we just left — including All Documents, which
+            # would otherwise silently re-list every document under whatever
+            # root you land on next.
+            self._doc_panel.clear_selection()
+            self._sidebar.set_selection(None)
+            if self._stack.get_visible_child_name() == "documents":
+                self._title_widget.set_subtitle("")
+                self._stack.set_visible_child_name("welcome")
+                self._update_back_btn()
             self._sidebar.refresh()
             self._doc_panel.refresh()
             self._welcome.refresh()
@@ -1343,6 +1369,18 @@ class MainWindow(Adw.ApplicationWindow):
     def _rebuild_root_model(self):
         """Fill the selector with the ceiling folder and every folder below it."""
         ceiling = os.path.expanduser(self._root_ceiling)
+
+        if ROOT_DRILLDOWN:
+            # The drill-down reads one level at a time, so it only needs the
+            # ceiling; it walks the rest itself when a page is pushed.
+            if ceiling != self._root_ceiling_shown:
+                self._root_ceiling_shown = ceiling
+                self._root_dropdown.set_ceiling(ceiling)
+            else:
+                self._root_dropdown.refresh()
+            self._update_root_label()
+            return
+
         paths = [ceiling] + _collect_tree(ceiling)
 
         # Switching root doesn't move any folder, so the list is usually
@@ -1372,6 +1410,11 @@ class MainWindow(Adw.ApplicationWindow):
     def _update_root_label(self):
         """Point the selector at whatever the current root directory is."""
         current = os.path.normpath(self._settings.root_directory)
+
+        if ROOT_DRILLDOWN:
+            self._root_dropdown.set_current(current)
+            return
+
         match = -1
         for i, path in enumerate(self._root_paths):
             if os.path.normpath(path) == current:
@@ -1398,6 +1441,11 @@ class MainWindow(Adw.ApplicationWindow):
         # this dropdown's model. Doing that here would mutate the widget
         # while it is still emitting notify::selected, so let it finish first.
         GLib.idle_add(self._apply_root_change, self._root_paths[index])
+
+    def _on_root_folder_selected(self, _selector, path):
+        # Same deferral as the dropdown path: applying the root refreshes the
+        # sidebar, which rebuilds the selector we are being called from.
+        GLib.idle_add(self._apply_root_change, path)
 
     def _apply_root_change(self, path):
         self._settings.set_override("root_directory", path)

@@ -178,7 +178,20 @@ class Sidebar(Gtk.Box):
     def set_root_widget(self, widget):
         """Host the root-folder selector at the top of the sidebar."""
         widget.set_hexpand(True)
-        self._root_slot.append(widget)
+        # The selector shows a folder name in a folder-shaped button directly
+        # above a list of folders, so nothing on it says that this name is the
+        # root rather than one more place to go. A caption says it once,
+        # permanently, without touching the popup.
+        column = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2,
+                         hexpand=True)
+        column.append(Gtk.Label(
+            label=_("Root folder"),
+            xalign=0,
+            margin_start=6,
+            css_classes=["dim-label", "caption"],
+        ))
+        column.append(widget)
+        self._root_slot.append(column)
         self._root_slot.set_visible(True)
 
     def _active_dir(self):
@@ -265,11 +278,27 @@ class Sidebar(Gtk.Box):
                     )
                     self._listbox.append(row)
 
-        # Reconnect and select "All Documents" by default
+        # Reconnect, then put the highlight back on whatever the document
+        # pane is actually showing. Highlighting All Documents unconditionally
+        # made the sidebar claim a selection nobody had made: at startup the
+        # pane is still on the welcome view, and after a rebuild the user's
+        # own folder would lose the highlight to it.
         self._listbox.connect("row-activated", self._on_row_selected)
-        first = self._listbox.get_row_at_index(0)
-        if first:
-            self._listbox.select_row(first)
+        self._restore_highlight()
+
+    def _restore_highlight(self):
+        """Select the row for _selected_path, or nothing if it has no row."""
+        if self._selected_path is not None:
+            row = self._listbox.get_first_child()
+            while row is not None:
+                if getattr(row, "_folder_path", None) == self._selected_path:
+                    self._listbox.select_row(row)
+                    return
+                row = row.get_next_sibling()
+            # The folder was deleted, or the root moved away from under it;
+            # clearing it also stops _active_dir pointing outside the root.
+            self._selected_path = None
+        self._listbox.unselect_all()
 
     def _make_row(self, label_text, icon_name, count, path):
         box = Gtk.Box(
@@ -678,6 +707,15 @@ class Sidebar(Gtk.Box):
         self.refresh()
 
     # ---- Public ---------------------------------------------------------
+
+    def set_selection(self, path):
+        """Point the sidebar at `path` without emitting folder-selected.
+
+        For keeping the highlight in step when something other than a click
+        changes what the document pane shows.
+        """
+        self._selected_path = path
+        self._restore_highlight()
 
     def refresh(self):
         self._settings.cleanup_stale_pins()

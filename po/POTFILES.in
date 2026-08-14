@@ -8,6 +8,7 @@ stenmark/editor.py
 stenmark/frontmatter.py
 stenmark/html_template.py
 stenmark/markdown_renderer.py
+stenmark/root_selector.py
 stenmark/search_panel.py
 stenmark/settings_dialog.py
 stenmark/sidebar.py

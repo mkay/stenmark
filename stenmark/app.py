@@ -155,6 +155,39 @@ class Application(Adw.Application):
             .root-dropdown popover listview > row:active > box {
                 background-color: transparent;
             }
+            /* --- Drill-down root selector (prototype) -------------------
+               A GtkListBox in a plain popover, unlike the dropdown's
+               listview above, does take a background on the row itself, so
+               the stripe needs no negative-margin trick here. */
+            .root-drilldown-row {
+                padding: 4px 10px;
+                border-radius: 0;
+                /* Fixed, so a row carrying a chevron button doesn't stand
+                   taller than its plain neighbours. */
+                min-height: 30px;
+            }
+            /* Undo the row's padding so the striped box fills it edge to
+               edge, then carry the same padding on the box itself. */
+            .root-drilldown-row > box {
+                margin: -4px -10px;
+                padding: 4px 10px;
+            }
+            /* Same as the dropdown: drop the stripe under the pointer so the
+               theme's rounded pill isn't framed by square corners. */
+            .root-drilldown-row:hover > box,
+            .root-drilldown-row:active > box {
+                background-color: transparent;
+            }
+            /* The chevron is a button inside an activatable row; without
+               this it draws its own full-height pill over the stripe. */
+            .root-drilldown-descend {
+                min-width: 24px;
+                min-height: 24px;
+                padding: 0;
+            }
+            .root-drilldown popover contents {
+                padding: 0;
+            }
         """)
         Gtk.StyleContext.add_provider_for_display(
             Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION

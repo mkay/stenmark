@@ -1182,6 +1182,17 @@ class DocumentPanel(Gtk.Box):
         parent = os.path.dirname(self._browsing_folder)
         self._navigate_to(parent)
 
+    def clear_selection(self):
+        """Forget what was being shown, back to the state before any click.
+
+        Used when the root moves: what the pane was listing belongs to the
+        tree we just left, and neither the old folder nor All Documents of
+        the new root is something the user asked for here.
+        """
+        self._current_folder = None
+        self._browsing_folder = None
+        self._clear()
+
     def refresh(self):
         if self._current_folder and self._current_folder.startswith("tag:"):
             self.show_folder(self._current_folder)

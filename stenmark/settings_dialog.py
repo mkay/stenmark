@@ -398,6 +398,13 @@ class SettingsDialog(Adw.PreferencesDialog):
         edit_shortcut_row.connect("changed", self._on_edit_shortcut_changed)
         editor_shortcuts_group.add(edit_shortcut_row)
 
+        typewriter_shortcut_row = Adw.EntryRow(title=_("Typewriter Mode"))
+        typewriter_shortcut_row.set_text(self._settings.typewriter_shortcut)
+        typewriter_shortcut_row.connect(
+            "changed", self._on_typewriter_shortcut_changed
+        )
+        editor_shortcuts_group.add(typewriter_shortcut_row)
+
         editor_page.add(editor_shortcuts_group)
         self.add(editor_page)
 
@@ -530,3 +537,6 @@ class SettingsDialog(Adw.PreferencesDialog):
 
     def _on_edit_shortcut_changed(self, row):
         self._settings.set("edit_shortcut", row.get_text())
+
+    def _on_typewriter_shortcut_changed(self, row):
+        self._settings.set("typewriter_shortcut", row.get_text())

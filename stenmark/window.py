@@ -302,11 +302,17 @@ class MainWindow(Adw.ApplicationWindow):
         # mode, where it can't do anything, it is a readout and nothing more.
         # Still a real button underneath, so it keeps keyboard and screen
         # reader behaviour. Preferences stays the durable home.
-        self._typewriter_btn = Gtk.Button(
-            css_classes=["caption", "dim-label", "status-toggle"],
+        # A GtkLabel, exactly like the two stats beside it, rather than a
+        # button wearing a label's clothes: libadwaita's stylesheet outranks
+        # ours, so a button keeps its 16px side padding whatever we ask for,
+        # and lands a half-gap further out than the stats it sits with.
+        self._typewriter_btn = Gtk.Label(
+            css_classes=["caption", "dim-label"],
+            accessible_role=Gtk.AccessibleRole.BUTTON,
         )
-        self._typewriter_btn.set_focus_on_click(False)
-        self._typewriter_btn.connect("clicked", self._on_typewriter_action)
+        click = Gtk.GestureClick()
+        click.connect("released", lambda *_: self._on_typewriter_action())
+        self._typewriter_btn.add_controller(click)
         self._status_bar.append(self._typewriter_btn)
 
         content_toolbar = Adw.ToolbarView()
@@ -394,6 +400,7 @@ class MainWindow(Adw.ApplicationWindow):
         edit_toggle.connect("activate", self._on_edit_shortcut)
         self.add_action(edit_toggle)
         self._apply_edit_shortcut()
+        self._apply_typewriter_shortcut()
 
         search = Gio.SimpleAction.new("search", None)
         search.connect("activate", self._on_search)
@@ -408,9 +415,6 @@ class MainWindow(Adw.ApplicationWindow):
         typewriter = Gio.SimpleAction.new("typewriter", None)
         typewriter.connect("activate", self._on_typewriter_action)
         self.add_action(typewriter)
-        self.get_application().set_accels_for_action(
-            "win.typewriter", ["<Control><Shift>t"]
-        )
 
         nav_back = Gio.SimpleAction.new("nav-back", None)
         nav_back.connect("activate", lambda *_: self._navigate_back())
@@ -599,10 +603,15 @@ class MainWindow(Adw.ApplicationWindow):
         # Insensitive in view mode: GTK dims it, which is exactly the "this is
         # information, not a control right now" the bar wants to say.
         self._typewriter_btn.set_sensitive(self._editing)
-        self._typewriter_btn.set_tooltip_text(
-            _("Keep the current line centred (Ctrl+Shift+T)")
-            if self._editing else None
-        )
+        self._typewriter_btn.set_cursor_from_name("pointer" if self._editing else None)
+        if not self._editing:
+            self._typewriter_btn.set_tooltip_text(None)
+        else:
+            accel = self._typewriter_accel_label()
+            self._typewriter_btn.set_tooltip_text(
+                _("Keep the current line centred ({accel})").format(accel=accel)
+                if accel else _("Keep the current line centred")
+            )
 
     def _update_back_btn(self):
         page = self._stack.get_visible_child_name()
@@ -878,6 +887,8 @@ class MainWindow(Adw.ApplicationWindow):
             self._editor.update_style()
         elif key == "edit_shortcut":
             self._apply_edit_shortcut()
+        elif key == "typewriter_shortcut":
+            self._apply_typewriter_shortcut()
         elif key == "file_watching":
             if self._settings.file_watching:
                 self._start_watching()
@@ -1026,6 +1037,25 @@ class MainWindow(Adw.ApplicationWindow):
         )
         self._update_typewriter_label()
         self._status_bar.set_visible(True)
+
+    def _apply_typewriter_shortcut(self):
+        # Validated first: the row is free text, and handing GTK something it
+        # can't parse earns a console critical and installs nothing anyway.
+        shortcut = self._settings.typewriter_shortcut
+        valid = bool(shortcut) and Gtk.accelerator_parse(shortcut)[0]
+        self.get_application().set_accels_for_action(
+            "win.typewriter", [shortcut] if valid else []
+        )
+        # The readout names the key, so it has to be renamed with it.
+        self._update_typewriter_label()
+
+    def _typewriter_accel_label(self):
+        """The configured shortcut as a user would write it, or "" if unset."""
+        shortcut = self._settings.typewriter_shortcut
+        if not shortcut:
+            return ""
+        ok, keyval, mods = Gtk.accelerator_parse(shortcut)
+        return Gtk.accelerator_get_label(keyval, mods) if ok else ""
 
     def _apply_edit_shortcut(self):
         shortcut = self._settings.edit_shortcut

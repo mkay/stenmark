@@ -27,6 +27,7 @@ DEFAULTS = {
     "double_click_to_edit": True,
     "hide_sidebar_on_edit": True,
     "edit_shortcut": "<Control>e",
+    "typewriter_shortcut": "<Control><Shift>t",
     "pinned_files": [],
     "pinned_folders": [],
     "file_watching": True,
@@ -201,6 +202,10 @@ class SettingsManager(GObject.Object):
     @property
     def edit_shortcut(self):
         return self.get("edit_shortcut")
+
+    @property
+    def typewriter_shortcut(self):
+        return self.get("typewriter_shortcut")
 
     @property
     def file_watching(self):

@@ -155,22 +155,6 @@ class Application(Adw.Application):
             .root-dropdown popover listview > row:active > box {
                 background-color: transparent;
             }
-            /* The typewriter readout sits among the status-bar stats and
-               should read as one of them, not as a button parked in the bar.
-               Chrome off, padding to match a label; it stays a real button so
-               the keyboard and screen reader still see one. */
-            .status-toggle {
-                background: none;
-                border: none;
-                box-shadow: none;
-                outline: none;
-                padding: 0;
-                min-height: 0;
-                min-width: 0;
-            }
-            .status-toggle:hover:not(:disabled) {
-                opacity: 1;
-            }
             .root-divider {
                 background-color: alpha(currentColor, 0.13);
                 min-height: 1px;

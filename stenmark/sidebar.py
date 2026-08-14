@@ -41,6 +41,21 @@ def _count_root_md_files(dir_path):
     return count
 
 
+def _collect_tree(root, max_depth=4):
+    """Return every folder below root, depth-first, sorted, path-only.
+
+    Depth is capped so a deep tree can't turn the root selector into a
+    thousand-entry list.
+    """
+    dirs = []
+    if max_depth <= 0:
+        return dirs
+    for path, _name in _collect_subdirs(root):
+        dirs.append(path)
+        dirs.extend(_collect_tree(path, max_depth - 1))
+    return dirs
+
+
 def _collect_subdirs(root):
     """Return sorted list of (path, name) for immediate subdirectories."""
     dirs = []
@@ -77,6 +92,17 @@ class Sidebar(Gtk.Box):
         self._selected_path = None
 
         self.set_size_request(220, -1)
+
+        # Slot for the root selector, sitting directly above the list
+        self._root_slot = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL,
+            margin_start=6,
+            margin_end=6,
+            margin_top=6,
+            margin_bottom=2,
+            visible=False,
+        )
+        self.append(self._root_slot)
 
         scrolled = Gtk.ScrolledWindow(vexpand=True, hexpand=True)
         scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -148,6 +174,12 @@ class Sidebar(Gtk.Box):
 
         self._setup_context_menu()
         self._populate()
+
+    def set_root_widget(self, widget):
+        """Host the root-folder selector at the top of the sidebar."""
+        widget.set_hexpand(True)
+        self._root_slot.append(widget)
+        self._root_slot.set_visible(True)
 
     def _active_dir(self):
         """Return the currently selected folder path (or root for All Documents)."""
@@ -703,12 +735,15 @@ class Sidebar(Gtk.Box):
                 self._listbox.append(row)
 
     def set_outside_root(self, outside):
+        has_root_widget = self._root_slot.get_first_child() is not None
         if outside:
+            self._root_slot.set_visible(False)
             self._scrolled.set_visible(False)
             self._action_bar.set_visible(False)
             self._outside_box.set_visible(True)
         else:
             self._outside_box.set_visible(False)
+            self._root_slot.set_visible(has_root_widget)
             self._scrolled.set_visible(True)
             self._action_bar.set_visible(True)
 

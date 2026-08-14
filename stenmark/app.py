@@ -124,6 +124,37 @@ class Application(Adw.Application):
             .tag-filter-chip:checked {
                 background: alpha(@accent_color, 0.25);
             }
+            /* Zebra striping for the root selector's popup. The stripe goes on
+               the box built in the factory, never on the row: a GtkListView
+               row inside a dropdown popup accepts almost nothing from an app
+               provider — background, margin, border-radius and padding are
+               all dropped silently, which is what made the first attempt at
+               this invisible. A solid background on the row never paints.
+               That also leaves the row's own 6px of padding in place with no
+               way to remove it, so the box could only ever fill the content
+               box inside it and every stripe was ringed by a dead 6px band.
+               The negative margin pulls the box back out over that padding:
+               the stripes now meet vertically and reach the popover's edges.
+               Row height is 23px of content plus twice the padding below, and
+               the horizontal padding carries the 6px back so text still sits
+               10px from the edge. currentColor is the text colour, so the
+               tint is white-on-dark and black-on-light with no second rule
+               and nothing to reload when the theme flips. */
+            .root-dropdown popover listview > row > box {
+                margin: -6px;
+                padding: 6px 16px;
+            }
+            .root-row-alt {
+                background-color: color-mix(in srgb, currentColor 3.5%, transparent);
+            }
+            /* Under the pointer the theme draws its own rounded pill on the
+               row, and a striped box underneath leaves its square corners
+               poking out around it. Drop the stripe for those states and let
+               the pill stand alone. */
+            .root-dropdown popover listview > row:hover > box,
+            .root-dropdown popover listview > row:active > box {
+                background-color: transparent;
+            }
         """)
         Gtk.StyleContext.add_provider_for_display(
             Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION

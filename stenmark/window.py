@@ -7,11 +7,11 @@ import re
 import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Adw, Gdk, GLib, Gtk, Gio
+from gi.repository import Adw, Gdk, GLib, GObject, Gtk, Gio
 
 from stenmark import APP_NAME, VERSION
 from stenmark.i18n import _, ngettext
-from stenmark.sidebar import Sidebar
+from stenmark.sidebar import Sidebar, _collect_tree
 from stenmark.document_panel import DocumentPanel
 from stenmark.viewer import MarkdownViewer
 from stenmark.editor import MarkdownEditor
@@ -20,6 +20,19 @@ from stenmark.search_panel import SearchPanel
 from stenmark.tag_index import TagIndex
 from stenmark.tag_panel import TagPanel
 from stenmark.frontmatter import read_tags, update_tags
+
+
+class RootFolder(GObject.Object):
+    """One entry in the root-folder selector."""
+
+    # A custom factory replaces GtkDropDown's own checkmark, so the rows
+    # track the current folder themselves.
+    selected = GObject.Property(type=bool, default=False)
+
+    def __init__(self, name, depth):
+        super().__init__()
+        self.name = name
+        self.depth = depth
 
 
 class MainWindow(Adw.ApplicationWindow):
@@ -62,28 +75,32 @@ class MainWindow(Adw.ApplicationWindow):
     def _build_ui(self):
         # === Sidebar ToolbarView ===
         sidebar_header = Adw.HeaderBar(show_end_title_buttons=False)
-
-        self._root_popover = Gtk.Popover(position=Gtk.PositionType.BOTTOM)
-        self._root_popover.set_has_arrow(True)
-
-        self._root_label = Gtk.Label(
-            label=os.path.basename(self._settings.root_directory),
-            ellipsize=3,  # Pango.EllipsizeMode.END
-            css_classes=["heading"],
-        )
-        self._root_btn = Gtk.MenuButton(
-            css_classes=["flat"],
-            popover=self._root_popover,
-            child=self._root_label,
-            direction=Gtk.ArrowType.NONE,
-        )
-        self._root_btn.connect("notify::active", self._on_root_btn_toggled)
-        sidebar_header.set_title_widget(self._root_btn)
+        # The content header already shows the app/document name; a second
+        # "Stenmark" over the sidebar is just noise.
+        sidebar_header.set_title_widget(Gtk.Box())
 
         # The "ceiling" is the configured root from settings (ignoring session overrides)
         self._root_ceiling = self._settings._data.get("root_directory", self._settings.get("root_directory"))
 
+        # Root selector: the ceiling folder plus every folder beneath it, flat.
+        self._root_paths = []
+        self._root_model = Gio.ListStore(item_type=RootFolder)
+        self._root_dropdown = Gtk.DropDown(
+            model=self._root_model,
+            tooltip_text=_("Change root folder"),
+            # Lets the stylesheet reach the popup's rows, which carry the
+            # dividers and their own tightened padding.
+            css_classes=["root-dropdown"],
+            list_factory=self._root_row_factory(indent=True),
+            factory=self._root_row_factory(indent=False),
+        )
+        # Guards the handler while we set the selection to match settings
+        self._root_syncing = False
+        self._root_dropdown.connect("notify::selected", self._on_root_selected)
+        self._rebuild_root_model()
+
         self._sidebar = Sidebar(self._settings, tag_index=self._tag_index)
+        self._sidebar.set_root_widget(self._root_dropdown)
 
         sidebar_toolbar = Adw.ToolbarView()
         sidebar_toolbar.add_css_class("app-sidebar")
@@ -299,7 +316,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._split_view.connect("notify::show-sidebar", self._on_split_sidebar_changed)
         self._edit_btn.connect("toggled", self._on_edit_toggled)
         self._sidebar.connect("folder-selected", self._on_folder_selected)
-        self._sidebar.connect("changed", lambda _s: self._doc_panel.refresh())
+        self._sidebar.connect("changed", self._on_sidebar_changed)
         self._sidebar.connect("file-created", self._on_file_created)
         self._sidebar.connect("search-requested", lambda _s: self._on_search(None, None))
         self._sidebar.connect("tag-filter-requested", lambda _s: self._on_tag_filter(None, None))
@@ -779,7 +796,7 @@ class MainWindow(Adw.ApplicationWindow):
             if persisted and "root_directory" not in self._settings._overrides:
                 self._root_ceiling = persisted
             self._tag_index.set_root(self._settings.root_directory)
-            self._update_root_label()
+            self._rebuild_root_model()
             self._sidebar.refresh()
             self._doc_panel.refresh()
             self._welcome.refresh()
@@ -1256,82 +1273,132 @@ class MainWindow(Adw.ApplicationWindow):
 
     # ---- Root folder navigation (sidebar header) -------------------------
 
-    def _update_root_label(self):
-        self._root_label.set_label(
-            os.path.basename(self._settings.root_directory)
-        )
+    def _on_sidebar_changed(self, _sidebar):
+        # Folders may have been created, renamed or deleted
+        self._rebuild_root_model()
+        self._doc_panel.refresh()
 
-    def _on_root_btn_toggled(self, btn, _pspec):
-        if not btn.get_active():
-            return
+    def _root_row_factory(self, indent):
+        """Factory for the selector's rows — folder icon plus name.
 
-        from stenmark.sidebar import _collect_subdirs
+        The popup rows (indent=True) show nesting as an indent; the button
+        (indent=False) shows the plain folder name.
+        """
+        factory = Gtk.SignalListItemFactory()
 
-        current_root = self._settings.root_directory
-        ceiling = os.path.expanduser(self._root_ceiling)
-
-        box = Gtk.Box(
-            orientation=Gtk.Orientation.VERTICAL,
-            spacing=2,
-            margin_start=4,
-            margin_end=4,
-            margin_top=4,
-            margin_bottom=4,
-        )
-
-        # "Back" row if drilled deeper than ceiling
-        if os.path.normpath(current_root) != os.path.normpath(ceiling):
-            parent = os.path.dirname(current_root)
-            back_btn = Gtk.Button(css_classes=["flat"])
-            back_box = Gtk.Box(
+        def on_setup(_f, list_item):
+            # The button sits directly above the sidebar rows, which pair a
+            # spacing=8 box with an untrimmed icon — 8px plus the ~1px of dead
+            # space inside its viewBox. Our icon is trimmed flush, so it needs
+            # the wider spacing to line up with them. The popup stands alone
+            # and reads better tight.
+            box = Gtk.Box(
                 orientation=Gtk.Orientation.HORIZONTAL,
-                spacing=8,
-                margin_start=6,
-                margin_end=6,
-                margin_top=4,
-                margin_bottom=4,
+                spacing=4 if indent else 9,
             )
-            back_box.append(Gtk.Image(icon_name="stenmark-go-previous-symbolic"))
-            back_box.append(Gtk.Label(
-                label=os.path.basename(parent) if parent != current_root else _("Back"),
-                xalign=0,
-                hexpand=True,
-            ))
-            back_btn.set_child(back_box)
-            back_btn.connect("clicked", self._on_root_nav, parent)
-            box.append(back_btn)
-            box.append(Gtk.Separator())
+            box.append(Gtk.Image(icon_name="stenmark-folder-bold-symbolic"))
+            box.append(Gtk.Label(xalign=0, hexpand=True, ellipsize=3))  # END
+            if indent:
+                box.append(Gtk.Image(icon_name="object-select-symbolic"))
+            list_item.set_child(box)
 
-        # Child folder rows
-        subdirs = _collect_subdirs(current_root)
-        if subdirs:
-            for dir_path, dir_name in subdirs:
-                btn = Gtk.Button(css_classes=["flat"])
-                row_box = Gtk.Box(
-                    orientation=Gtk.Orientation.HORIZONTAL,
-                    spacing=8,
-                    margin_start=6,
-                    margin_end=6,
-                    margin_top=4,
-                    margin_bottom=4,
+        def on_bind(_f, list_item):
+            item = list_item.get_item()
+            box = list_item.get_child()
+            icon = box.get_first_child()
+            # On the button, nudge right so the icon lines up with the
+            # sidebar rows below; in the popup, indent one step per level.
+            icon.set_margin_start(item.depth * 16 if indent else 6)
+            label = icon.get_next_sibling()
+            label.set_label(item.name)
+            if indent:
+                # GtkListView recycles rows, so :nth-child CSS would stripe by
+                # widget order and smear while scrolling. Bind carries the real
+                # model position, and every row clears the class it inherited
+                # from whatever item sat here before.
+                position = list_item.get_position()
+                if (position != Gtk.INVALID_LIST_POSITION
+                        and position % 2 == 1):
+                    box.add_css_class("root-row-alt")
+                else:
+                    box.remove_css_class("root-row-alt")
+                list_item._binding = item.bind_property(
+                    "selected", box.get_last_child(), "visible",
+                    GObject.BindingFlags.SYNC_CREATE,
                 )
-                row_box.append(Gtk.Image(icon_name="stenmark-folder-symbolic"))
-                row_box.append(Gtk.Label(label=dir_name, xalign=0, hexpand=True))
-                btn.set_child(row_box)
-                btn.connect("clicked", self._on_root_nav, dir_path)
-                box.append(btn)
-        else:
-            box.append(Gtk.Label(
-                label=_("No subfolders"),
-                css_classes=["dim-label"],
-                margin_start=6,
-                margin_end=6,
-                margin_top=8,
-                margin_bottom=8,
+
+        def on_unbind(_f, list_item):
+            # Rows are recycled; drop the binding or it keeps tracking the
+            # item that used to live here.
+            binding = getattr(list_item, "_binding", None)
+            if binding is not None:
+                binding.unbind()
+                list_item._binding = None
+
+        factory.connect("setup", on_setup)
+        factory.connect("bind", on_bind)
+        factory.connect("unbind", on_unbind)
+        return factory
+
+    def _rebuild_root_model(self):
+        """Fill the selector with the ceiling folder and every folder below it."""
+        ceiling = os.path.expanduser(self._root_ceiling)
+        paths = [ceiling] + _collect_tree(ceiling)
+
+        # Switching root doesn't move any folder, so the list is usually
+        # identical and only the selection has changed. Splicing regardless
+        # would drop and rebuild every row widget — and since this can run
+        # from the dropdown's own notify::selected handler, GTK would tear
+        # down widgets it is still using and the popup would stop opening.
+        if paths == self._root_paths:
+            self._update_root_label()
+            return
+        self._root_paths = paths
+
+        base = os.path.basename(ceiling.rstrip(os.sep)) or ceiling
+        items = [RootFolder(name=base, depth=0)]
+        for path in self._root_paths[1:]:
+            rel = os.path.relpath(path, ceiling)
+            items.append(RootFolder(
+                name=os.path.basename(path),
+                depth=rel.count(os.sep) + 1,
             ))
 
-        self._root_popover.set_child(box)
+        self._root_syncing = True
+        self._root_model.splice(0, self._root_model.get_n_items(), items)
+        self._root_syncing = False
+        self._update_root_label()
 
-    def _on_root_nav(self, _btn, dir_path):
-        self._root_popover.popdown()
-        self._settings.set_override("root_directory", dir_path)
+    def _update_root_label(self):
+        """Point the selector at whatever the current root directory is."""
+        current = os.path.normpath(self._settings.root_directory)
+        match = -1
+        for i, path in enumerate(self._root_paths):
+            if os.path.normpath(path) == current:
+                match = i
+                break
+
+        for i in range(self._root_model.get_n_items()):
+            self._root_model.get_item(i).props.selected = (i == match)
+
+        self._root_syncing = True
+        # No match means the root sits outside the tree we listed
+        self._root_dropdown.set_selected(
+            match if match >= 0 else Gtk.INVALID_LIST_POSITION
+        )
+        self._root_syncing = False
+
+    def _on_root_selected(self, dropdown, _pspec):
+        if self._root_syncing:
+            return
+        index = dropdown.get_selected()
+        if index == Gtk.INVALID_LIST_POSITION or index >= len(self._root_paths):
+            return
+        # Applying the root change refreshes the sidebar, which can rebuild
+        # this dropdown's model. Doing that here would mutate the widget
+        # while it is still emitting notify::selected, so let it finish first.
+        GLib.idle_add(self._apply_root_change, self._root_paths[index])
+
+    def _apply_root_change(self, path):
+        self._settings.set_override("root_directory", path)
+        return GLib.SOURCE_REMOVE

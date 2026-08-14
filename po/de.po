@@ -393,7 +393,7 @@ msgstr "Keine Unterordner"
 
 #: stenmark/root_selector.py:152
 msgid "Use this folder as root"
-msgstr "Diesen Ordner als Stammordner verwenden"
+msgstr "Als Stammordner verwenden"
 
 #: stenmark/root_selector.py:189
 msgid "Show subfolders"
@@ -617,7 +617,7 @@ msgstr "Schreibmaschinenmodus"
 
 #: stenmark/settings_dialog.py:366
 msgid "Keeps the line you are writing centred in the window"
-msgstr "Hält die Zeile, die Sie schreiben, mittig im Fenster"
+msgstr "Zentriert die fokussierte Zeile mittig im Fenster"
 
 #: stenmark/settings_dialog.py:374
 msgid "Behaviour"
@@ -1006,7 +1006,7 @@ msgstr "Kreuder <mk@singular.de>"
 
 #: stenmark/window.py:1365
 msgid "Translators"
-msgstr "Übersetzer"
+msgstr "Übersetzung"
 
 #: stenmark/window.py:1372
 msgid "Help Translate Stenmark"

@@ -297,19 +297,17 @@ class MainWindow(Adw.ApplicationWindow):
         self._status_bar.append(self._reading_time_label)
 
         # Typewriter belongs beside the stats: both are about the document
-        # you are writing, and the bar is only up while you are writing it.
-        # Preferences stays the durable home; this is the reach-for-it copy.
-        self._typewriter_btn = Gtk.ToggleButton(
-            label=_("Typewriter"),
-            tooltip_text=_("Keep the current line centred (Ctrl+Shift+T)"),
-            css_classes=["flat", "caption"],
-            active=self._settings.editor_typewriter,
+        # you are writing. Styled as one of them rather than as a button
+        # parked in the bar — it carries its state in its text, and in view
+        # mode, where it can't do anything, it is a readout and nothing more.
+        # Still a real button underneath, so it keeps keyboard and screen
+        # reader behaviour. Preferences stays the durable home.
+        self._typewriter_btn = Gtk.Button(
+            css_classes=["caption", "dim-label", "status-toggle"],
         )
         self._typewriter_btn.set_focus_on_click(False)
-        self._typewriter_btn.connect("toggled", self._on_typewriter_toggled)
+        self._typewriter_btn.connect("clicked", self._on_typewriter_action)
         self._status_bar.append(self._typewriter_btn)
-        # Set when the button is following the setting rather than driving it.
-        self._typewriter_syncing = False
 
         content_toolbar = Adw.ToolbarView()
         content_toolbar.add_top_bar(self._content_header)
@@ -586,13 +584,25 @@ class MainWindow(Adw.ApplicationWindow):
         self._title_widget.set_subtitle(os.path.basename(folder_path))
         self._update_back_btn()
 
-    def _on_typewriter_toggled(self, btn):
-        if self._typewriter_syncing:
-            return
-        self._settings.set("editor_typewriter", btn.get_active())
-
     def _on_typewriter_action(self, *_args):
+        # The readout is inert outside edit mode; so is the shortcut, rather
+        # than silently arming a mode you can't see the effect of.
+        if not self._editing:
+            return
         self._settings.set("editor_typewriter", not self._settings.editor_typewriter)
+
+    def _update_typewriter_label(self):
+        on = self._settings.editor_typewriter
+        self._typewriter_btn.set_label(
+            _("Typewriter = ON") if on else _("Typewriter = OFF")
+        )
+        # Insensitive in view mode: GTK dims it, which is exactly the "this is
+        # information, not a control right now" the bar wants to say.
+        self._typewriter_btn.set_sensitive(self._editing)
+        self._typewriter_btn.set_tooltip_text(
+            _("Keep the current line centred (Ctrl+Shift+T)")
+            if self._editing else None
+        )
 
     def _update_back_btn(self):
         page = self._stack.get_visible_child_name()
@@ -863,11 +873,8 @@ class MainWindow(Adw.ApplicationWindow):
                      "editor_theme", "editor_line_numbers", "editor_line_wrap",
                      "editor_typewriter"):
             if key == "editor_typewriter":
-                # Preferences or the shortcut may have moved it; the button
-                # must follow without reporting the change back as its own.
-                self._typewriter_syncing = True
-                self._typewriter_btn.set_active(self._settings.editor_typewriter)
-                self._typewriter_syncing = False
+                # Preferences or the shortcut may have moved it.
+                self._update_typewriter_label()
             self._editor.update_style()
         elif key == "edit_shortcut":
             self._apply_edit_shortcut()
@@ -1017,6 +1024,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._reading_time_label.set_label(
             _("{n} min read").format(n=minutes)
         )
+        self._update_typewriter_label()
         self._status_bar.set_visible(True)
 
     def _apply_edit_shortcut(self):

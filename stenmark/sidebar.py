@@ -104,6 +104,20 @@ class Sidebar(Gtk.Box):
         )
         self.append(self._root_slot)
 
+        # Sets the selector off from the list it sits above. Shown with the
+        # slot, so a window without a selector doesn't get a stray rule.
+        # A box, not a GtkSeparator: neither the theme's separator colour nor
+        # an app-provider background on the separator itself paints here — the
+        # same quirk that keeps a background off a GtkListBoxRow. A box takes
+        # one, and currentColor tracks the text so it works in either theme.
+        self._root_divider = Gtk.Box(
+            visible=False,
+            margin_top=4,
+            height_request=1,
+            css_classes=["root-divider"],
+        )
+        self.append(self._root_divider)
+
         scrolled = Gtk.ScrolledWindow(vexpand=True, hexpand=True)
         scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 
@@ -184,15 +198,22 @@ class Sidebar(Gtk.Box):
         # permanently, without touching the popup.
         column = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2,
                          hexpand=True)
-        column.append(Gtk.Label(
+        # Not .dim-label: in this theme it resolves to a dark colour outright
+        # rather than dimming the inherited one, which on the dark sidebar
+        # paints the caption in the background's own colour. Widget opacity
+        # dims whatever the label would otherwise be, in either theme.
+        caption = Gtk.Label(
             label=_("Root folder"),
             xalign=0,
             margin_start=6,
-            css_classes=["dim-label", "caption"],
-        ))
+            css_classes=["caption"],
+        )
+        caption.set_opacity(0.6)
+        column.append(caption)
         column.append(widget)
         self._root_slot.append(column)
         self._root_slot.set_visible(True)
+        self._root_divider.set_visible(True)
 
     def _active_dir(self):
         """Return the currently selected folder path (or root for All Documents)."""

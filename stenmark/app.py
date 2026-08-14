@@ -155,6 +155,10 @@ class Application(Adw.Application):
             .root-dropdown popover listview > row:active > box {
                 background-color: transparent;
             }
+            .root-divider {
+                background-color: alpha(currentColor, 0.13);
+                min-height: 1px;
+            }
             /* --- Drill-down root selector (prototype) -------------------
                A GtkListBox in a plain popover, unlike the dropdown's
                listview above, does take a background on the row itself, so

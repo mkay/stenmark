@@ -54,13 +54,18 @@ class RootSelector(Gtk.MenuButton):
         self._ceiling = None
         self._current = None
 
-        # Button face: same spacing as the dropdown's collapsed row, so
-        # swapping the implementations doesn't move the sidebar's top line.
-        # A check rather than a folder — wearing the same icon as the rows
-        # underneath is what made this read as one more folder to open.
-        face = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=9)
+        # Button face. A check rather than a folder — wearing the same icon
+        # as the rows underneath is what made this read as one more folder to
+        # open. Spacing and icon size are picked so the *label* lands on the
+        # folder names' column below it — 1px to their left, since those are
+        # bold and this isn't — with the check a touch smaller so it doesn't
+        # outweigh a row's icon.
+        face = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=7)
         icon = Gtk.Image(icon_name="stenmark-check-square-symbolic")
-        icon.set_margin_start(6)
+        icon.set_pixel_size(14)
+        # 5 rather than 6: a 1px nudge left for the whole face, paying back
+        # the optical weight the rows get from their bold labels.
+        icon.set_margin_start(5)
         face.append(icon)
         self._label = Gtk.Label(xalign=0, hexpand=True, ellipsize=3)  # END
         face.append(self._label)

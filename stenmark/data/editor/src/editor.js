@@ -201,12 +201,29 @@ function prefixLine(prefix) {
 // edge and the caret rides down to meet it.
 function typewriterExtension() {
   let frame = 0;
+  let dragging = false;
+  const endDrag = () => { dragging = false; };
   return [
     EditorView.theme({ ".cm-content": { paddingBottom: "50vh" } }),
+    // A drag-select and a recentring scroll feed each other: the scroll moves
+    // the text under the held pointer, which extends the selection onto
+    // another line, which scrolls again. Hold still until the button is up.
+    EditorView.domEventHandlers({
+      mousedown: (event) => {
+        if (event.button === 0) {
+          dragging = true;
+          window.addEventListener("mouseup", endDrag, { once: true });
+        }
+      },
+    }),
     EditorView.updateListener.of((update) => {
+      if (dragging) return;
       // Recentre for edits, and for the caret changing line. Not for moving
       // along a line, and not for plain scrolling: yanking the view back on
       // every keypress in a line, or fighting the wheel, both read as a bug.
+      // Not while a range is selected either — the reader is looking at the
+      // whole span, not writing at its head.
+      if (!update.state.selection.main.empty) return;
       const before = update.startState.doc.lineAt(
         update.startState.selection.main.head
       ).number;

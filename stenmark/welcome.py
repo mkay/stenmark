@@ -68,6 +68,12 @@ class WelcomeView(Adw.Bin):
         self._update_state()
         self.set_child(self._status)
 
+    def _root_is_unset(self):
+        """No folder has ever been picked, as opposed to one that broke."""
+        if self._settings is None:
+            return False
+        return not self._settings.get("root_directory")
+
     def _root_is_missing(self):
         if self._settings is None:
             return False
@@ -75,12 +81,22 @@ class WelcomeView(Adw.Bin):
         return not root or not os.path.isdir(root)
 
     def _update_state(self):
-        missing = self._root_is_missing()
-        if missing:
+        if self._root_is_unset():
+            # Naming Markdown here is what tells a new user which folder is
+            # worth picking, without reading as a restriction notice.
             self._status.set_description(
                 _("Your markdown librarian\nVersion {version}\n\n"
-                  "No root directory is set, or the configured directory is "
-                  "missing.\nChoose a folder to get started.").format(version=VERSION)
+                  "Choose the folder your Markdown files live "
+                  "in.").format(version=VERSION)
+            )  # nosec B608
+            self._set_root_btn.set_visible(True)
+            self._create_label.set_visible(False)
+            self._hint_label.set_visible(True)
+        elif self._root_is_missing():
+            self._status.set_description(
+                _("Your markdown librarian\nVersion {version}\n\n"
+                  "The configured folder is missing.\n"
+                  "Choose another to get started.").format(version=VERSION)
             )  # nosec B608
             self._set_root_btn.set_visible(True)
             self._create_label.set_visible(False)

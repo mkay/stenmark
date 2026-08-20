@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 23:20+0300\n"
+"POT-Creation-Date: 2026-08-20 23:29+0300\n"
 "PO-Revision-Date: 2026-08-10 14:10+0300\n"
 "Last-Translator: Kreuder <mk@singular.de>\n"
 "Language-Team: German\n"
@@ -872,23 +872,35 @@ msgstr ""
 msgid "You can change it later in Preferences → General → Files."
 msgstr "Du kannst ihn später unter Einstellungen → Allgemein → Dateien ändern."
 
-#: stenmark/welcome.py:81
+#: stenmark/welcome.py:88
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"
 "Version {version}\n"
 "\n"
-"No root directory is set, or the configured directory is missing.\n"
-"Choose a folder to get started."
+"Choose the folder your Markdown files live in."
 msgstr ""
 "Dein Markdown-Organizer\n"
 "Version {version}\n"
 "\n"
-"Es ist kein Stammverzeichnis festgelegt, oder das eingestellte Verzeichnis "
-"fehlt.\n"
-"Wähle einen Ordner, um loszulegen."
+"Wähle den Ordner, in dem deine Markdown-Dateien liegen."
 
-#: stenmark/welcome.py:90
+#: stenmark/welcome.py:97
+#, python-brace-format
+msgid ""
+"Your markdown librarian\n"
+"Version {version}\n"
+"\n"
+"The configured folder is missing.\n"
+"Choose another to get started."
+msgstr ""
+"Dein Markdown-Organizer\n"
+"Version {version}\n"
+"\n"
+"Der eingestellte Ordner fehlt.\n"
+"Wähle einen anderen, um loszulegen."
+
+#: stenmark/welcome.py:106
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"

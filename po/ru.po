@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 23:20+0300\n"
+"POT-Creation-Date: 2026-08-20 23:29+0300\n"
 "PO-Revision-Date: 2026-08-10 18:25+0200\n"
 "Last-Translator: derVedro <dervedro@googlemail.com>\n"
 "Language-Team: Russian\n"
@@ -881,14 +881,28 @@ msgstr ""
 msgid "You can change it later in Preferences → General → Files."
 msgstr ""
 
-#: stenmark/welcome.py:81
-#, python-brace-format
+#: stenmark/welcome.py:88
+#, fuzzy, python-brace-format
 msgid ""
 "Your markdown librarian\n"
 "Version {version}\n"
 "\n"
-"No root directory is set, or the configured directory is missing.\n"
-"Choose a folder to get started."
+"Choose the folder your Markdown files live in."
+msgstr ""
+"Твой markdown архивариус\n"
+"Версия {version}\n"
+"\n"
+"Stenmark — приложение в альфа-версии.\n"
+"Функции могут появляться и внезапно исчезать, а иногда даже и улучшаться."
+
+#: stenmark/welcome.py:97
+#, fuzzy, python-brace-format
+msgid ""
+"Your markdown librarian\n"
+"Version {version}\n"
+"\n"
+"The configured folder is missing.\n"
+"Choose another to get started."
 msgstr ""
 "Твой markdown архивариус\n"
 "Версия {version}\n"
@@ -896,7 +910,7 @@ msgstr ""
 "Корневой каталог не задан, или настроенный каталог отсутствует.\n"
 "Чтобы начать, выбери папку."
 
-#: stenmark/welcome.py:90
+#: stenmark/welcome.py:106
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"

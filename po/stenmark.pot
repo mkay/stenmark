@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 23:20+0300\n"
+"POT-Creation-Date: 2026-08-20 23:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -846,17 +846,26 @@ msgstr ""
 msgid "You can change it later in Preferences → General → Files."
 msgstr ""
 
-#: stenmark/welcome.py:81
+#: stenmark/welcome.py:88
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"
 "Version {version}\n"
 "\n"
-"No root directory is set, or the configured directory is missing.\n"
-"Choose a folder to get started."
+"Choose the folder your Markdown files live in."
 msgstr ""
 
-#: stenmark/welcome.py:90
+#: stenmark/welcome.py:97
+#, python-brace-format
+msgid ""
+"Your markdown librarian\n"
+"Version {version}\n"
+"\n"
+"The configured folder is missing.\n"
+"Choose another to get started."
+msgstr ""
+
+#: stenmark/welcome.py:106
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"

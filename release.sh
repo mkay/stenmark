@@ -98,6 +98,9 @@ fi
 # 1. Update version in meson.build, PKGBUILD, and Python package
 sed -i "0,/version: '[^']*'/{s/version: '[^']*'/version: '$VERSION'/}" meson.build
 sed -i "s/^pkgver=.*/pkgver=$VERSION/" PKGBUILD
+# pkgrel counts rebuilds of one pkgver, so a new version restarts it at 1.
+# Left alone it only ever climbs, and 0.9.0 shipped as -2 because of that.
+sed -i "s/^pkgrel=.*/pkgrel=1/" PKGBUILD
 sed -i "s/^VERSION = \".*\"/VERSION = \"$VERSION\"/" "$PROJECT_NAME/__init__.py"
 # PKGBUILD.local isn't released and isn't tracked, so it is bumped but never
 # committed: a stale pkgver makes local test installs report the wrong
@@ -105,6 +108,7 @@ sed -i "s/^VERSION = \".*\"/VERSION = \"$VERSION\"/" "$PROJECT_NAME/__init__.py"
 # missing local-testing file must not abort a release.
 if [[ -f PKGBUILD.local ]]; then
     sed -i "s/^pkgver=.*/pkgver=$VERSION/" PKGBUILD.local
+    sed -i "s/^pkgrel=.*/pkgrel=1/" PKGBUILD.local
 fi
 
 # 2. Generate the changelog for the forge releases (PREV_TAG set in step 0)

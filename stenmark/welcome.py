@@ -55,6 +55,14 @@ class WelcomeView(Adw.Bin):
         self._create_label.connect("activate-link", self._on_link_activated)
         child_box.append(self._create_label)
 
+        self._hint_label = Gtk.Label(
+            label=_("You can change it later in Preferences \u2192 General "
+                    "\u2192 Files."),
+            halign=Gtk.Align.CENTER,
+            css_classes=["dim-label"],
+        )
+        child_box.append(self._hint_label)
+
         self._status.set_child(child_box)
 
         self._update_state()
@@ -76,6 +84,7 @@ class WelcomeView(Adw.Bin):
             )  # nosec B608
             self._set_root_btn.set_visible(True)
             self._create_label.set_visible(False)
+            self._hint_label.set_visible(True)
         else:
             self._status.set_description(
                 _("Your markdown librarian\nVersion {version}\n\n"
@@ -85,6 +94,7 @@ class WelcomeView(Adw.Bin):
             )  # nosec B608
             self._set_root_btn.set_visible(False)
             self._create_label.set_visible(True)
+            self._hint_label.set_visible(False)
 
     def refresh(self):
         """Re-evaluate root directory state and update the view."""

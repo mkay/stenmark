@@ -22,6 +22,7 @@ form: a full URL wraps mid-scheme in a dialog this narrow.
 
 - Typewriter mode keeps the line you are writing centred in the window, with room to scroll past the end of the document. Turn it on in Preferences → Editor, from the status bar while editing, or with Ctrl+Shift+T.
 - Selecting text with the mouse in typewriter mode no longer sends the document racing past you.
+- On first launch Stenmark asks which folder your notes live in, instead of quietly starting in ~/Documents.
 - Stenmark no longer fails to start when the notes folder has no subfolders in it.
 - The root folder picker drills down one level at a time instead of listing every folder at once. Click a folder to make it the root, or the arrow beside it to see what is inside.
 - Changing the root folder starts fresh in the folder you picked, rather than carrying on listing documents from the one you left.

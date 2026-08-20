@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-14 18:28+0300\n"
+"POT-Creation-Date: 2026-08-20 23:20+0300\n"
 "PO-Revision-Date: 2026-08-10 18:25+0200\n"
 "Last-Translator: derVedro <dervedro@googlemail.com>\n"
 "Language-Team: Russian\n"
@@ -86,8 +86,13 @@ msgid "Reading a document beside the folder sidebar"
 msgstr "Чтение документа рядом с боковой панелью папок"
 
 #: data/de.singular.stenmark.metainfo.xml.in:51
-msgid "Editing Markdown with syntax highlighting"
+#, fuzzy
+msgid "Editing Markdown beside a live preview"
 msgstr "Редактирование markdown с подсветкой синтаксиса"
+
+#: data/de.singular.stenmark.metainfo.xml.in:55
+msgid "Every document in the root folder, grouped by subfolder"
+msgstr ""
 
 #: stenmark/app.py:26
 msgid "[FOLDER | FILE.md]"
@@ -230,7 +235,7 @@ msgstr "Новый документ"
 #: stenmark/document_panel.py:868 stenmark/document_panel.py:1045
 #: stenmark/document_panel.py:1082 stenmark/document_panel.py:1126
 #: stenmark/sidebar.py:541 stenmark/sidebar.py:568 stenmark/sidebar.py:627
-#: stenmark/sidebar.py:697 stenmark/window.py:799
+#: stenmark/sidebar.py:697 stenmark/window.py:801
 msgid "Cancel"
 msgstr "Отменить"
 
@@ -275,7 +280,7 @@ msgstr ""
 "«{name}» всё ещё содержит файлы или папки.\n"
 "Сначала удали её содержимое."
 
-#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:460
+#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:464
 #: stenmark/sidebar.py:531
 msgid "OK"
 msgstr "ОК"
@@ -397,6 +402,11 @@ msgstr "Скопировано!"
 msgid "Change root folder"
 msgstr "Открыть корневую папку"
 
+#: stenmark/root_selector.py:93
+#, fuzzy
+msgid "Choose folder"
+msgstr "Открыть корневую папку"
+
 #: stenmark/root_selector.py:129
 msgid "No subfolders"
 msgstr "Нет подпапок"
@@ -492,6 +502,10 @@ msgstr "Файлы"
 #: stenmark/settings_dialog.py:125
 msgid "Root Directory"
 msgstr "Корневой каталог"
+
+#: stenmark/settings_dialog.py:126
+msgid "Not set"
+msgstr ""
 
 #: stenmark/settings_dialog.py:140
 msgid "File Watching"
@@ -663,27 +677,27 @@ msgstr "Переключать режим редактирования"
 msgid "Choose Root Directory"
 msgstr "Выбери корневой каталог"
 
-#: stenmark/settings_dialog.py:439
+#: stenmark/settings_dialog.py:443
 msgid "Restart Stenmark?"
 msgstr "Перезапустить Stenmark?"
 
-#: stenmark/settings_dialog.py:440
+#: stenmark/settings_dialog.py:444
 msgid "The new language takes effect after Stenmark restarts."
 msgstr "Новый язык вступит в силу после перезапуска Stenmark."
 
-#: stenmark/settings_dialog.py:442
+#: stenmark/settings_dialog.py:446
 msgid "Later"
 msgstr "Позже"
 
-#: stenmark/settings_dialog.py:443
+#: stenmark/settings_dialog.py:447
 msgid "Restart Now"
 msgstr "Перезапустить сейчас"
 
-#: stenmark/settings_dialog.py:457 stenmark/window.py:796
+#: stenmark/settings_dialog.py:461 stenmark/window.py:798
 msgid "Unsaved Changes"
 msgstr "Несохранённые изменения"
 
-#: stenmark/settings_dialog.py:458
+#: stenmark/settings_dialog.py:462
 msgid "Save your open document before restarting."
 msgstr "Сохрани открытый документ перед перезапуском."
 
@@ -713,7 +727,7 @@ msgstr "Открыть корневую папку"
 msgid "All Documents"
 msgstr "Все документы"
 
-#: stenmark/sidebar.py:278 stenmark/sidebar.py:772 stenmark/window.py:1295
+#: stenmark/sidebar.py:278 stenmark/sidebar.py:772 stenmark/window.py:1297
 msgid "Tags"
 msgstr "Метки"
 
@@ -863,7 +877,11 @@ msgstr ""
 "Выбери markdown файл в боковой панели или <a href=\"create\">нажми здесь, "
 "чтобы создать новый</a>."
 
-#: stenmark/welcome.py:73
+#: stenmark/welcome.py:59
+msgid "You can change it later in Preferences → General → Files."
+msgstr ""
+
+#: stenmark/welcome.py:81
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"
@@ -878,7 +896,7 @@ msgstr ""
 "Корневой каталог не задан, или настроенный каталог отсутствует.\n"
 "Чтобы начать, выбери папку."
 
-#: stenmark/welcome.py:81
+#: stenmark/welcome.py:90
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"
@@ -969,23 +987,23 @@ msgstr ""
 msgid "Keep the current line centred"
 msgstr ""
 
-#: stenmark/window.py:797
+#: stenmark/window.py:799
 msgid "You have unsaved changes. What would you like to do?"
 msgstr "У тебя есть несохранённые изменения. Что хочешь сделать?"
 
-#: stenmark/window.py:800
+#: stenmark/window.py:802
 msgid "Discard"
 msgstr "Не сохранять"
 
-#: stenmark/window.py:801
+#: stenmark/window.py:803
 msgid "Save"
 msgstr "Сохранить"
 
-#: stenmark/window.py:1042
+#: stenmark/window.py:1044
 msgid "Copied as rich text"
 msgstr "Скопировано как форматированный текст"
 
-#: stenmark/window.py:1048
+#: stenmark/window.py:1050
 #, python-brace-format
 msgid "{n} word"
 msgid_plural "{n} words"
@@ -993,37 +1011,37 @@ msgstr[0] "{n} слово"
 msgstr[1] "{n} слова"
 msgstr[2] "{n} слов"
 
-#: stenmark/window.py:1051
+#: stenmark/window.py:1053
 #, python-brace-format
 msgid "{n} min read"
 msgstr "{n} мин. чтения"
 
-#: stenmark/window.py:1225
+#: stenmark/window.py:1227
 msgid "Add tag…"
 msgstr "Добавить метку…"
 
-#: stenmark/window.py:1327
+#: stenmark/window.py:1329
 msgid "Search"
 msgstr "Поиск"
 
-#: stenmark/window.py:1357
+#: stenmark/window.py:1359
 msgid "translator-credits"
 msgstr "derVedro с божьей помощью"
 
-#: stenmark/window.py:1365
+#: stenmark/window.py:1367
 #, fuzzy
 msgid "Translators"
 msgstr "derVedro с божьей помощью"
 
-#: stenmark/window.py:1372
+#: stenmark/window.py:1374
 msgid "Help Translate Stenmark"
 msgstr "Помоги перевести Stenmark"
 
-#: stenmark/window.py:1378
+#: stenmark/window.py:1380
 msgid "Give Stenmark a Like"
 msgstr "Поставь Stenmark лайк"
 
-#: stenmark/window.py:1379
+#: stenmark/window.py:1381
 msgid "Support Stenmark on Ko-fi"
 msgstr "Поддержи Stenmark на Ko-fi"
 

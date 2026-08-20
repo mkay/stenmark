@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-14 18:28+0300\n"
+"POT-Creation-Date: 2026-08-20 23:20+0300\n"
 "PO-Revision-Date: 2026-08-10 14:10+0300\n"
 "Last-Translator: Kreuder <mk@singular.de>\n"
 "Language-Team: German\n"
@@ -82,8 +82,12 @@ msgid "Reading a document beside the folder sidebar"
 msgstr "Ein Dokument neben der Ordner-Seitenleiste lesen"
 
 #: data/de.singular.stenmark.metainfo.xml.in:51
-msgid "Editing Markdown with syntax highlighting"
-msgstr "Markdown mit Syntaxhervorhebung bearbeiten"
+msgid "Editing Markdown beside a live preview"
+msgstr "Markdown bearbeiten mit Live-Vorschau daneben"
+
+#: data/de.singular.stenmark.metainfo.xml.in:55
+msgid "Every document in the root folder, grouped by subfolder"
+msgstr "Jedes Dokument im Stammordner, nach Unterordnern gruppiert"
 
 #: stenmark/app.py:26
 msgid "[FOLDER | FILE.md]"
@@ -221,7 +225,7 @@ msgstr "Neues Dokument"
 #: stenmark/document_panel.py:868 stenmark/document_panel.py:1045
 #: stenmark/document_panel.py:1082 stenmark/document_panel.py:1126
 #: stenmark/sidebar.py:541 stenmark/sidebar.py:568 stenmark/sidebar.py:627
-#: stenmark/sidebar.py:697 stenmark/window.py:799
+#: stenmark/sidebar.py:697 stenmark/window.py:801
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -266,7 +270,7 @@ msgstr ""
 "„{name}“ enthält noch Dateien oder Ordner.\n"
 "Leere ihn zuerst."
 
-#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:460
+#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:464
 #: stenmark/sidebar.py:531
 msgid "OK"
 msgstr "OK"
@@ -387,6 +391,10 @@ msgstr "Kopiert!"
 msgid "Change root folder"
 msgstr "Stammordner wechseln"
 
+#: stenmark/root_selector.py:93
+msgid "Choose folder"
+msgstr "Ordner wählen"
+
 #: stenmark/root_selector.py:129
 msgid "No subfolders"
 msgstr "Keine Unterordner"
@@ -479,6 +487,10 @@ msgstr "Dateien"
 #: stenmark/settings_dialog.py:125
 msgid "Root Directory"
 msgstr "Stammverzeichnis"
+
+#: stenmark/settings_dialog.py:126
+msgid "Not set"
+msgstr "Nicht festgelegt"
 
 #: stenmark/settings_dialog.py:140
 msgid "File Watching"
@@ -653,27 +665,27 @@ msgstr "Bearbeitungsmodus umschalten"
 msgid "Choose Root Directory"
 msgstr "Stammverzeichnis wählen"
 
-#: stenmark/settings_dialog.py:439
+#: stenmark/settings_dialog.py:443
 msgid "Restart Stenmark?"
 msgstr "Stenmark neu starten?"
 
-#: stenmark/settings_dialog.py:440
+#: stenmark/settings_dialog.py:444
 msgid "The new language takes effect after Stenmark restarts."
 msgstr "Die neue Sprache wird nach einem Neustart von Stenmark wirksam."
 
-#: stenmark/settings_dialog.py:442
+#: stenmark/settings_dialog.py:446
 msgid "Later"
 msgstr "Später"
 
-#: stenmark/settings_dialog.py:443
+#: stenmark/settings_dialog.py:447
 msgid "Restart Now"
 msgstr "Jetzt neu starten"
 
-#: stenmark/settings_dialog.py:457 stenmark/window.py:796
+#: stenmark/settings_dialog.py:461 stenmark/window.py:798
 msgid "Unsaved Changes"
 msgstr "Ungespeicherte Änderungen"
 
-#: stenmark/settings_dialog.py:458
+#: stenmark/settings_dialog.py:462
 msgid "Save your open document before restarting."
 msgstr "Speichere dein geöffnetes Dokument vor dem Neustart."
 
@@ -702,7 +714,7 @@ msgstr "Stammordner"
 msgid "All Documents"
 msgstr "Alle Dokumente"
 
-#: stenmark/sidebar.py:278 stenmark/sidebar.py:772 stenmark/window.py:1295
+#: stenmark/sidebar.py:278 stenmark/sidebar.py:772 stenmark/window.py:1297
 msgid "Tags"
 msgstr "Schlagwörter"
 
@@ -856,7 +868,11 @@ msgstr ""
 "Wähle eine Markdown-Datei in der Seitenleiste oder <a href=\"create\">klicke "
 "hier, um eine neue anzulegen</a>."
 
-#: stenmark/welcome.py:73
+#: stenmark/welcome.py:59
+msgid "You can change it later in Preferences → General → Files."
+msgstr "Du kannst ihn später unter Einstellungen → Allgemein → Dateien ändern."
+
+#: stenmark/welcome.py:81
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"
@@ -872,7 +888,7 @@ msgstr ""
 "fehlt.\n"
 "Wähle einen Ordner, um loszulegen."
 
-#: stenmark/welcome.py:81
+#: stenmark/welcome.py:90
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"
@@ -964,59 +980,59 @@ msgstr "Aktuelle Zeile mittig halten ({accel})"
 msgid "Keep the current line centred"
 msgstr "Aktuelle Zeile mittig halten"
 
-#: stenmark/window.py:797
+#: stenmark/window.py:799
 msgid "You have unsaved changes. What would you like to do?"
 msgstr "Du hast ungespeicherte Änderungen. Was möchtest du tun?"
 
-#: stenmark/window.py:800
+#: stenmark/window.py:802
 msgid "Discard"
 msgstr "Verwerfen"
 
-#: stenmark/window.py:801
+#: stenmark/window.py:803
 msgid "Save"
 msgstr "Speichern"
 
-#: stenmark/window.py:1042
+#: stenmark/window.py:1044
 msgid "Copied as rich text"
 msgstr "Als formatierter Text kopiert"
 
-#: stenmark/window.py:1048
+#: stenmark/window.py:1050
 #, python-brace-format
 msgid "{n} word"
 msgid_plural "{n} words"
 msgstr[0] "{n} Wort"
 msgstr[1] "{n} Wörter"
 
-#: stenmark/window.py:1051
+#: stenmark/window.py:1053
 #, python-brace-format
 msgid "{n} min read"
 msgstr "{n} Min. Lesezeit"
 
-#: stenmark/window.py:1225
+#: stenmark/window.py:1227
 msgid "Add tag…"
 msgstr "Schlagwort hinzufügen…"
 
-#: stenmark/window.py:1327
+#: stenmark/window.py:1329
 msgid "Search"
 msgstr "Suche"
 
-#: stenmark/window.py:1357
+#: stenmark/window.py:1359
 msgid "translator-credits"
 msgstr "Kreuder <mk@singular.de>"
 
-#: stenmark/window.py:1365
+#: stenmark/window.py:1367
 msgid "Translators"
 msgstr "Übersetzung"
 
-#: stenmark/window.py:1372
+#: stenmark/window.py:1374
 msgid "Help Translate Stenmark"
 msgstr "Hilf mit, Stenmark zu übersetzen"
 
-#: stenmark/window.py:1378
+#: stenmark/window.py:1380
 msgid "Give Stenmark a Like"
 msgstr "Gib Stenmark ein Like"
 
-#: stenmark/window.py:1379
+#: stenmark/window.py:1381
 msgid "Support Stenmark on Ko-fi"
 msgstr "Stenmark auf Ko-fi unterstützen"
 

@@ -123,7 +123,7 @@ class SettingsDialog(Adw.PreferencesDialog):
         dir_group = Adw.PreferencesGroup(title=_("Files"))
 
         dir_row = Adw.ActionRow(title=_("Root Directory"))
-        dir_row.set_subtitle(self._settings.get("root_directory"))
+        dir_row.set_subtitle(self._settings.get("root_directory") or _("Not set"))
         dir_row.set_subtitle_lines(1)
         dir_row.add_css_class("property")
         choose_btn = Gtk.Button(
@@ -410,8 +410,12 @@ class SettingsDialog(Adw.PreferencesDialog):
 
     def _on_choose_root_dir(self, _btn):
         dialog = Gtk.FileDialog(title=_("Choose Root Directory"))
-        current = Gio.File.new_for_path(self._settings.root_directory)
-        dialog.set_initial_folder(current)
+        # With no root yet, start where the desktop keeps documents rather
+        # than at the filesystem root.
+        start = self._settings.root_directory or GLib.get_user_special_dir(
+            GLib.UserDirectory.DIRECTORY_DOCUMENTS
+        ) or GLib.get_home_dir()
+        dialog.set_initial_folder(Gio.File.new_for_path(start))
         dialog.select_folder(self.get_root(), None, self._on_root_dir_selected)
 
     def _on_root_dir_selected(self, dialog, result):

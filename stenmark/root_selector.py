@@ -90,7 +90,7 @@ class RootSelector(Gtk.MenuButton):
     def set_current(self, path):
         """Mark `path` as the active root and relabel the button."""
         self._current = os.path.normpath(path) if path else None
-        base = os.path.basename(path.rstrip(os.sep)) or path if path else ""
+        base = os.path.basename(path.rstrip(os.sep)) or path if path else _("Choose folder")
         self._label.set_label(base)
         self._refresh_marks()
 

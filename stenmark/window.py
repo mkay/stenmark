@@ -759,9 +759,11 @@ class MainWindow(Adw.ApplicationWindow):
         self._load_file(path)
         # Show "Open root folder" in sidebar if file is outside the
         # persistent root (ceiling), not the session override.
-        ceiling = os.path.realpath(os.path.expanduser(self._root_ceiling))
+        # realpath("") is the working directory, so an unset root would put
+        # every file "outside" it.
+        ceiling = os.path.realpath(os.path.expanduser(self._root_ceiling)) if self._root_ceiling else ""
         file_dir = os.path.realpath(os.path.dirname(path))
-        if file_dir != ceiling and not file_dir.startswith(ceiling + os.sep):
+        if ceiling and file_dir != ceiling and not file_dir.startswith(ceiling + os.sep):
             self._sidebar.set_outside_root(True)
 
     def _load_file(self, path, push_history=False):
@@ -1507,7 +1509,8 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _update_root_label(self):
         """Point the selector at whatever the current root directory is."""
-        current = os.path.normpath(self._settings.root_directory)
+        root = self._settings.root_directory
+        current = os.path.normpath(root) if root else ""
 
         if ROOT_DRILLDOWN:
             self._root_dropdown.set_current(current)

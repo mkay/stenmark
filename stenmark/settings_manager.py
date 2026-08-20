@@ -10,7 +10,9 @@ gi.require_version("Gtk", "4.0")
 from gi.repository import GObject
 
 DEFAULTS = {
-    "root_directory": str(Path.home() / "Documents"),
+    # Empty until the user picks one: a guessed folder is indistinguishable
+    # from a chosen one, and every consumer already handles "no root".
+    "root_directory": "",
     # Empty means "follow the system locale". See stenmark.i18n, which reads
     # this key straight from the file before any catalogue is loaded.
     "language": "",

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 23:29+0300\n"
+"POT-Creation-Date: 2026-08-20 23:33+0300\n"
 "PO-Revision-Date: 2026-08-10 14:10+0300\n"
 "Last-Translator: Kreuder <mk@singular.de>\n"
 "Language-Team: German\n"
@@ -868,24 +868,22 @@ msgstr ""
 "Wähle eine Markdown-Datei in der Seitenleiste oder <a href=\"create\">klicke "
 "hier, um eine neue anzulegen</a>."
 
-#: stenmark/welcome.py:59
-msgid "You can change it later in Preferences → General → Files."
-msgstr "Du kannst ihn später unter Einstellungen → Allgemein → Dateien ändern."
-
-#: stenmark/welcome.py:88
+#: stenmark/welcome.py:80
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"
 "Version {version}\n"
 "\n"
-"Choose the folder your Markdown files live in."
+"Choose the folder your Markdown files live in.\n"
+"You can change it later in Preferences → General → Files."
 msgstr ""
 "Dein Markdown-Organizer\n"
 "Version {version}\n"
 "\n"
-"Wähle den Ordner, in dem deine Markdown-Dateien liegen."
+"Wähle den Ordner, in dem deine Markdown-Dateien liegen.\n"
+"Du kannst ihn später unter Einstellungen → Allgemein → Dateien ändern."
 
-#: stenmark/welcome.py:97
+#: stenmark/welcome.py:89
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"
@@ -900,7 +898,7 @@ msgstr ""
 "Der eingestellte Ordner fehlt.\n"
 "Wähle einen anderen, um loszulegen."
 
-#: stenmark/welcome.py:106
+#: stenmark/welcome.py:97
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"
@@ -1047,6 +1045,10 @@ msgstr "Gib Stenmark ein Like"
 #: stenmark/window.py:1381
 msgid "Support Stenmark on Ko-fi"
 msgstr "Stenmark auf Ko-fi unterstützen"
+
+#~ msgid "You can change it later in Preferences → General → Files."
+#~ msgstr ""
+#~ "Du kannst ihn später unter Einstellungen → Allgemein → Dateien ändern."
 
 #~ msgid ""
 #~ "Switched to Phosphor Icons, fixed opening directories via CLI argument."

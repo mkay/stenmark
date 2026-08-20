@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 23:29+0300\n"
+"POT-Creation-Date: 2026-08-20 23:33+0300\n"
 "PO-Revision-Date: 2026-08-10 18:25+0200\n"
 "Last-Translator: derVedro <dervedro@googlemail.com>\n"
 "Language-Team: Russian\n"
@@ -877,17 +877,14 @@ msgstr ""
 "Выбери markdown файл в боковой панели или <a href=\"create\">нажми здесь, "
 "чтобы создать новый</a>."
 
-#: stenmark/welcome.py:59
-msgid "You can change it later in Preferences → General → Files."
-msgstr ""
-
-#: stenmark/welcome.py:88
+#: stenmark/welcome.py:80
 #, fuzzy, python-brace-format
 msgid ""
 "Your markdown librarian\n"
 "Version {version}\n"
 "\n"
-"Choose the folder your Markdown files live in."
+"Choose the folder your Markdown files live in.\n"
+"You can change it later in Preferences → General → Files."
 msgstr ""
 "Твой markdown архивариус\n"
 "Версия {version}\n"
@@ -895,7 +892,7 @@ msgstr ""
 "Stenmark — приложение в альфа-версии.\n"
 "Функции могут появляться и внезапно исчезать, а иногда даже и улучшаться."
 
-#: stenmark/welcome.py:97
+#: stenmark/welcome.py:89
 #, fuzzy, python-brace-format
 msgid ""
 "Your markdown librarian\n"
@@ -910,7 +907,7 @@ msgstr ""
 "Корневой каталог не задан, или настроенный каталог отсутствует.\n"
 "Чтобы начать, выбери папку."
 
-#: stenmark/welcome.py:106
+#: stenmark/welcome.py:97
 #, python-brace-format
 msgid ""
 "Your markdown librarian\n"

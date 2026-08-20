@@ -21,5 +21,5 @@ form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
 - On first launch Stenmark asks which folder your notes live in, instead of quietly starting in ~/Documents.
-- Stenmark no longer fails to start when the notes folder has no subfolders in it.
+- Stenmark no longer fails to start when the notes folder has no subfolders in it. Found and fixed by [ner216](https://github.com/ner216).
 - Selecting text with the mouse in typewriter mode no longer sends the document racing past you.

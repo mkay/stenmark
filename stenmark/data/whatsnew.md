@@ -20,6 +20,6 @@ Links may be written as [label](https://…) or as a bare URL. Prefer the labell
 form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
-- On first launch Stenmark asks which folder your notes live in, instead of quietly starting in ~/Documents.
+- On first launch Stenmark asks which folder your notes live in, instead of quietly starting in ~/Documents. Suggested by [ner216](https://github.com/ner216).
 - Stenmark no longer fails to start when the notes folder has no subfolders in it. Found and fixed by [ner216](https://github.com/ner216).
 - Selecting text with the mouse in typewriter mode no longer sends the document racing past you.

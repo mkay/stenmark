@@ -87,6 +87,12 @@ meson compile -C builddir
 sudo meson install -C builddir
 ```
 
+### Build Deb package from source
+
+```bash
+./build-deb.sh
+```
+
 ## Usage
 
 ```bash
@@ -98,6 +104,14 @@ stenmark ~/Notes/todo.md        # opens a file directly (sidebar hidden)
 ## Configuration
 
 Settings are stored in `~/.config/stenmark/settings.json` and can be changed from the Preferences dialog. All changes take effect immediately, except the interface language, which applies on restart.
+
+## Troubleshooting
+
+If you encounter issues or crashes, debug output can be enabled by running the following command in your terminal:
+
+```
+G_MESSAGES_DEBUG=all PYTHONUNBUFFERED=1 stenmark
+```
 
 ## License
 

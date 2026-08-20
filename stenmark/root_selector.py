@@ -229,12 +229,16 @@ class RootSelector(Gtk.MenuButton):
             page._use_button.set_sensitive(
                 os.path.normpath(page.get_tag()) != self._current
             )
-            row = page._rows.get_first_child()
-            while row is not None:
+
+            # Rows, not children: a page with no subfolders parents its
+            # "No subfolders" placeholder to the listbox, so walking the
+            # widget tree handed that label back as if it were a row.
+            index = 0
+            while (row := page._rows.get_row_at_index(index)) is not None:
                 row._check.set_visible(
                     os.path.normpath(row._path) == self._current
                 )
-                row = row.get_next_sibling()
+                index += 1
 
     def _on_closed(self, _popover):
         # Reopen where the user expects to start rather than wherever they

@@ -230,9 +230,8 @@ class RootSelector(Gtk.MenuButton):
                 os.path.normpath(page.get_tag()) != self._current
             )
 
-            # Rows, not children: a page with no subfolders parents its
-            # "No subfolders" placeholder to the listbox, so walking the
-            # widget tree handed that label back as if it were a row.
+            # Rows, not children: the "No subfolders" placeholder is
+            # parented to the listbox but is never a row.
             index = 0
             while (row := page._rows.get_row_at_index(index)) is not None:
                 row._check.set_visible(

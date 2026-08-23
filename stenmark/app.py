@@ -91,10 +91,6 @@ class Application(Adw.Application):
                 min-height: 20px;
                 font-size: 0.8em;
             }
-            flowboxchild:has(.tag-chip) {
-                padding: 0;
-                margin: 0;
-            }
             .tag-chip-link {
                 background: alpha(@accent_color, 0.12);
                 color: alpha(@accent_color, 0.85);

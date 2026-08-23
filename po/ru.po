@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 00:49+0300\n"
+"POT-Creation-Date: 2026-08-24 01:10+0300\n"
 "PO-Revision-Date: 2026-08-10 18:25+0200\n"
 "Last-Translator: derVedro <dervedro@googlemail.com>\n"
 "Language-Team: Russian\n"
@@ -580,7 +580,7 @@ msgstr "Тема просмотрщика"
 msgid "Style used when reading documents"
 msgstr "Стиль, используемый при чтении документов"
 
-#: stenmark/settings_dialog.py:246 stenmark/settings_dialog.py:547
+#: stenmark/settings_dialog.py:246 stenmark/settings_dialog.py:551
 msgid "Auto"
 msgstr "Как у приложения"
 
@@ -709,7 +709,7 @@ msgstr "Несохранённые изменения"
 msgid "Save your open document before restarting."
 msgstr "Сохрани открытый документ перед перезапуском."
 
-#: stenmark/settings_dialog.py:573
+#: stenmark/settings_dialog.py:576
 msgid "This one comes in a single variant and stays as it is"
 msgstr ""
 
@@ -925,14 +925,9 @@ msgid ""
 "Your markdown librarian\n"
 "Version {version}\n"
 "\n"
-"Stenmark is alpha software\n"
-"Features may appear, disappear, or spontaneously improve."
+"Early-stage release — expect rough edges.\n"
+"Feedback and bug reports welcome via Issues."
 msgstr ""
-"Твой markdown архивариус\n"
-"Версия {version}\n"
-"\n"
-"Stenmark — приложение в альфа-версии.\n"
-"Функции могут появляться и внезапно исчезать, а иногда даже и улучшаться."
 
 #. Translators: dialog title for the release notes shown after an
 #. update. The notes themselves are always English.
@@ -1067,6 +1062,20 @@ msgstr "Поставь Stenmark лайк"
 #: stenmark/window.py:1381
 msgid "Support Stenmark on Ko-fi"
 msgstr "Поддержи Stenmark на Ko-fi"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Your markdown librarian\n"
+#~ "Version {version}\n"
+#~ "\n"
+#~ "Stenmark is alpha software\n"
+#~ "Features may appear, disappear, or spontaneously improve."
+#~ msgstr ""
+#~ "Твой markdown архивариус\n"
+#~ "Версия {version}\n"
+#~ "\n"
+#~ "Stenmark — приложение в альфа-версии.\n"
+#~ "Функции могут появляться и внезапно исчезать, а иногда даже и улучшаться."
 
 #~ msgid ""
 #~ "Corrected the version this metadata reports: it had stopped at 0.3.3, so "

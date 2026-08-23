@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 00:49+0300\n"
+"POT-Creation-Date: 2026-08-24 01:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -559,7 +559,7 @@ msgstr ""
 msgid "Style used when reading documents"
 msgstr ""
 
-#: stenmark/settings_dialog.py:246 stenmark/settings_dialog.py:547
+#: stenmark/settings_dialog.py:246 stenmark/settings_dialog.py:551
 msgid "Auto"
 msgstr ""
 
@@ -687,7 +687,7 @@ msgstr ""
 msgid "Save your open document before restarting."
 msgstr ""
 
-#: stenmark/settings_dialog.py:573
+#: stenmark/settings_dialog.py:576
 msgid "This one comes in a single variant and stays as it is"
 msgstr ""
 
@@ -880,8 +880,8 @@ msgid ""
 "Your markdown librarian\n"
 "Version {version}\n"
 "\n"
-"Stenmark is alpha software\n"
-"Features may appear, disappear, or spontaneously improve."
+"Early-stage release — expect rough edges.\n"
+"Feedback and bug reports welcome via Issues."
 msgstr ""
 
 #. Translators: dialog title for the release notes shown after an

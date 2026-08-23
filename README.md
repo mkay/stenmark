@@ -2,7 +2,7 @@
 
 Your markdown librarian. A GTK4 Markdown reader, organizer and editor.
 
-> **Alpha software.** Still tightening the screws..
+> Early-stage release — expect rough edges. Feedback and bug reports welcome via Issues.
 
 ![Stenmark Icon](data/de.singular.stenmark.svg)
 

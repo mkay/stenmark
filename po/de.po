@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 00:49+0300\n"
+"POT-Creation-Date: 2026-08-24 01:10+0300\n"
 "PO-Revision-Date: 2026-08-10 14:10+0300\n"
 "Last-Translator: Kreuder <mk@singular.de>\n"
 "Language-Team: German\n"
@@ -567,7 +567,7 @@ msgstr "Darstellung im Betrachter"
 msgid "Style used when reading documents"
 msgstr "Stil beim Lesen von Dokumenten"
 
-#: stenmark/settings_dialog.py:246 stenmark/settings_dialog.py:547
+#: stenmark/settings_dialog.py:246 stenmark/settings_dialog.py:551
 msgid "Auto"
 msgstr "Automatisch"
 
@@ -697,7 +697,7 @@ msgstr "Ungespeicherte Änderungen"
 msgid "Save your open document before restarting."
 msgstr "Speichere dein geöffnetes Dokument vor dem Neustart."
 
-#: stenmark/settings_dialog.py:573
+#: stenmark/settings_dialog.py:576
 msgid "This one comes in a single variant and stays as it is"
 msgstr "Dieses gibt es nur in einer Variante und bleibt, wie es ist"
 
@@ -916,15 +916,14 @@ msgid ""
 "Your markdown librarian\n"
 "Version {version}\n"
 "\n"
-"Stenmark is alpha software\n"
-"Features may appear, disappear, or spontaneously improve."
+"Early-stage release — expect rough edges.\n"
+"Feedback and bug reports welcome via Issues."
 msgstr ""
 "Dein Markdown-Organizer\n"
 "Version {version}\n"
 "\n"
-"Stenmark ist Alpha-Software\n"
-"Funktionen kommen und gehen, wie sie wollen. Verbessern sich sogar "
-"gelegentlich."
+"Frühe Version — erwarte ein paar Ecken und Kanten.\n"
+"Rückmeldungen und Fehlerberichte gern über Issues."
 
 #. Translators: dialog title for the release notes shown after an
 #. update. The notes themselves are always English.
@@ -1057,6 +1056,21 @@ msgstr "Gib Stenmark ein Like"
 #: stenmark/window.py:1381
 msgid "Support Stenmark on Ko-fi"
 msgstr "Stenmark auf Ko-fi unterstützen"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Your markdown librarian\n"
+#~ "Version {version}\n"
+#~ "\n"
+#~ "Stenmark is alpha software\n"
+#~ "Features may appear, disappear, or spontaneously improve."
+#~ msgstr ""
+#~ "Dein Markdown-Organizer\n"
+#~ "Version {version}\n"
+#~ "\n"
+#~ "Stenmark ist Alpha-Software\n"
+#~ "Funktionen kommen und gehen, wie sie wollen. Verbessern sich sogar "
+#~ "gelegentlich."
 
 #~ msgid "Uses the theme's light or dark variant to match the app"
 #~ msgstr ""

@@ -95,9 +95,9 @@ class WelcomeView(Adw.Bin):
         else:
             self._status.set_description(
                 _("Your markdown librarian\nVersion {version}\n\n"
-                  "Stenmark is alpha software\n"
-                  "Features may appear, disappear, or spontaneously "
-                  "improve.").format(version=VERSION)
+                  "Early-stage release — expect rough edges.\n"
+                  "Feedback and bug reports welcome via "
+                  "Issues.").format(version=VERSION)
             )  # nosec B608
             self._set_root_btn.set_visible(False)
             self._create_label.set_visible(True)

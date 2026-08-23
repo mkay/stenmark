@@ -23,7 +23,7 @@ BUILD_DIR="${STENMARK_FLATPAK_BUILD:-$HOME/.cache/stenmark-flatpak/build}"
 REPO="${STENMARK_FLATPAK_REPO:-$HOME/.cache/stenmark-flatpak/repo}"
 
 # Working checkout of the GitHub Pages repo that serves the files.
-PAGES="${STENMARK_PAGES_CHECKOUT:-$HOME/Staging/stenmark-flatpak}"
+PAGES="${STENMARK_PAGES_CHECKOUT:-$HOME/Dev/projects/stenmark-flatpak/repo}"
 PAGES_URL="${STENMARK_PAGES_URL:-https://mkay.github.io/stenmark-flatpak/}"
 
 # Signing key. Stenmark has its own, separate from Edith's: a compromise stays

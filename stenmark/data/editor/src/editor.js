@@ -75,12 +75,26 @@ for (const entry of themeManifest) {
   if (ext) THEMES[entry.key] = ext;
 }
 
-// "auto" maps to one of the above based on system dark mode
+// family -> { light: key, dark: key }, for themes that ship both.
+const FAMILIES = {};
+for (const entry of themeManifest) {
+  if (!entry.family || !entry.variant) continue;
+  (FAMILIES[entry.family] ||= {})[entry.variant] = entry.key;
+}
+
 const AUTO_LIGHT = "adwaita-light";
 const AUTO_DARK  = "one-dark";
 
-function resolveTheme(setting, systemDark) {
-  if (setting === "auto") return THEMES[systemDark ? AUTO_DARK : AUTO_LIGHT];
+/** The variant of `key`'s family for the current mode, or `key` unpaired. */
+function matchVariant(key, systemDark) {
+  const entry = themeManifest.find((e) => e.key === key);
+  const family = entry && FAMILIES[entry.family];
+  return (family && family[systemDark ? "dark" : "light"]) || key;
+}
+
+function resolveTheme(setting, systemDark, matchSystem) {
+  if (setting === "auto") setting = systemDark ? AUTO_DARK : AUTO_LIGHT;
+  else if (matchSystem) setting = matchVariant(setting, systemDark);
   return THEMES[setting] || THEMES[AUTO_LIGHT];
 }
 
@@ -333,9 +347,11 @@ window.setContent = (text) => {
   view.focus();
 };
 
-window.setTheme = (setting, systemDark) => {
+window.setTheme = (setting, systemDark, matchSystem) => {
   view.dispatch({
-    effects: themeCompartment.reconfigure(resolveTheme(setting, systemDark)),
+    effects: themeCompartment.reconfigure(
+      resolveTheme(setting, systemDark, matchSystem)
+    ),
   });
 };
 

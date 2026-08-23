@@ -11,7 +11,10 @@
  * useful and wrong often enough to be worth reading ("Github Light" wants to
  * be "GitHub Light").
  *
- * Existing labels are preserved, so hand-corrections survive regeneration.
+ * Existing labels are preserved, so hand-corrections survive regeneration, as
+ * are hand-written "family"/"variant" pairings — the suffix rule catches
+ * github-light/github-dark but not tokyo-night/tokyo-night-day.
+ *
  * Entries whose export is null or starts with "__" are kept verbatim: those
  * are Auto and the two themes that do not come from the package (the
  * hand-written Adwaita Light and CodeMirror's own One Dark).
@@ -53,9 +56,20 @@ function isThemeExtension(value) {
   return !(value[0] && typeof value[0] === "object" && "tag" in value[0]);
 }
 
+/** Light/dark counterpart, from the key suffix. Hand-written pairings win. */
+function derivePair(key) {
+  for (const [suffix, variant] of [["-light", "light"], ["-dark", "dark"]]) {
+    if (key.endsWith(suffix)) return { family: key.slice(0, -suffix.length), variant };
+  }
+  return null;
+}
+
 const previous = JSON.parse(readFileSync(MANIFEST, "utf8"));
 const labelFor = new Map(
   previous.filter((e) => e.export).map((e) => [e.export, e.label])
+);
+const pairFor = new Map(
+  previous.filter((e) => e.export && e.family).map((e) => [e.export, e])
 );
 const kept = previous.filter((e) => !e.export || e.export.startsWith("__"));
 
@@ -86,7 +100,10 @@ for (const name of Object.keys(themePackages)) {
     added.push(`${name} -> "${label}"`);
   }
 
-  generated.push({ key: kebab(name), export: name, label, dark: (lum ?? 1) < 0.5, colors });
+  const key = kebab(name);
+  const hand = pairFor.get(name);
+  const pair = hand ? { family: hand.family, variant: hand.variant } : derivePair(key);
+  generated.push({ key, export: name, label, dark: (lum ?? 1) < 0.5, ...pair, colors });
 }
 
 generated.sort((a, b) => a.export.toLowerCase().localeCompare(b.export.toLowerCase()));
@@ -98,6 +115,23 @@ const duplicates = keys.filter((k, i) => keys.indexOf(k) !== i);
 if (duplicates.length) {
   console.error(`duplicate keys: ${duplicates.join(", ")}`);
   process.exit(1);
+}
+
+// A family with only one variant cannot answer "match light/dark" — drop it,
+// so the switch in Preferences is never offered against a missing counterpart.
+const variantsPerFamily = new Map();
+for (const e of entries) {
+  if (!e.family) continue;
+  const seen = variantsPerFamily.get(e.family) || new Set();
+  seen.add(e.variant);
+  variantsPerFamily.set(e.family, seen);
+}
+for (const e of entries) {
+  if (e.family && variantsPerFamily.get(e.family).size < 2) {
+    console.warn(`! ${e.key}: family "${e.family}" has no ${e.variant === "dark" ? "light" : "dark"} counterpart, unpaired`);
+    delete e.family;
+    delete e.variant;
+  }
 }
 
 // Keys are what settings.json stores — losing one silently resets a user's theme

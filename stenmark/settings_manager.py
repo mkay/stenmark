@@ -23,6 +23,7 @@ DEFAULTS = {
     "editor_font_family": "Monospace",
     "editor_font_size": 14,
     "editor_theme": "auto",
+    "editor_theme_match_system": False,
     "editor_line_numbers": True,
     "editor_line_wrap": True,
     "editor_typewriter": False,
@@ -133,6 +134,10 @@ class SettingsManager(GObject.Object):
     @property
     def editor_theme(self):
         return self.get("editor_theme")
+
+    @property
+    def editor_theme_match_system(self):
+        return self.get("editor_theme_match_system")
 
     @property
     def editor_line_numbers(self):

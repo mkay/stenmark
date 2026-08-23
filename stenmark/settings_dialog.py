@@ -6,9 +6,17 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, GLib, Gtk, Gio
 
-from stenmark.editor import available_themes, theme_colors
+from stenmark.editor import (available_themes, collapsed_themes,
+                            resolve_theme, theme_colors, theme_has_variants)
 from stenmark.i18n import (_, LANGUAGE_KEY, SUPPORTED_LANGUAGES,
                            TRANSLATE_URL)
+
+
+def _same_family(a, b):
+    """Two theme keys that are the light and dark halves of one theme."""
+    return a != b and theme_has_variants(a) and resolve_theme(
+        a, system_dark=True, match_system=True
+    ) == resolve_theme(b, system_dark=True, match_system=True)
 
 
 class ThemePreview(Gtk.DrawingArea):
@@ -111,6 +119,19 @@ class SettingsDialog(Adw.PreferencesDialog):
         super().__init__(title=_("Preferences"))
         self._settings = settings
         self._build_ui()
+
+        # App Theme lives on the General page, so the preview can go stale
+        # while the dialog is open.
+        style = Adw.StyleManager.get_default()
+        self._style_handler = style.connect(
+            "notify::dark", self._on_style_dark_changed
+        )
+        self.connect("closed", self._on_closed)
+
+    def _on_closed(self, *_args):
+        if self._style_handler:
+            Adw.StyleManager.get_default().disconnect(self._style_handler)
+            self._style_handler = 0
 
     def _build_ui(self):
         # --- General page ---
@@ -320,36 +341,35 @@ class SettingsDialog(Adw.PreferencesDialog):
             icon_name="text-editor-symbolic",
         )
 
-        editor_appearance_group = Adw.PreferencesGroup(title=_("Appearance"))
-
-        # Read from the bundle's own theme manifest. Names are proper nouns
-        # (Dracula, Nord, Xcode) and stay untranslated — "Auto" is the one
-        # word rather than a name, as with the viewer themes above.
-        _EDITOR_THEMES = [
-            (_("Auto") if key == "auto" else label, key)
-            for key, label in available_themes()
-        ]
-        self._editor_theme_keys = [key for _label, key in _EDITOR_THEMES]
+        # Its own group: a PreferencesGroup puts plain widgets below the whole
+        # row list, so the preview would sit under Line Numbers and friends.
+        theme_group = Adw.PreferencesGroup(title=_("Color Theme"))
 
         theme_row = Adw.ComboRow(title=_("Color Theme"))
-        theme_row.set_model(
-            Gtk.StringList.new([label for label, _key in _EDITOR_THEMES])
-        )
         # Long enough to be worth typing into
         if hasattr(theme_row, "set_enable_search"):
             theme_row.set_enable_search(True)
-        current_et = self._settings.editor_theme
-        theme_row.set_selected(
-            self._editor_theme_keys.index(current_et)
-            if current_et in self._editor_theme_keys else 0
-        )
         theme_row.connect("notify::selected", self._on_editor_theme_changed)
-        editor_appearance_group.add(theme_row)
+        theme_group.add(theme_row)
+        self._editor_theme_row = theme_row
+
+        self._match_row = Adw.SwitchRow(
+            title=_("Match Light/Dark"),
+            subtitle=_("Themes that come in both use the half that suits the app"),
+        )
+        self._match_row.set_active(self._settings.editor_theme_match_system)
+        self._match_row.connect("notify::active", self._on_theme_match_changed)
+        theme_group.add(self._match_row)
 
         self._theme_preview = ThemePreview()
         self._theme_preview.set_margin_top(12)
-        editor_appearance_group.add(self._theme_preview)
-        self._update_theme_preview(current_et)
+        theme_group.add(self._theme_preview)
+
+        self._rebuild_theme_model()
+
+        editor_page.add(theme_group)
+
+        editor_appearance_group = Adw.PreferencesGroup(title=_("Appearance"))
 
         line_numbers_row = Adw.SwitchRow(title=_("Line Numbers"))
         line_numbers_row.set_active(self._settings.editor_line_numbers)
@@ -515,14 +535,66 @@ class SettingsDialog(Adw.PreferencesDialog):
     def _on_editor_font_size_changed(self, row, _pspec):
         self._settings.set("editor_font_size", int(row.get_value()))
 
+    def _rebuild_theme_model(self):
+        """Fill the picker, folding pairs into "GitHub" while matching is on."""
+        match = self._settings.editor_theme_match_system
+        entries = collapsed_themes() if match else available_themes()
+        # Names are proper nouns (Dracula, Nord, Xcode) and stay untranslated
+        # — "Auto" is the one word rather than a name, as with viewer themes.
+        self._editor_theme_keys = [key for key, _label in entries]
+
+        # set_model() resets the selection to row 0 and emits — without this
+        # the rebuild would store "auto" over whatever the user had picked.
+        self._editor_theme_row.handler_block_by_func(self._on_editor_theme_changed)
+        self._editor_theme_row.set_model(
+            Gtk.StringList.new(
+                [_("Auto") if key == "auto" else label for key, label in entries]
+            )
+        )
+
+        # A folded row stands for either half, so match the stored key on its
+        # family before falling back to the key itself.
+        current = self._settings.editor_theme
+        index = next(
+            (i for i, key in enumerate(self._editor_theme_keys)
+             if key == current or (match and _same_family(key, current))),
+            0,
+        )
+        self._editor_theme_row.set_selected(index)
+        self._editor_theme_row.handler_unblock_by_func(self._on_editor_theme_changed)
+        self._update_theme_preview(current)
+
     def _update_theme_preview(self, key):
         dark = Adw.StyleManager.get_default().get_dark()
-        self._theme_preview.set_colors(theme_colors(key, system_dark=dark))
+        match = self._settings.editor_theme_match_system
+        self._theme_preview.set_colors(
+            theme_colors(key, system_dark=dark, match_system=match)
+        )
+        # Most themes ship one variant only. Say so where it applies, rather
+        # than let the switch look broken for two thirds of the list.
+        self._editor_theme_row.set_subtitle(
+            _("This one comes in a single variant and stays as it is")
+            if match and key != "auto" and not theme_has_variants(key) else ""
+        )
 
     def _on_editor_theme_changed(self, row, _pspec):
         key = self._editor_theme_keys[row.get_selected()]
+        # A folded row is stored as the half that fits the app right now, so
+        # turning matching off later leaves the editor looking as it does.
+        dark = Adw.StyleManager.get_default().get_dark()
+        key = resolve_theme(
+            key, system_dark=dark,
+            match_system=self._settings.editor_theme_match_system,
+        )
         self._settings.set("editor_theme", key)
         self._update_theme_preview(key)
+
+    def _on_theme_match_changed(self, row, _pspec):
+        self._settings.set("editor_theme_match_system", row.get_active())
+        self._rebuild_theme_model()
+
+    def _on_style_dark_changed(self, *_args):
+        self._update_theme_preview(self._settings.editor_theme)
 
     def _on_line_numbers_changed(self, row, _pspec):
         self._settings.set("editor_line_numbers", row.get_active())

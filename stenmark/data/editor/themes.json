@@ -121,6 +121,8 @@
     "export": "basicDark",
     "label": "Basic Dark",
     "dark": true,
+    "family": "basic",
+    "variant": "dark",
     "colors": {
       "background": "#2E3235",
       "foreground": "#DDDDDD",
@@ -135,6 +137,8 @@
     "export": "basicLight",
     "label": "Basic Light",
     "dark": false,
+    "family": "basic",
+    "variant": "light",
     "colors": {
       "background": "#ffffff",
       "foreground": "#2e3440",
@@ -177,6 +181,8 @@
     "export": "consoleDark",
     "label": "Console Dark",
     "dark": true,
+    "family": "console",
+    "variant": "dark",
     "colors": {
       "background": "#000",
       "foreground": "#fff",
@@ -191,6 +197,8 @@
     "export": "consoleLight",
     "label": "Console Light",
     "dark": false,
+    "family": "console",
+    "variant": "light",
     "colors": {
       "background": "#fff",
       "foreground": "#000",
@@ -247,6 +255,8 @@
     "export": "duotoneDark",
     "label": "Duotone Dark",
     "dark": true,
+    "family": "duotone",
+    "variant": "dark",
     "colors": {
       "background": "#2a2734",
       "foreground": "#6c6783",
@@ -261,6 +271,8 @@
     "export": "duotoneLight",
     "label": "Duotone Light",
     "dark": false,
+    "family": "duotone",
+    "variant": "light",
     "colors": {
       "background": "#faf8f5",
       "foreground": "#b29762",
@@ -289,6 +301,8 @@
     "export": "githubDark",
     "label": "GitHub Dark",
     "dark": true,
+    "family": "github",
+    "variant": "dark",
     "colors": {
       "background": "#0d1117",
       "foreground": "#c9d1d9",
@@ -302,6 +316,8 @@
     "export": "githubLight",
     "label": "GitHub Light",
     "dark": false,
+    "family": "github",
+    "variant": "light",
     "colors": {
       "background": "#fff",
       "foreground": "#24292e",
@@ -314,6 +330,8 @@
     "export": "gruvboxDark",
     "label": "Gruvbox Dark",
     "dark": true,
+    "family": "gruvbox",
+    "variant": "dark",
     "colors": {
       "background": "#282828",
       "foreground": "#ebdbb2",
@@ -328,6 +346,8 @@
     "export": "gruvboxLight",
     "label": "Gruvbox Light",
     "dark": false,
+    "family": "gruvbox",
+    "variant": "light",
     "colors": {
       "background": "#fbf1c7",
       "foreground": "#3c3836",
@@ -356,6 +376,8 @@
     "export": "material",
     "label": "Material",
     "dark": true,
+    "family": "material",
+    "variant": "dark",
     "colors": {
       "background": "#2e3235",
       "foreground": "#bdbdbd",
@@ -370,6 +392,8 @@
     "export": "materialDark",
     "label": "Material Dark",
     "dark": true,
+    "family": "material",
+    "variant": "dark",
     "colors": {
       "background": "#2e3235",
       "foreground": "#bdbdbd",
@@ -384,6 +408,8 @@
     "export": "materialLight",
     "label": "Material Light",
     "dark": false,
+    "family": "material",
+    "variant": "light",
     "colors": {
       "background": "#FAFAFA",
       "foreground": "#90A4AE",
@@ -496,6 +522,8 @@
     "export": "solarizedDark",
     "label": "Solarized Dark",
     "dark": true,
+    "family": "solarized",
+    "variant": "dark",
     "colors": {
       "background": "#002B36",
       "foreground": "#839496",
@@ -510,6 +538,8 @@
     "export": "solarizedLight",
     "label": "Solarized Light",
     "dark": false,
+    "family": "solarized",
+    "variant": "light",
     "colors": {
       "background": "#FDF6E3",
       "foreground": "#657B83",
@@ -538,6 +568,8 @@
     "export": "tokyoNight",
     "label": "Tokyo Night",
     "dark": true,
+    "family": "tokyo-night",
+    "variant": "dark",
     "colors": {
       "background": "#1a1b26",
       "foreground": "#787c99",
@@ -552,6 +584,8 @@
     "export": "tokyoNightDay",
     "label": "Tokyo Night Day",
     "dark": false,
+    "family": "tokyo-night",
+    "variant": "light",
     "colors": {
       "background": "#e1e2e7",
       "foreground": "#3760bf",
@@ -594,6 +628,8 @@
     "export": "vscodeDark",
     "label": "VS Code Dark",
     "dark": true,
+    "family": "vscode",
+    "variant": "dark",
     "colors": {
       "background": "#1e1e1e",
       "foreground": "#9cdcfe",
@@ -608,6 +644,8 @@
     "export": "vscodeLight",
     "label": "VS Code Light",
     "dark": false,
+    "family": "vscode",
+    "variant": "light",
     "colors": {
       "background": "#ffffff",
       "foreground": "#383a42",
@@ -622,6 +660,8 @@
     "export": "whiteDark",
     "label": "White Dark",
     "dark": true,
+    "family": "white",
+    "variant": "dark",
     "colors": {
       "background": "#000",
       "foreground": "#fff",
@@ -636,6 +676,8 @@
     "export": "whiteLight",
     "label": "White Light",
     "dark": false,
+    "family": "white",
+    "variant": "light",
     "colors": {
       "background": "#fff",
       "foreground": "#000",
@@ -650,6 +692,8 @@
     "export": "xcodeDark",
     "label": "Xcode Dark",
     "dark": true,
+    "family": "xcode",
+    "variant": "dark",
     "colors": {
       "background": "#292A30",
       "foreground": "#CECFD0",
@@ -663,6 +707,8 @@
     "export": "xcodeLight",
     "label": "Xcode Light",
     "dark": false,
+    "family": "xcode",
+    "variant": "light",
     "colors": {
       "background": "#fff",
       "foreground": "#3D3D3D",

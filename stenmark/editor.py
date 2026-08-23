@@ -40,15 +40,85 @@ def available_themes():
     return [(e["key"], e["label"]) for e in _load_theme_manifest()]
 
 
-def theme_colors(key, system_dark=False):
+def theme_label(key):
+    """The picker's English label for a theme key, or the key itself."""
+    return next(
+        (e["label"] for e in _load_theme_manifest() if e["key"] == key), key
+    )
+
+
+def theme_has_variants(key):
+    """True if the theme ships both a light and a dark variant."""
+    entries = _load_theme_manifest()
+    family = next((e.get("family") for e in entries if e["key"] == key), None)
+    if not family:
+        return False
+    variants = {e.get("variant") for e in entries if e.get("family") == family}
+    return {"light", "dark"} <= variants
+
+
+def _family_label(labels):
+    """"Basic Dark" + "Basic Light" -> "Basic". Word-wise, so "VS Code" survives."""
+    words = [l.split() for l in labels]
+    common = []
+    for i in range(min(len(w) for w in words)):
+        if len({w[i] for w in words}) != 1:
+            break
+        common.append(words[0][i])
+    return " ".join(common)
+
+
+def collapsed_themes():
+    """(key, label) pairs with each light/dark family folded into one entry.
+
+    The key is a representative variant — resolve_theme() turns it into the
+    right half for the current mode. Themes with no counterpart are unchanged.
+    """
+    entries = _load_theme_manifest()
+    labels = {}
+    for e in entries:
+        if e.get("family"):
+            labels.setdefault(e["family"], []).append(e["label"])
+
+    out, seen = [], set()
+    for e in entries:
+        family = e.get("family")
+        if not family:
+            out.append((e["key"], e["label"]))
+        elif family not in seen:
+            seen.add(family)
+            out.append((e["key"], _family_label(labels[family]) or e["label"]))
+    return out
+
+
+def resolve_theme(key, system_dark=False, match_system=False):
+    """The theme key actually shown, mirroring resolveTheme() in editor.js."""
+    entries = _load_theme_manifest()
+    if key == "auto":
+        return "one-dark" if system_dark else "adwaita-light"
+    if not match_system:
+        return key
+    entry = next((e for e in entries if e["key"] == key), None)
+    family = (entry or {}).get("family")
+    if not family:
+        return key
+    want = "dark" if system_dark else "light"
+    return next(
+        (e["key"] for e in entries
+         if e.get("family") == family and e.get("variant") == want),
+        key,
+    )
+
+
+def theme_colors(key, system_dark=False, match_system=False):
     """Return the palette dict for a theme key, or None if it has none.
 
     "auto" has no palette of its own — it reports whichever theme it would
-    actually resolve to, so a preview of it is not a blank.
+    actually resolve to, so a preview of it is not a blank. The same goes for
+    a paired theme while Match Light/Dark is on.
     """
     entries = {e["key"]: e for e in _load_theme_manifest()}
-    if key == "auto":
-        key = "one-dark" if system_dark else "adwaita-light"
+    key = resolve_theme(key, system_dark, match_system)
     entry = entries.get(key) or entries.get("adwaita-light")
     return (entry or {}).get("colors")
 
@@ -269,13 +339,14 @@ class MarkdownEditor(Gtk.Box):
         dark = Adw.StyleManager.get_default().get_dark()
         theme = json.dumps(self._settings.editor_theme)
         dark_js = "true" if dark else "false"
+        match_js = "true" if self._settings.editor_theme_match_system else "false"
         family = json.dumps(self._settings.editor_font_family)
         size = self._settings.editor_font_size
         line_nums = "true" if self._settings.editor_line_numbers else "false"
         line_wrap = "true" if self._settings.editor_line_wrap else "false"
         typewriter = "true" if self._settings.editor_typewriter else "false"
         self._js(
-            f"setTheme({theme}, {dark_js});"
+            f"setTheme({theme}, {dark_js}, {match_js});"
             f"setFont({family}, {size});"
             f"setLineNumbers({line_nums});"
             f"setLineWrap({line_wrap});"

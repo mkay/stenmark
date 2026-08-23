@@ -20,6 +20,6 @@ Links may be written as [label](https://…) or as a bare URL. Prefer the labell
 form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
-- On first launch Stenmark asks which folder your notes live in, instead of quietly starting in ~/Documents. Suggested by [ner216](https://github.com/ner216).
-- Stenmark no longer fails to start when the notes folder has no subfolders in it. Found and fixed by [ner216](https://github.com/ner216).
-- Selecting text with the mouse in typewriter mode no longer sends the document racing past you.
+- Editor colour themes can follow the app's light and dark mode. Turn on Match Light/Dark in Preferences → Editor, and themes that come in a pair — GitHub, Solarized, Gruvbox, Tokyo Night and seven more — show their light half in a light session and their dark half in a dark one. Suggested by [ner216](https://github.com/ner216).
+- With that switch on, the picker lists such themes once, as "GitHub" rather than as both halves. Themes that only come one way stay as they are.
+- The theme preview in Preferences now sits directly under the theme picker, instead of below the switches further down the page.

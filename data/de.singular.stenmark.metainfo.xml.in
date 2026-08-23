@@ -69,6 +69,11 @@
        could exist. Keep the attribute on new entries; a release genuinely
        worth translating can drop it. -->
   <releases>
+    <release version="0.10.0" date="2026-08-24">
+      <description translate="no">
+        <p>Editor colour themes can now follow the app's light and dark mode. Turn on Match Light/Dark in Preferences, and the eleven themes that ship as a pair — GitHub, Solarized, Gruvbox, Tokyo Night among them — show the half that suits the session, listed once under the shared name instead of twice. Themes that come in a single variant stay as they are. Suggested by ner216. The theme preview also moved next to the theme picker it belongs to.</p>
+      </description>
+    </release>
     <release version="0.9.0" date="2026-08-21">
       <description translate="no">
         <p>On first launch Stenmark now asks which folder your notes live in, instead of quietly starting in ~/Documents, and it no longer fails to start when that folder has no subfolders in it — both suggested and fixed by ner216. Selecting text with the mouse in typewriter mode no longer sends the document racing past you.</p>

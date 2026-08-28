@@ -4,20 +4,36 @@ set -euo pipefail
 # Builds a .deb from the current checkout, without any of the release
 # machinery — no tagging, no pushing, no uploads. Useful for packaging a
 # branch, or a main that is ahead of the latest release.
+#
+# Usage: ./build-deb.sh [version]
+#
+# The version defaults to the one in meson.build; release.sh passes the
+# version being released instead. Progress goes to stderr and the path of
+# the finished package to stdout, so callers can capture it:
+#
+#     DEB_PKG=$(./build-deb.sh 1.2.3)
 
 cd "$(dirname "$(readlink -f "$0")")"
+
+log() { echo "$@" >&2; }
 
 # Metadata comes from the files that already define it, so a .deb built here
 # describes itself the same way a released one does.
 PROJECT_NAME=$(grep -oP "^project\(\s*'\K[^']+" meson.build || true)
-VERSION=$(grep -oP "^\s*version:\s*'\K[^']+" meson.build || true)
 PKGDESC=$(grep -oP "^pkgdesc=['\"]\K[^'\"]+" PKGBUILD || true)
 PKGLICENSE=$(grep -oP "^license=\('\K[^']+" PKGBUILD || true)
 MAINTAINER=$(grep -oP "^# Maintainer:\s*\K.+" PKGBUILD || true)
 
+# Version numbers in the files are bare; a tag-style 'v' prefix is accepted.
+VERSION="${1:-}"
+VERSION="${VERSION#v}"
+if [[ -z "$VERSION" ]]; then
+    VERSION=$(grep -oP "^\s*version:\s*'\K[^']+" meson.build || true)
+fi
+
 # A wrong version in a package is worse than no package — never guess.
 if [[ -z "$PROJECT_NAME" || -z "$VERSION" ]]; then
-    echo "ERROR: Could not read project name and version from meson.build"
+    log "ERROR: Could not read project name and version from meson.build"
     exit 1
 fi
 
@@ -31,7 +47,7 @@ else
         armv7l)  ARCH=armhf ;;
         i?86)    ARCH=i386 ;;
         *)
-            echo "ERROR: Unknown architecture '$(uname -m)'. Install dpkg or set ARCH by hand."
+            log "ERROR: Unknown architecture '$(uname -m)'. Install dpkg or set ARCH by hand."
             exit 1
             ;;
     esac
@@ -52,12 +68,12 @@ cleanup() {
 }
 trap cleanup EXIT
 
-echo "==> Building .deb package for $PROJECT_NAME v$VERSION ($ARCH)"
+log "==> Building .deb package for $PROJECT_NAME v$VERSION ($ARCH)"
 
 # 1. Ensure required build tools exist
 for cmd in meson ninja nfpm; do
     if ! command -v "$cmd" &>/dev/null; then
-        echo "ERROR: Missing required command '$cmd'. Install meson, ninja-build, and nfpm first."
+        log "ERROR: Missing required command '$cmd'. Install meson, ninja-build, and nfpm first."
         exit 1
     fi
 done
@@ -65,12 +81,12 @@ done
 # 2. Stage the application installation tree
 rm -rf "$DEB_STAGING"
 if [[ -d builddir ]]; then
-    meson setup builddir --prefix=/usr --wipe
+    meson setup builddir --prefix=/usr --wipe >&2
 else
-    meson setup builddir --prefix=/usr
+    meson setup builddir --prefix=/usr >&2
 fi
-meson compile -C builddir
-DESTDIR="$DEB_STAGING" meson install -C builddir --no-rebuild
+meson compile -C builddir >&2
+DESTDIR="$DEB_STAGING" meson install -C builddir --no-rebuild >&2
 
 # 3. Generate contents list for nFPM
 CONTENTS=""
@@ -101,7 +117,7 @@ $CONTENTS
 NFPM
 
 # 5. Build .deb package
-nfpm package -p deb -f "$CONFIG_FILE" -t "$OUTPUT"
+nfpm package -p deb -f "$CONFIG_FILE" -t "$OUTPUT" >&2
 
-echo "==> Successfully built package:"
-ls -l "$OUTPUT"
+log "==> Successfully built $OUTPUT"
+echo "$OUTPUT"

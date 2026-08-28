@@ -156,7 +156,14 @@ if [[ "$CHECKSUMS_OK" -ne 1 ]]; then
 fi
 echo "==> Building Arch package"
 makepkg -sf --noconfirm
-ARCH_PKG=$(ls -t ./*.pkg.tar.zst 2>/dev/null | grep -v debug | head -1)
+# makepkg --packagelist prints the exact paths this PKGBUILD produces,
+# honouring pkgrel, PKGEXT and PKGDEST. A glob over the repo root would
+# happily pick a package left over from an earlier release instead.
+ARCH_PKG=$(makepkg --packagelist | grep -v -- '-debug-' | head -1)
+if [[ ! -f "$ARCH_PKG" ]]; then
+    echo "ERROR: makepkg did not produce $ARCH_PKG"
+    exit 1
+fi
 
 # Push updated checksums back to repos
 if ! git diff --quiet PKGBUILD; then

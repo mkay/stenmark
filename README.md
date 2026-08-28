@@ -87,7 +87,9 @@ meson compile -C builddir
 sudo meson install -C builddir
 ```
 
-### Build Deb package from source
+### Build a .deb package from source
+
+Requires [nfpm](https://nfpm.goreleaser.com) in addition to meson and ninja. The package is written to the repository root and named after the version in `meson.build`.
 
 ```bash
 ./build-deb.sh
@@ -109,7 +111,7 @@ Settings are stored in `~/.config/stenmark/settings.json` and can be changed fro
 
 If you encounter issues or crashes, debug output can be enabled by running the following command in your terminal:
 
-```
+```bash
 G_MESSAGES_DEBUG=all PYTHONUNBUFFERED=1 stenmark
 ```
 

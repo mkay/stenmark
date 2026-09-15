@@ -15,6 +15,10 @@
 
 set -euo pipefail
 
+# Machine-specific settings (Pages checkout, signing key) live outside the
+# repo. .private/ is gitignored; see the template in the comments below.
+[[ -f .private/publish.env ]] && source .private/publish.env
+
 APP_ID="de.singular.stenmark"
 MANIFEST="build-aux/flatpak/de.singular.stenmark.yaml"
 
@@ -23,16 +27,19 @@ BUILD_DIR="${STENMARK_FLATPAK_BUILD:-$HOME/.cache/stenmark-flatpak/build}"
 REPO="${STENMARK_FLATPAK_REPO:-$HOME/.cache/stenmark-flatpak/repo}"
 
 # Working checkout of the GitHub Pages repo that serves the files.
-PAGES="${STENMARK_PAGES_CHECKOUT:-$HOME/Dev/projects/stenmark-flatpak/repo}"
+# STENMARK_PAGES_CHECKOUT=/path/to/stenmark-flatpak
+PAGES="${STENMARK_PAGES_CHECKOUT:-}"
 PAGES_URL="${STENMARK_PAGES_URL:-https://mkay.github.io/stenmark-flatpak/}"
 
 # Signing key. Stenmark has its own, separate from Edith's: a compromise stays
 # contained, and each .flatpakrepo embeds the key its repo was signed with.
-GPG_KEY="${STENMARK_GPG_KEY:-2BE7C6CC719C6131304457452F4B6E1C5580BF18}"
+# STENMARK_GPG_KEY=<fingerprint>
+GPG_KEY="${STENMARK_GPG_KEY:-}"
 
 die() { echo "ERROR: $*" >&2; exit 1; }
 
 [[ -f "$MANIFEST" ]] || die "run this from the repository root ($MANIFEST not found)"
+[[ -n "$PAGES" ]] || die "set STENMARK_PAGES_CHECKOUT to your stenmark-flatpak Pages checkout"
 [[ -n "$GPG_KEY" ]] || die "set STENMARK_GPG_KEY to the signing key's fingerprint"
 gpg --list-secret-keys "$GPG_KEY" >/dev/null 2>&1 || die "no secret key for $GPG_KEY"
 

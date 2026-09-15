@@ -11,3 +11,4 @@ stenmark/__init__.py
 node_modules/
 *.gresource
 PKGBUILD.local
+.private/

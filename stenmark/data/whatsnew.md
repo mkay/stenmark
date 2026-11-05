@@ -20,8 +20,8 @@ Links may be written as [label](https://…) or as a bare URL. Prefer the labell
 form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
-- Safer saving for synced notes. If a note changes on disk while you edit it, Stenmark now asks instead of overwriting it, and it tells you when a save fails. Discard really discards, and closing or quitting asks about unsaved edits.
-- Undo stays inside the note you're editing. Files are written atomically, and keep their encoding and line endings.
+- Safer saving: Stenmark asks before overwriting a note that changed on disk, and before closing with unsaved edits.
+- Discard really discards, undo stays inside the current note, and failed saves and file operations now say so.
 - Notes can no longer run scripts or load anything from the network, so remote images don't show.
-- A new Markdown engine fixes lists after a paragraph, code blocks in lists, loose task lists, list numbering and strikethrough. Checkboxes and the table of contents now find the exact line. A heading needs a space after the #: "###Title" is plain text now.
-- Renames and moves keep pins, failed file operations say so, and copying code keeps every line. The sidebar list has a light accent tint, which Preferences can turn off.
+- A new Markdown engine fixes many lists, strikethrough and task checkboxes. Headings now need a space after the #.
+- Renames and moves keep pins, copying code keeps every line, and the sidebar tint can be turned off in Preferences.

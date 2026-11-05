@@ -15,6 +15,7 @@ from stenmark.i18n import _
 
 from stenmark.markdown_renderer import MarkdownRenderer
 from stenmark.html_template import wrap_html
+from stenmark.note_file import read_note, save_note
 
 
 class MarkdownViewer(Gtk.Box):
@@ -278,10 +279,10 @@ class MarkdownViewer(Gtk.Box):
         if not self._current_path:
             return
         try:
-            with open(self._current_path, encoding="utf-8") as f:
-                text = f.read()
+            note = read_note(self._current_path)
         except OSError:
             return
+        text = note.text
         pattern = re.compile(r'^(\s*[-*+]\s+)\[[ xX]\]', re.MULTILINE)
         matches = list(pattern.finditer(text))
         if index >= len(matches):
@@ -291,11 +292,11 @@ class MarkdownViewer(Gtk.Box):
         bracket_pos = m.end(1) + 1  # position of the space or 'x' inside [...]
         new_text = text[:bracket_pos] + mark + text[bracket_pos + 1:]
         try:
-            with open(self._current_path, "w", encoding="utf-8") as f:
-                f.write(new_text)
+            save_note(self._current_path, new_text, note)
         except OSError:
             return
-        self._skip_next_load = True
+        # An unchanged note isn't written, so no change event will consume this
+        self._skip_next_load = new_text != text
 
     def _on_edit_request(self, _ucm, result):
         try:
@@ -411,8 +412,7 @@ class MarkdownViewer(Gtk.Box):
         self._skip_next_load = False
         self._current_path = path
         try:
-            with open(path, encoding="utf-8") as f:
-                text = f.read()
+            text = read_note(path).text
         except OSError:
             self._show_empty()
             return

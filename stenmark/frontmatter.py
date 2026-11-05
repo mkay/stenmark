@@ -5,6 +5,8 @@ import re
 
 import yaml
 
+from stenmark.note_file import read_note, save_note
+
 
 def parse_frontmatter(text):
     """Return (metadata_dict, body_without_frontmatter).
@@ -73,12 +75,11 @@ def update_tags(path, tags):
     prepended. If *tags* is empty the ``tags`` key is removed.
     """
     try:
-        with open(path, encoding="utf-8") as f:
-            text = f.read()
+        note = read_note(path)
     except OSError:
         return
 
-    meta, body = parse_frontmatter(text)
+    meta, body = parse_frontmatter(note.text)
 
     if tags:
         meta["tags"] = sorted(tags)
@@ -91,5 +92,4 @@ def update_tags(path, tags):
     else:
         new_text = body
 
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(new_text)
+    save_note(path, new_text, note)

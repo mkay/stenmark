@@ -20,6 +20,7 @@ from stenmark.search_panel import SearchPanel
 from stenmark.tag_index import TagIndex
 from stenmark.tag_panel import TagPanel
 from stenmark.frontmatter import read_tags, update_tags
+from stenmark.note_file import NoteChanged, read_note, save_note
 from stenmark.root_selector import RootSelector
 
 
@@ -57,6 +58,8 @@ class MainWindow(Adw.ApplicationWindow):
         self._pending_edit_pos = None
         # Sidebar visibility to put back when edit mode ends; None when we
         # did not hide it ourselves.
+        # The note as it stood when editing began or was last saved
+        self._note = None
         self._sidebar_before_edit = None
 
         self.set_default_size(settings.window_width, settings.window_height)
@@ -80,9 +83,8 @@ class MainWindow(Adw.ApplicationWindow):
             self.open_file(open_file)
 
     # A property so the status-bar readout can't fall out of step with it:
-    # edit mode is left from ten different places — toggling, saving,
-    # navigating away, closing a document — and only some of them refresh the
-    # status bar. The readout has to dim with every one of them.
+    # edit mode ends both in _close_editor() and when the open note is
+    # trashed, and the readout has to dim with every one of them.
     @property
     def _editing(self):
         return self._editing_state
@@ -447,15 +449,77 @@ class MainWindow(Adw.ApplicationWindow):
         self.add_action(self._export_pdf_action)
 
     def _on_editor_save(self):
-        if not self._current_file or not self._editing:
-            return
-        text = self._editor.get_text()
+        if self._current_file and self._editing:
+            self._save_edits(lambda: None)
+
+    def _save_edits(self, then, overwrite=False):
+        """Write the editor's text, then call `then`.
+
+        `then` doesn't run if the save fails or the user cancels it, so
+        whoever asked is left in the editor with their text intact.
+        """
         try:
-            with open(self._current_file, "w", encoding="utf-8") as f:
-                f.write(text)
-        except OSError:
-            pass
-        self._tag_index.update_file(self._current_file)
+            self._note = save_note(self._current_file, self._editor.get_text(),
+                                   self._note, overwrite)
+        except NoteChanged:
+            self._prompt_note_changed(then)
+        except UnicodeEncodeError:
+            self._save_failed(_("Some of the text can\u2019t be stored as {encoding}")
+                              .format(encoding=self._note.encoding))
+        except OSError as err:
+            self._save_failed(err.strerror or str(err))
+        else:
+            self._tag_index.update_file(self._current_file)
+            then()
+
+    def _save_failed(self, reason):
+        self._edit_btn.set_active(True)
+        self.show_toast(
+            _("Could not save \u201c{name}\u201d: {reason}").format(
+                name=os.path.basename(self._current_file), reason=reason),
+            "error", timeout=0,
+        )
+
+    def _prompt_note_changed(self, then):
+        name = os.path.basename(self._current_file)
+        gone = not os.path.exists(self._current_file)
+        if gone:
+            dialog = Adw.AlertDialog(
+                heading=_("Note Deleted"),
+                body=_("\u201c{name}\u201d was deleted while you were editing it.")
+                .format(name=name),
+            )
+            dialog.add_response("cancel", _("Keep Editing"))
+            dialog.add_response("overwrite", _("Save Again"))
+        else:
+            dialog = Adw.AlertDialog(
+                heading=_("Note Changed"),
+                body=_("\u201c{name}\u201d changed on disk while you were editing it.")
+                .format(name=name),
+            )
+            dialog.add_response("cancel", _("Keep Editing"))
+            dialog.add_response("reload", _("Use Version on Disk"))
+            dialog.add_response("overwrite", _("Overwrite"))
+            dialog.set_response_appearance("reload", Adw.ResponseAppearance.DESTRUCTIVE)
+            dialog.set_response_appearance("overwrite", Adw.ResponseAppearance.DESTRUCTIVE)
+        dialog.set_default_response("cancel")
+        dialog.set_close_response("cancel")
+        dialog.connect("response", self._on_note_changed_response, then)
+        dialog.present(self)
+
+    def _on_note_changed_response(self, _dialog, response, then):
+        if response == "overwrite":
+            self._save_edits(then, overwrite=True)
+        elif response == "reload":
+            try:
+                self._note = read_note(self._current_file)
+            except OSError as err:
+                self._save_failed(err.strerror or str(err))
+                return
+            self._editor.load_text(self._note.text)
+            then()
+        else:
+            self._edit_btn.set_active(True)
 
     def _on_editor_escape(self):
         """Escape in the editor — same exit as the edit button, saving included."""
@@ -493,64 +557,98 @@ class MainWindow(Adw.ApplicationWindow):
         self._split_view.set_show_sidebar(show)
 
     def _on_edit_toggled(self, btn):
+        # Only a press that disagrees with the actual state means anything.
+        # Everything else is the button being put right, which must not save.
+        if btn.get_active() == self._editing:
+            return
+        if btn.get_active():
+            self._enter_edit_mode()
+        else:
+            self._leave_edit_mode()
+
+    def _enter_edit_mode(self):
         if not self._current_file:
             self._restore_sidebar_after_edit()
-            btn.set_active(False)
+            self._edit_btn.set_active(False)
             return
+        try:
+            self._note = read_note(self._current_file)
+        except OSError as err:
+            self._edit_btn.set_active(False)
+            self.show_toast(
+                _("Could not open \u201c{name}\u201d: {reason}").format(
+                    name=os.path.basename(self._current_file),
+                    reason=err.strerror or str(err)),
+                "error",
+            )
+            return
+        text = self._note.text
+        self._editor.load_text(text)
+        if self._preview_btn.get_active():
+            self._preview_viewer.render_text(text, self._current_file)
 
-        if btn.get_active():
-            # Enter edit mode
-            try:
-                with open(self._current_file, encoding="utf-8") as f:
-                    text = f.read()
-            except OSError:
-                btn.set_active(False)
-                return
-            self._editor.load_text(text)
-            if self._preview_btn.get_active():
-                self._preview_viewer.render_text(text, self._current_file)
-
-            # Land where the reader was, so editing picks up mid-document
-            # instead of at line 1.
-            pos = self._pending_edit_pos
-            self._pending_edit_pos = None
-            if pos and pos[0]:
-                self._editor.goto_line(pos[0], pos[1], center=True)
-            else:
-                self._viewer.get_top_source_line(self._editor.goto_line)
-
-            # Editing wants the width — the sidebar comes back on the way out
-            if (self._settings.hide_sidebar_on_edit
-                    and self._split_view.get_show_sidebar()):
-                self._sidebar_before_edit = True
-                self._split_view.set_show_sidebar(False)
-
-            self._stack.set_visible_child_name("edit")
-            self._editing = True
-            self._preview_btn.set_visible(True)
-            # After the stack has actually swapped, or the WebView is not yet
-            # mapped and cannot take focus
-            GLib.idle_add(lambda: (self._editor.focus_editor(), GLib.SOURCE_REMOVE)[1])
-            self._open_in_btn.set_sensitive(False)
-            self._stop_watching()
+        # Land where the reader was, so editing picks up mid-document
+        # instead of at line 1.
+        pos = self._pending_edit_pos
+        self._pending_edit_pos = None
+        if pos and pos[0]:
+            self._editor.goto_line(pos[0], pos[1], center=True)
         else:
-            # Exit edit mode — save and re-render
-            self._restore_sidebar_after_edit()
-            text = self._editor.get_text()
-            try:
-                with open(self._current_file, "w", encoding="utf-8") as f:
-                    f.write(text)
-            except OSError:
-                pass
-            self._viewer.render_text(text, self._current_file)
-            # ... and the other way round: show the reader the line being edited
-            self._editor.get_top_line(self._viewer.scroll_to_line)
-            self._stack.set_visible_child_name("view")
-            self._editing = False
-            self._preview_btn.set_visible(False)
-            self._open_in_btn.set_sensitive(True)
-            self._tag_index.update_file(self._current_file)
-            self._start_watching()
+            self._viewer.get_top_source_line(self._editor.goto_line)
+
+        # Editing wants the width — the sidebar comes back on the way out
+        if (self._settings.hide_sidebar_on_edit
+                and self._split_view.get_show_sidebar()):
+            self._sidebar_before_edit = True
+            self._split_view.set_show_sidebar(False)
+
+        self._stack.set_visible_child_name("edit")
+        self._editing = True
+        self._preview_btn.set_visible(True)
+        # After the stack has actually swapped, or the WebView is not yet
+        # mapped and cannot take focus
+        GLib.idle_add(lambda: (self._editor.focus_editor(), GLib.SOURCE_REMOVE)[1])
+        self._open_in_btn.set_sensitive(False)
+        self._stop_watching()
+
+    def _leave_edit_mode(self, then=None, save=True):
+        """The one way out of edit mode, saving unless told not to.
+
+        `then` runs once editing has really ended. A save can fail, or stop
+        to ask about a newer version, so nothing may assume it happened
+        before this returns.
+        """
+        def finish():
+            self._close_editor()
+            if then:
+                then()
+
+        if save:
+            self._save_edits(finish)
+        else:
+            finish()
+
+    def _close_editor(self):
+        self._restore_sidebar_after_edit()
+        # What's on disk, rather than the editor's text: a discard or an
+        # unchanged note leaves the two different.
+        try:
+            note = read_note(self._current_file)
+        except OSError:
+            note = self._note
+        self._note = None
+        self._viewer.render_text(note.text, self._current_file)
+        self._update_stats(note.text)
+        self._update_toc(note.text)
+        # ... and the other way round: show the reader the line being edited
+        self._editor.get_top_line(self._viewer.scroll_to_line)
+        self._stack.set_visible_child_name("view")
+        self._editing = False
+        self._edit_btn.set_active(False)
+        self._preview_btn.set_visible(False)
+        self._open_in_btn.set_sensitive(True)
+        self._tag_index.update_file(self._current_file)
+        self._start_watching()
 
     def _on_edit_requested(self, _viewer, line, word):
         """Double-click in the reader — edit this very spot."""
@@ -566,16 +664,8 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _on_folder_selected(self, _sidebar, folder_path):
         if self._editing:
-            # Save first, then show documents
-            text = self._editor.get_text()
-            try:
-                with open(self._current_file, "w", encoding="utf-8") as f:
-                    f.write(text)
-            except OSError:
-                pass
-            self._editing = False
-            self._edit_btn.set_active(False)
-            self._preview_btn.set_visible(False)
+            self._leave_edit_mode(lambda: self._on_folder_selected(_sidebar, folder_path))
+            return
 
         from stenmark.sidebar import Sidebar
         if folder_path.startswith("tag:"):
@@ -638,19 +728,11 @@ class MainWindow(Adw.ApplicationWindow):
             self._back_btn.set_visible(False)
 
     def _on_back_clicked(self, _btn):
+        if self._editing:
+            self._leave_edit_mode(lambda: self._on_back_clicked(_btn))
+            return
         page = self._stack.get_visible_child_name()
         if page in ("view", "edit"):
-            # Exit document view — save if editing
-            if self._editing:
-                text = self._editor.get_text()
-                try:
-                    with open(self._current_file, "w", encoding="utf-8") as f:
-                        f.write(text)
-                except OSError:
-                    pass
-                self._editing = False
-                self._edit_btn.set_active(False)
-                self._preview_btn.set_visible(False)
             self._stop_watching()
             self._current_file = None
             self._edit_btn.set_sensitive(False)
@@ -695,15 +777,8 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _on_file_created(self, _sidebar, path):
         if self._editing:
-            text = self._editor.get_text()
-            try:
-                with open(self._current_file, "w", encoding="utf-8") as f:
-                    f.write(text)
-            except OSError:
-                pass
-            self._editing = False
-            self._edit_btn.set_active(False)
-            self._preview_btn.set_visible(False)
+            self._leave_edit_mode(lambda: self._on_file_created(_sidebar, path))
+            return
         self._load_file(path)
         self._edit_btn.set_active(True)
 
@@ -785,8 +860,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._stack.set_visible_child_name("view")
         self._start_watching()
         try:
-            with open(path, encoding="utf-8") as f:
-                text = f.read()
+            text = read_note(path).text
             self._update_stats(text)
             self._update_toc(text)
         except OSError:
@@ -812,18 +886,7 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_unsaved_response(self, _dialog, response, next_path):
         if response == "cancel":
             return
-        if response == "save":
-            text = self._editor.get_text()
-            try:
-                with open(self._current_file, "w", encoding="utf-8") as f:
-                    f.write(text)
-            except OSError:
-                pass
-        # For both "save" and "discard"
-        self._editing = False
-        self._edit_btn.set_active(False)
-        self._stack.set_visible_child_name("view")
-        self._load_file(next_path)
+        self._leave_edit_mode(lambda: self._load_file(next_path), save=response == "save")
 
     def _start_watching(self):
         self._stop_watching()
@@ -849,7 +912,9 @@ class MainWindow(Adw.ApplicationWindow):
         if self._current_file == path:
             self._stop_watching()
             self._current_file = None
+            self._note = None
             self._editing = False
+            self._restore_sidebar_after_edit()
             self._edit_btn.set_active(False)
             self._edit_btn.set_sensitive(False)
             self._copy_rich_btn.set_visible(False)
@@ -1022,8 +1087,7 @@ class MainWindow(Adw.ApplicationWindow):
             text = self._editor.get_text()
         elif self._current_file:
             try:
-                with open(self._current_file, encoding="utf-8") as f:
-                    text = f.read()
+                text = read_note(self._current_file).text
             except OSError:
                 return
         else:
@@ -1285,15 +1349,8 @@ class MainWindow(Adw.ApplicationWindow):
     def _open_tag_panel(self, preselect_tag=None):
         """Show the tag filter pane, optionally pre-selecting a tag."""
         if self._editing:
-            text = self._editor.get_text()
-            try:
-                with open(self._current_file, "w", encoding="utf-8") as f:
-                    f.write(text)
-            except OSError:
-                pass
-            self._editing = False
-            self._edit_btn.set_active(False)
-            self._preview_btn.set_visible(False)
+            self._leave_edit_mode(lambda: self._open_tag_panel(preselect_tag))
+            return
         self._title_widget.set_subtitle(_("Tags"))
         self._edit_btn.set_sensitive(False)
         self._copy_rich_btn.set_visible(False)
@@ -1313,15 +1370,8 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_search(self, *_args):
         """Switch to the full-text search panel."""
         if self._editing:
-            text = self._editor.get_text()
-            try:
-                with open(self._current_file, "w", encoding="utf-8") as f:
-                    f.write(text)
-            except OSError:
-                pass
-            self._editing = False
-            self._edit_btn.set_active(False)
-            self._preview_btn.set_visible(False)
+            self._leave_edit_mode(lambda: self._on_search(*_args))
+            return
         # Scope search to the currently selected folder
         folder = self._doc_panel._current_folder
         if folder:

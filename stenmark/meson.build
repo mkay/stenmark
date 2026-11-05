@@ -16,6 +16,7 @@ stenmark_sources = [
   'html_template.py',
   'i18n.py',
   'markdown_renderer.py',
+  'note_file.py',
   'root_selector.py',
   'search_panel.py',
   'settings_dialog.py',

@@ -9,6 +9,8 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import GObject
 
+from stenmark.note_file import write_atomic
+
 DEFAULTS = {
     # Empty until the user picks one: a guessed folder is indistinguishable
     # from a chosen one, and every consumer already handles "no root".
@@ -84,8 +86,7 @@ class SettingsManager(GObject.Object):
 
     def _save(self):
         CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-        with open(CONFIG_FILE, "w") as f:
-            json.dump(self._data, f, indent=2)
+        write_atomic(CONFIG_FILE, json.dumps(self._data, indent=2).encode())
 
     def get(self, key):
         if key in self._overrides:

@@ -36,6 +36,16 @@ trap cleanup EXIT
 
 echo "==> Releasing $PROJECT_NAME $TAG"
 
+# A push that fails in step 4 leaves the release on only some remotes, so make
+# sure each one answers before anything is bumped or tagged.
+for remote in $(git remote); do
+    echo "==> Checking access to $remote"
+    if ! git ls-remote "$remote" >/dev/null; then
+        echo "ERROR: can't reach remote '$remote' — is its SSH key on this machine?"
+        exit 1
+    fi
+done
+
 # 0. The release notes must actually describe this release. The what's-new
 # dialog shows whatsnew.md verbatim under the new version number, so shipping
 # the previous release's bullets tells every updating user something false.

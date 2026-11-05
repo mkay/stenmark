@@ -37,21 +37,9 @@ if [[ -z "$PROJECT_NAME" || -z "$VERSION" ]]; then
     exit 1
 fi
 
-# Debian architecture name, which is not what uname reports.
-if command -v dpkg &>/dev/null; then
-    ARCH=$(dpkg --print-architecture)
-else
-    case "$(uname -m)" in
-        x86_64)  ARCH=amd64 ;;
-        aarch64) ARCH=arm64 ;;
-        armv7l)  ARCH=armhf ;;
-        i?86)    ARCH=i386 ;;
-        *)
-            log "ERROR: Unknown architecture '$(uname -m)'. Install dpkg or set ARCH by hand."
-            exit 1
-            ;;
-    esac
-fi
+# Pure Python and web assets, with nothing compiled, so one package serves every
+# architecture and it doesn't matter which machine builds it.
+ARCH=all
 
 DEB_STAGING="$(pwd)/deb-staging"
 CONFIG_FILE=$(mktemp -t "nfpm-$PROJECT_NAME-XXXXXX.yaml")

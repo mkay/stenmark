@@ -44,7 +44,7 @@ Your markdown librarian. A GTK4 Markdown reader, organizer and editor.
 - Python 3.10+
 - GTK 4.0, libadwaita 1
 - WebKitGTK 6.0
-- python-markdown, Pygments, PyYAML
+- markdown-it-py, Pygments, PyYAML
 - Meson, Ninja, gettext (build)
 
 ## Install
@@ -69,7 +69,7 @@ flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/fl
 ### Arch Linux
 
 ```bash
-pacman -S python python-gobject gtk4 libadwaita webkitgtk-6.0 python-markdown python-pygments python-yaml meson ninja
+pacman -S python python-gobject gtk4 libadwaita webkitgtk-6.0 python-markdown-it-py python-pygments python-yaml meson ninja
 makepkg -sic
 ```
 

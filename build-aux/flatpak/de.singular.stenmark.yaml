@@ -40,7 +40,7 @@ cleanup:
   - '*.la'
 
 modules:
-  # markdown / pygments / pyyaml.
+  # markdown-it-py / pygments / pyyaml.
   # Regenerate with build-aux/flatpak/regen-python-deps.sh
   - python-deps.json
 

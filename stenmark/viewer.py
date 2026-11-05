@@ -19,6 +19,10 @@ from stenmark.html_template import wrap_html
 from stenmark.note_file import read_note, save_note
 
 
+# Up to the brackets of a task line, which may be quoted or nested
+_TASK_LINE = re.compile(r"^([\s>]*(?:(?:[-*+]|\d+[.)])\s+)+)\[[ xX]\]")
+
+
 class MarkdownViewer(Gtk.Box):
     __gsignals__ = {
         "link-activated": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
@@ -34,6 +38,8 @@ class MarkdownViewer(Gtk.Box):
         self._read_only_tasks = read_only_tasks
         # The address of the page this viewer last asked for
         self._page_uri = None
+        # The text on the page, which a checkbox's line number refers to
+        self._rendered_text = None
         self._renderer = MarkdownRenderer()
         self._current_path = None
         self._can_go_back = False
@@ -276,7 +282,7 @@ class MarkdownViewer(Gtk.Box):
     def _on_checkbox_toggled(self, _ucm, result):
         try:
             data = json.loads(result.to_string())
-            index = data["index"]
+            line = int(data["line"])
             checked = data["checked"]
         except Exception:
             return
@@ -286,21 +292,26 @@ class MarkdownViewer(Gtk.Box):
             note = read_note(self._current_path)
         except OSError:
             return
-        text = note.text
-        pattern = re.compile(r'^(\s*[-*+]\s+)\[[ xX]\]', re.MULTILINE)
-        matches = list(pattern.finditer(text))
-        if index >= len(matches):
+        if note.text != self._rendered_text:
+            # Synced since it was drawn: this box may not be that line any more
+            self._skip_next_load = False
+            self.reload()
             return
-        m = matches[index]
-        mark = "x" if checked else " "
-        bracket_pos = m.end(1) + 1  # position of the space or 'x' inside [...]
-        new_text = text[:bracket_pos] + mark + text[bracket_pos + 1:]
+        lines = note.text.split("\n")
+        match = _TASK_LINE.match(lines[line - 1]) if 0 < line <= len(lines) else None
+        if not match:
+            return
+        task = lines[line - 1]
+        bracket_pos = match.end(1) + 1  # position of the space or 'x' inside [...]
+        lines[line - 1] = task[:bracket_pos] + ("x" if checked else " ") + task[bracket_pos + 1:]
+        new_text = "\n".join(lines)
         try:
             save_note(self._current_path, new_text, note)
         except OSError:
             return
+        self._rendered_text = new_text
         # An unchanged note isn't written, so no change event will consume this
-        self._skip_next_load = new_text != text
+        self._skip_next_load = new_text != note.text
 
     def _on_edit_request(self, _ucm, result):
         try:
@@ -439,6 +450,7 @@ class MarkdownViewer(Gtk.Box):
     def render_text(self, text, path=None):
         if path:
             self._current_path = path
+        self._rendered_text = text
         body = self._renderer.render(text)
         html = wrap_html(body, self._settings.font_family, self._settings.font_size,
                          dark=self._is_dark(), viewer_theme=self._settings.viewer_theme,

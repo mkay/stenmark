@@ -9,7 +9,7 @@ description = "Your markdown librarian. A GTK4 Markdown reader, organizer and ed
 license = "GPL-3.0-only"
 requires-python = ">=3.10"
 dependencies = [
-    "markdown",
+    "markdown-it-py",
     "pygments",
     "pyyaml",
 ]

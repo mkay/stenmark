@@ -107,14 +107,17 @@ def wrap_html(body_html, font_family="Sans", font_size=16, dark=False, viewer_th
 
     script = f"""
 document.addEventListener("DOMContentLoaded", function() {{
-    document.querySelectorAll("li.task-item input[type='checkbox']").forEach(function(cb, i) {{
+    document.querySelectorAll("li.task-item input[type='checkbox']").forEach(function(cb) {{
         if ({read_only_tasks_js}) {{
             cb.disabled = true;
             return;
         }}
         cb.addEventListener("change", function() {{
             window.webkit.messageHandlers.checkboxToggled.postMessage(
-                JSON.stringify({{index: i, checked: cb.checked}})
+                JSON.stringify({{
+                    line: parseInt(cb.getAttribute("data-source-line"), 10),
+                    checked: cb.checked,
+                }})
             );
         }});
     }});

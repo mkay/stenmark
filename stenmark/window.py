@@ -20,6 +20,7 @@ from stenmark.search_panel import SearchPanel
 from stenmark.tag_index import TagIndex
 from stenmark.tag_panel import TagPanel
 from stenmark.frontmatter import read_tags, update_tags
+from stenmark.markdown_renderer import MarkdownRenderer
 from stenmark.note_file import NoteChanged, read_note, save_note
 from stenmark.root_selector import RootSelector
 
@@ -58,6 +59,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._pending_edit_pos = None
         # Sidebar visibility to put back when edit mode ends; None when we
         # did not hide it ourselves.
+        self._renderer = MarkdownRenderer()
         # The note as it stood when editing began or was last saved
         self._note = None
         self._sidebar_before_edit = None
@@ -1101,8 +1103,7 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             return
 
-        from stenmark.markdown_renderer import MarkdownRenderer
-        body = MarkdownRenderer().render(text)
+        body = self._renderer.render(text)
         html = f"<html><body>{body}</body></html>"
 
         providers = [
@@ -1159,25 +1160,8 @@ class MainWindow(Adw.ApplicationWindow):
         if self._current_file:
             self._edit_btn.set_active(not self._edit_btn.get_active())
 
-    def _parse_headings(self, text):
-        headings = []
-        in_fence = False
-        for i, line in enumerate(text.splitlines(), 1):
-            stripped = line.strip()
-            if stripped.startswith("```") or stripped.startswith("~~~"):
-                in_fence = not in_fence
-                continue
-            if in_fence:
-                continue
-            m = re.match(r'^(#{1,6})\s+(.+)', line)
-            if m:
-                level = len(m.group(1))
-                title = m.group(2).strip()
-                headings.append((level, title, i))
-        return headings
-
     def _update_toc(self, text):
-        self._toc_headings = self._parse_headings(text)
+        self._toc_headings = self._renderer.headings(text)
         while True:
             row = self._toc_list.get_row_at_index(0)
             if row is None:
@@ -1201,14 +1185,11 @@ class MainWindow(Adw.ApplicationWindow):
         idx = row.get_index()
         if idx >= len(self._toc_headings):
             return
-        level, title, line_num = self._toc_headings[idx]
+        _level, _title, line_num = self._toc_headings[idx]
         if self._editing:
             self._editor._js(f"scrollToLine({line_num})")
         else:
-            self._viewer._webview.evaluate_javascript(
-                f"document.querySelectorAll('h1,h2,h3,h4,h5,h6')[{idx}]?.scrollIntoView({{behavior:'smooth'}});",
-                -1, None, None, None, None,
-            )
+            self._viewer.scroll_to_line(line_num)
 
     def show_toast(self, message, kind="info", timeout=3):
         _icons = {

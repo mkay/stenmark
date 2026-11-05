@@ -111,7 +111,9 @@ depends:
   - gir1.2-adw-1
   - gir1.2-webkit-6.0
   - python3-gi
-  - python3-markdown
+  - python3-markdown-it
+  - python3-pygments
+  - python3-yaml
 contents:
 $CONTENTS
 NFPM

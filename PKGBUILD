@@ -9,7 +9,7 @@ license=('GPL-3.0-only')
 depends=(
   'python'
   'python-gobject'
-  'python-markdown'
+  'python-markdown-it-py'
   'python-pygments'
   'python-yaml'
   'gtk4'

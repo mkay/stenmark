@@ -4,8 +4,8 @@
 #
 # Regenerate python-deps.json from the runtime's Python version.
 #
-# All three dependencies are importable as-is: markdown and pygments publish a
-# universal py3-none-any wheel, and PyYAML publishes manylinux wheels. Hence
+# All three dependencies are importable as-is: markdown-it-py and pygments publish
+# a universal py3-none-any wheel, and PyYAML publishes manylinux wheels. Hence
 # --prefer-wheels for pyyaml, which would otherwise build its optional libyaml
 # C extension from the sdist; --runtime makes pip resolve against the runtime's
 # interpreter rather than the host's, which matters because PyYAML's wheels are
@@ -28,6 +28,6 @@ flatpak-pip-generator \
   --prefer-wheels=pyyaml \
   --cleanup=all \
   --output="${HERE}/python-deps" \
-  markdown pygments pyyaml
+  markdown-it-py pygments pyyaml
 
 echo "Wrote ${HERE}/python-deps.json"

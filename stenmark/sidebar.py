@@ -130,7 +130,8 @@ class Sidebar(Gtk.Box):
 
         scrolled = Gtk.ScrolledWindow(vexpand=True, hexpand=True)
         scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        scrolled.add_css_class("sidebar-list")
+        self._list_scroller = scrolled
+        self.update_tint()
 
         self._listbox = Gtk.ListBox()
         self._listbox.add_css_class("navigation-sidebar")
@@ -759,6 +760,12 @@ class Sidebar(Gtk.Box):
         self.refresh()
 
     # ---- Public ---------------------------------------------------------
+
+    def update_tint(self):
+        if self._settings.get("tint_sidebar"):
+            self._list_scroller.add_css_class("sidebar-list")
+        else:
+            self._list_scroller.remove_css_class("sidebar-list")
 
     def set_selection(self, path):
         """Point the sidebar at `path` without emitting folder-selected.

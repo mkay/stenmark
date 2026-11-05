@@ -1017,6 +1017,8 @@ class MainWindow(Adw.ApplicationWindow):
                 self._stop_watching()
         elif key == "show_sidebar_tags":
             self._sidebar.refresh()
+        elif key == "tint_sidebar":
+            self._sidebar.update_tint()
         elif key == "double_click_to_edit":
             enabled = self._settings.double_click_to_edit
             self._viewer.set_edit_on_dblclick(enabled)

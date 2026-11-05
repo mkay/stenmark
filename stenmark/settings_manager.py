@@ -38,6 +38,7 @@ DEFAULTS = {
     "file_watching": True,
     "remember_last_folder": False,
     "show_sidebar_tags": False,
+    "tint_sidebar": True,
     "preview_enabled": False,
     "last_root_folder": "",
     # Version whose release notes have been shown. See whats_new_dialog.

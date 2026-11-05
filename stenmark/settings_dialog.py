@@ -187,6 +187,17 @@ class SettingsDialog(Adw.PreferencesDialog):
         )
         dir_group.add(sidebar_tags_row)
 
+        tint_row = Adw.SwitchRow(
+            title=_("Tint Sidebar"),
+            subtitle=_("Mix the accent colour into the sidebar list"),
+        )
+        tint_row.set_active(self._settings.get("tint_sidebar"))
+        tint_row.connect(
+            "notify::active",
+            lambda row, _p: self._settings.set("tint_sidebar", row.get_active()),
+        )
+        dir_group.add(tint_row)
+
         general_page.add(dir_group)
 
         # Theme group

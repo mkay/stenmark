@@ -9,7 +9,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import GObject
 
-from stenmark.note_file import write_atomic
+from stenmark.note_file import moved_path, write_atomic
 
 DEFAULTS = {
     # Empty until the user picks one: a guessed folder is indistinguishable
@@ -66,6 +66,9 @@ class SettingsManager(GObject.Object):
         #: write the file. The what's-new dialog needs to tell a fresh install
         #: apart from an upgrade, and by the time it runs the file exists.
         self.first_run = not CONFIG_FILE.exists()
+        #: The file exists but couldn't be understood. It may still be
+        #: repairable, so nothing is written over it this session.
+        self.load_failed = False
         self._load()
 
     def _load(self):
@@ -73,11 +76,14 @@ class SettingsManager(GObject.Object):
             try:
                 with open(CONFIG_FILE) as f:
                     stored = json.load(f)
-                for k, v in stored.items():
-                    if k in DEFAULTS:
-                        self._data[k] = v
-            except (json.JSONDecodeError, OSError):
-                pass
+                if not isinstance(stored, dict):
+                    raise ValueError("settings.json is not an object")
+            except (ValueError, OSError):
+                self.load_failed = True
+            else:
+                # Keys this version doesn't know are kept: they may be a newer
+                # version's, and going back shouldn't lose them.
+                self._data.update(stored)
         # Ensure pinned_files / pinned_folders are always lists
         if not isinstance(self._data.get("pinned_files"), list):
             self._data["pinned_files"] = []
@@ -85,6 +91,8 @@ class SettingsManager(GObject.Object):
             self._data["pinned_folders"] = []
 
     def _save(self):
+        if self.load_failed:
+            return
         CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         write_atomic(CONFIG_FILE, json.dumps(self._data, indent=2).encode())
 
@@ -189,6 +197,11 @@ class SettingsManager(GObject.Object):
         else:
             pins.append(path)
         self.set("pinned_folders", pins)
+
+    def move_pins(self, old, new):
+        """Carry pins along when `old` is renamed, including anything inside it."""
+        for key in ("pinned_files", "pinned_folders"):
+            self.set(key, [moved_path(path, old, new) for path in self.get(key)])
 
     def cleanup_stale_pins(self):
         """Remove pinned file/folder paths that no longer exist on disk."""

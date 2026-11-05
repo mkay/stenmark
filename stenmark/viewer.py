@@ -368,6 +368,12 @@ class MarkdownViewer(Gtk.Box):
                 decision.ignore()
                 if os.path.isfile(path):
                     self.emit("link-activated", path)
+                else:
+                    self.get_root().show_toast(
+                        _("\u201c{name}\u201d doesn\u2019t exist").format(
+                            name=os.path.basename(path)),
+                        "warning",
+                    )
                 return True
 
         # Block all other navigation (don't leave the rendered page)
@@ -460,6 +466,23 @@ class MarkdownViewer(Gtk.Box):
         if self._current_path:
             base_uri = "file://" + os.path.dirname(os.path.abspath(self._current_path)) + "/"
         self._load_page(html, base_uri)
+
+    def reload_in_place(self, path):
+        """Show a newer version of `path` without losing the reading position."""
+        if self._skip_next_load and path == self._current_path:
+            self._skip_next_load = False
+            return
+
+        def restore(line):
+            if path == self._current_path:
+                self.load_file(path)
+                self.scroll_to_line(line)
+
+        self.get_top_source_line(restore)
+
+    def follow_rename(self, path):
+        """The page is unchanged, but its file has a new path."""
+        self._current_path = path
 
     def reload(self):
         if self._current_path:

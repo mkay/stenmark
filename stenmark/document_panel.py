@@ -7,11 +7,12 @@ import time
 import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Adw, Gtk, Gio, GObject, Gdk, Graphene
+from gi.repository import Adw, Gtk, Gio, GLib, GObject, Gdk, Graphene
 
 from stenmark.i18n import _, ngettext
+from stenmark.note_file import moved_path, note_filename, valid_name
 
-from stenmark.sidebar import Sidebar, _count_md_files
+from stenmark.sidebar import Sidebar, _count_md_files, delete_folder
 
 
 def _collect_subdirs(root):
@@ -127,6 +128,7 @@ class DocumentPanel(Gtk.Box):
         "file-selected": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
         "file-trashed": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
         "file-renamed": (GObject.SignalFlags.RUN_FIRST, None, (str, str)),
+        "folder-renamed": (GObject.SignalFlags.RUN_FIRST, None, (str, str)),
         "folder-navigated": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
         "tag-clicked": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
     }
@@ -751,8 +753,10 @@ class DocumentPanel(Gtk.Box):
         name = entry.get_text().strip()
         if not name:
             return
-        if not name.lower().endswith(".md"):
-            name += ".md"
+        if not valid_name(name):
+            self.get_root().show_toast(_("A name can\u2019t contain a slash"), "warning")
+            return
+        name = note_filename(name)
         path = os.path.join(parent_dir, name)
         if os.path.exists(path):
             win = self.get_root()
@@ -763,7 +767,8 @@ class DocumentPanel(Gtk.Box):
         try:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(f"# {os.path.splitext(name)[0]}\n")
-        except OSError:
+        except OSError as err:
+            self._show_failure(_("Could not create \u201c{name}\u201d: {reason}"), name, err)
             return
         self.refresh()
 
@@ -852,10 +857,16 @@ class DocumentPanel(Gtk.Box):
         if response != "delete":
             return
         try:
-            os.rmdir(path)
-        except OSError:
+            delete_folder(path)
+        except (OSError, GLib.Error) as err:
+            self._show_failure(_("Could not delete \u201c{name}\u201d: {reason}"),
+                               os.path.basename(path), err)
             return
         self.refresh()
+
+    def _show_failure(self, message, name, err):
+        reason = getattr(err, "strerror", None) or getattr(err, "message", None) or str(err)
+        self.get_root().show_toast(message.format(name=name, reason=reason), "error")
 
     def _on_rename_folder_activate(self, *_args):
         if not self._context_folder_path:
@@ -885,6 +896,9 @@ class DocumentPanel(Gtk.Box):
         old_name = os.path.basename(old_path)
         if not new_name or new_name == old_name:
             return
+        if not valid_name(new_name):
+            self.get_root().show_toast(_("A name can\u2019t contain a slash"), "warning")
+            return
         new_path = os.path.join(os.path.dirname(old_path), new_name)
         if os.path.exists(new_path):
             win = self.get_root()
@@ -894,8 +908,11 @@ class DocumentPanel(Gtk.Box):
             return
         try:
             os.rename(old_path, new_path)
-        except OSError:
+        except OSError as err:
+            self._show_failure(_("Could not rename \u201c{name}\u201d: {reason}"),
+                               old_name, err)
             return
+        self.emit("folder-renamed", old_path, new_path)
         self.refresh()
 
     def _on_reveal_folder_activate(self, *_args):
@@ -1056,7 +1073,9 @@ class DocumentPanel(Gtk.Box):
         gfile = Gio.File.new_for_path(path)
         try:
             gfile.trash(None)
-        except Exception:
+        except GLib.Error as err:
+            self._show_failure(_("Could not delete \u201c{name}\u201d: {reason}"),
+                               os.path.basename(path), err)
             return
         self.emit("file-trashed", path)
         self.refresh()
@@ -1110,7 +1129,9 @@ class DocumentPanel(Gtk.Box):
             return
         try:
             os.rename(old_path, new_path)
-        except OSError:
+        except OSError as err:
+            self._show_failure(_("Could not move \u201c{name}\u201d: {reason}"),
+                               os.path.basename(old_path), err)
             return
         self.emit("file-renamed", old_path, new_path)
         self.refresh()
@@ -1148,7 +1169,13 @@ class DocumentPanel(Gtk.Box):
             return
         new_name = entry.get_text().strip()
         old_name = os.path.basename(old_path)
-        if not new_name or new_name == old_name:
+        if not new_name:
+            return
+        if not valid_name(new_name):
+            self.get_root().show_toast(_("A name can\u2019t contain a slash"), "warning")
+            return
+        new_name = note_filename(new_name)
+        if new_name == old_name:
             return
         new_path = os.path.join(os.path.dirname(old_path), new_name)
         if os.path.exists(new_path):
@@ -1159,7 +1186,9 @@ class DocumentPanel(Gtk.Box):
             return
         try:
             os.rename(old_path, new_path)
-        except OSError:
+        except OSError as err:
+            self._show_failure(_("Could not rename \u201c{name}\u201d: {reason}"),
+                               old_name, err)
             return
         self.emit("file-renamed", old_path, new_path)
         self.refresh()
@@ -1174,6 +1203,13 @@ class DocumentPanel(Gtk.Box):
         if self._current_folder in (Sidebar.ALL_DOCUMENTS, Sidebar.NO_FOLDER):
             return False
         return self._browsing_folder != self._current_folder
+
+    def folder_renamed(self, old_path, new_path):
+        """Keep showing the same folder when it, or one above it, was renamed."""
+        if self._current_folder:
+            self._current_folder = moved_path(self._current_folder, old_path, new_path)
+        if self._browsing_folder:
+            self._browsing_folder = moved_path(self._browsing_folder, old_path, new_path)
 
     def navigate_back(self):
         """Go up one level in the drilled-in folder hierarchy."""

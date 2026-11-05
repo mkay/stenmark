@@ -6,9 +6,10 @@ import os
 import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Adw, Gtk, Gio, GObject, Gdk, Graphene
+from gi.repository import Adw, Gtk, Gio, GLib, GObject, Gdk, Graphene
 
 from stenmark.i18n import _
+from stenmark.note_file import note_filename, valid_name
 
 
 def _count_md_files(dir_path):
@@ -70,11 +71,20 @@ def _collect_subdirs(root):
     return dirs
 
 
+def delete_folder(path):
+    """Delete a folder that looks empty, trashing any dot files it still holds."""
+    try:
+        os.rmdir(path)
+    except OSError:
+        Gio.File.new_for_path(path).trash(None)
+
+
 class Sidebar(Gtk.Box):
     __gsignals__ = {
         "folder-selected": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
         "changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "file-created": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
+        "folder-renamed": (GObject.SignalFlags.RUN_FIRST, None, (str, str)),
         "search-requested": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "tag-filter-requested": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "open-root-requested": (GObject.SignalFlags.RUN_FIRST, None, ()),
@@ -551,10 +561,16 @@ class Sidebar(Gtk.Box):
         if response != "trash":
             return
         try:
-            os.rmdir(path)
-        except OSError:
+            delete_folder(path)
+        except (OSError, GLib.Error) as err:
+            self._show_failure(_("Could not delete \u201c{name}\u201d: {reason}"),
+                               os.path.basename(path), err)
             return
         self.refresh()
+
+    def _show_failure(self, message, name, err):
+        reason = getattr(err, "strerror", None) or getattr(err, "message", None) or str(err)
+        self.get_root().show_toast(message.format(name=name, reason=reason), "error")
 
     # ---- Rename ---------------------------------------------------------
 
@@ -586,16 +602,23 @@ class Sidebar(Gtk.Box):
         old_name = os.path.basename(old_path)
         if not new_name or new_name == old_name:
             return
+        if not valid_name(new_name):
+            self.get_root().show_toast(_("A name can\u2019t contain a slash"), "warning")
+            return
         new_path = os.path.join(os.path.dirname(old_path), new_name)
         if os.path.exists(new_path):
             win = self.get_root()
             if hasattr(win, "show_toast"):
-                win.show_toast(f"\u201c{new_name}\u201d already exists", "warning")
+                win.show_toast(_("\u201c{name}\u201d already exists").format(name=new_name),
+                               "warning")
             return
         try:
             os.rename(old_path, new_path)
-        except OSError:
+        except OSError as err:
+            self._show_failure(_("Could not rename \u201c{name}\u201d: {reason}"),
+                               old_name, err)
             return
+        self.emit("folder-renamed", old_path, new_path)
         self.refresh()
 
     # ---- New file / folder ----------------------------------------------
@@ -668,8 +691,10 @@ class Sidebar(Gtk.Box):
         name = entry.get_text().strip()
         if not name:
             return
-        if not name.lower().endswith(".md"):
-            name += ".md"
+        if not valid_name(name):
+            self.get_root().show_toast(_("A name can\u2019t contain a slash"), "warning")
+            return
+        name = note_filename(name)
         parent_dir = (
             folder_paths[folder_dropdown.get_selected()]
             if folder_dropdown is not None
@@ -685,7 +710,8 @@ class Sidebar(Gtk.Box):
         try:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(f"# {os.path.splitext(name)[0]}\n")
-        except OSError:
+        except OSError as err:
+            self._show_failure(_("Could not create \u201c{name}\u201d: {reason}"), name, err)
             return
         self.refresh()
         self.emit("file-created", path)
@@ -715,6 +741,9 @@ class Sidebar(Gtk.Box):
         name = entry.get_text().strip()
         if not name:
             return
+        if not valid_name(name):
+            self.get_root().show_toast(_("A name can\u2019t contain a slash"), "warning")
+            return
         path = os.path.join(parent_dir, name)
         if os.path.exists(path):
             win = self.get_root()
@@ -724,7 +753,8 @@ class Sidebar(Gtk.Box):
             return
         try:
             os.makedirs(path)
-        except OSError:
+        except OSError as err:
+            self._show_failure(_("Could not create \u201c{name}\u201d: {reason}"), name, err)
             return
         self.refresh()
 

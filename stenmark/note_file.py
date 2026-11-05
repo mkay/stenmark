@@ -32,6 +32,25 @@ class Note:
     newline: str
 
 
+def valid_name(name):
+    """Whether a typed name stays in its folder, rather than pointing elsewhere."""
+    return "/" not in name and "\0" not in name and name not in (".", "..")
+
+
+def note_filename(name):
+    """A typed name as a note's filename: without .md the app can't list it."""
+    return name if name.lower().endswith(".md") else name + ".md"
+
+
+def moved_path(path, old, new):
+    """Where `path` is now that `old` became `new`, whether itself or inside it."""
+    if path == old:
+        return new
+    if path.startswith(old + os.sep):
+        return new + path[len(old):]
+    return path
+
+
 def read_note(path):
     """Read a note, raising OSError if it can't be.
 

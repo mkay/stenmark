@@ -129,11 +129,7 @@ document.addEventListener("DOMContentLoaded", function() {{
         btn.innerHTML = svgIcon;
         btn.addEventListener("click", function() {{
             var code = pre.querySelector("code");
-            var raw = (code || pre).textContent;
-            var text = raw.split("\\n").filter(function(line) {{
-                var t = line.trim();
-                return t !== "" && !t.startsWith("#");
-            }}).join("\\n");
+            var text = (code || pre).textContent.replace(/\\n$/, "");
             window.webkit.messageHandlers.copyCode.postMessage(text);
             btn.innerHTML = "{copied_label}";
             btn.classList.add("copied");

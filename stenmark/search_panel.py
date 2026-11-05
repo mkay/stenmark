@@ -251,11 +251,11 @@ class SearchPanel(Gtk.Box):
 
         # Snap to word boundaries
         if start > 0:
-            space = content.rfind(" ", start, pos)
+            space = content.find(" ", start, pos)
             if space != -1:
                 start = space + 1
         if end < len(content):
-            space = content.find(" ", pos + query_len, end)
+            space = content.rfind(" ", pos + query_len, end)
             if space != -1:
                 end = space
 

@@ -21,7 +21,7 @@ from stenmark.tag_index import TagIndex
 from stenmark.tag_panel import TagPanel
 from stenmark.frontmatter import read_tags, update_tags
 from stenmark.markdown_renderer import MarkdownRenderer
-from stenmark.note_file import NoteChanged, read_note, save_note
+from stenmark.note_file import NoteChanged, moved_path, read_note, save_note
 from stenmark.root_selector import RootSelector
 
 
@@ -83,6 +83,9 @@ class MainWindow(Adw.ApplicationWindow):
 
         if open_file:
             self.open_file(open_file)
+        if settings.load_failed:
+            self.show_toast(_("settings.json can\u2019t be read, so changes to settings "
+                              "won\u2019t be saved"), "error", timeout=0)
 
     # A property so the status-bar readout can't fall out of step with it:
     # edit mode ends both in _close_editor() and when the open note is
@@ -376,12 +379,14 @@ class MainWindow(Adw.ApplicationWindow):
         self._sidebar.connect("folder-selected", self._on_folder_selected)
         self._sidebar.connect("changed", self._on_sidebar_changed)
         self._sidebar.connect("file-created", self._on_file_created)
+        self._sidebar.connect("folder-renamed", self._on_folder_renamed)
         self._sidebar.connect("search-requested", lambda _s: self._on_search(None, None))
         self._sidebar.connect("tag-filter-requested", lambda _s: self._on_tag_filter(None, None))
         self._sidebar.connect("open-root-requested", self._on_open_root_requested)
         self._doc_panel.connect("file-selected", self._on_file_selected)
         self._doc_panel.connect("file-trashed", self._on_file_trashed)
         self._doc_panel.connect("file-renamed", self._on_file_renamed)
+        self._doc_panel.connect("folder-renamed", self._on_folder_renamed)
         self._doc_panel.connect("folder-navigated", self._on_folder_navigated)
         self._doc_panel.connect("tag-clicked", lambda _p, tag: self._open_tag_panel(tag))
         self._settings.connect("changed", self._on_settings_changed)
@@ -914,8 +919,15 @@ class MainWindow(Adw.ApplicationWindow):
             self._watcher = None
 
     def _on_file_changed(self):
-        if not self._editing and self._current_file:
-            self._viewer.load_file(self._current_file)
+        if self._editing or not self._current_file:
+            return
+        self._viewer.reload_in_place(self._current_file)
+        try:
+            text = read_note(self._current_file).text
+        except OSError:
+            return
+        self._update_stats(text)
+        self._update_toc(text)
 
     def _on_file_trashed(self, _panel, path):
         self._tag_index.remove_file(path)
@@ -940,11 +952,28 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_file_renamed(self, _panel, old_path, new_path):
         self._tag_index.remove_file(old_path)
         self._tag_index.update_file(new_path)
-        if self._current_file == old_path:
-            self._current_file = new_path
-            self._title_widget.set_subtitle(os.path.basename(new_path))
-            self._start_watching()
+        self._path_moved(old_path, new_path)
         self._sidebar.refresh()
+
+    def _on_folder_renamed(self, _source, old_path, new_path):
+        self._path_moved(old_path, new_path)
+        self._tag_index.rebuild()
+        self._doc_panel.folder_renamed(old_path, new_path)
+        self._doc_panel.refresh()
+        self._sidebar.refresh()
+
+    def _path_moved(self, old_path, new_path):
+        self._settings.move_pins(old_path, new_path)
+        self._nav_history = [moved_path(p, old_path, new_path) for p in self._nav_history]
+        if not self._current_file:
+            return
+        moved = moved_path(self._current_file, old_path, new_path)
+        if moved != self._current_file:
+            self._current_file = moved
+            self._viewer.follow_rename(moved)
+            self._title_widget.set_subtitle(os.path.basename(moved))
+            if not self._editing:
+                self._start_watching()
 
     def _on_settings_changed(self, _mgr, key):
         if key == "root_directory":

@@ -8,6 +8,11 @@ import yaml
 from stenmark.note_file import read_note, save_note
 
 
+# Opening --- (with optional trailing whitespace), content, closing ---
+_FRONTMATTER = re.compile(r"^---[ \t]*\r?\n(.*?\r?\n)---[ \t]*\r?\n", re.DOTALL)
+_TAGS_KEY = re.compile(r"""["']?tags["']?[ \t]*:""")
+
+
 def parse_frontmatter(text):
     """Return (metadata_dict, body_without_frontmatter).
 
@@ -18,8 +23,7 @@ def parse_frontmatter(text):
     if not text.startswith("---"):
         return {}, text
 
-    # Match opening --- (with optional trailing whitespace) then content then closing ---
-    m = re.match(r"^---[ \t]*\r?\n(.*?\r?\n)---[ \t]*\r?\n", text, re.DOTALL)
+    m = _FRONTMATTER.match(text)
     if not m:
         return {}, text
 
@@ -71,25 +75,39 @@ def _extract_tags(meta):
 def update_tags(path, tags):
     """Read file, update (or insert) the ``tags`` key in frontmatter, write back.
 
-    Preserves all other frontmatter keys. If no frontmatter exists, one is
-    prepended. If *tags* is empty the ``tags`` key is removed.
+    Only the ``tags`` key changes, so comments and the order of the other keys
+    survive. If no frontmatter exists, one is prepended. If *tags* is empty the
+    ``tags`` key is removed.
     """
     try:
         note = read_note(path)
     except OSError:
         return
 
-    meta, body = parse_frontmatter(note.text)
-
-    if tags:
-        meta["tags"] = sorted(tags)
+    text = note.text
+    _meta, body = parse_frontmatter(text)
+    if len(body) == len(text):
+        block = _replace_tags("", tags)
+        new_text = f"---\n{block}---\n{body}" if block else body
     else:
-        meta.pop("tags", None)
-
-    if meta:
-        fm_str = yaml.dump(meta, default_flow_style=False, allow_unicode=True, sort_keys=True)
-        new_text = f"---\n{fm_str}---\n{body}"
-    else:
-        new_text = body
+        m = _FRONTMATTER.match(text)
+        block = _replace_tags(m.group(1), tags)
+        new_text = text[:m.start(1)] + block + text[m.end(1):] if block.strip() else body
 
     save_note(path, new_text, note)
+
+
+def _replace_tags(block, tags):
+    """Swap the ``tags`` key in a YAML block, leaving every other line alone."""
+    new = ""
+    if tags:
+        new = yaml.dump({"tags": sorted(tags)}, default_flow_style=False, allow_unicode=True)
+    lines = block.splitlines(keepends=True)
+    start = next((i for i, line in enumerate(lines) if _TAGS_KEY.match(line)), None)
+    if start is None:
+        return block + new
+    end = start + 1
+    # Its value runs on over indented lines, list items and a closing bracket
+    while end < len(lines) and lines[end][:1] in (" ", "\t", "-", "]"):
+        end += 1
+    return "".join(lines[:start]) + new + "".join(lines[end:])

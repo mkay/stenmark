@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 01:10+0300\n"
+"POT-Creation-Date: 2026-11-05 21:29+0200\n"
 "PO-Revision-Date: 2026-08-10 18:25+0200\n"
 "Last-Translator: derVedro <dervedro@googlemail.com>\n"
 "Language-Team: Russian\n"
@@ -113,26 +113,26 @@ msgstr ""
 msgid "Show the application version"
 msgstr "Показать версию приложения"
 
-#: stenmark/document_panel.py:102
+#: stenmark/document_panel.py:103
 #, python-brace-format
 msgid "{n} B"
 msgstr "{n} Б"
 
-#: stenmark/document_panel.py:104
+#: stenmark/document_panel.py:105
 #, python-brace-format
 msgid "{n} KB"
 msgstr "{n} кБ"
 
-#: stenmark/document_panel.py:106
+#: stenmark/document_panel.py:107
 #, python-brace-format
 msgid "{n} MB"
 msgstr "{n} МБ"
 
-#: stenmark/document_panel.py:113
+#: stenmark/document_panel.py:114
 msgid "just now"
 msgstr "только что"
 
-#: stenmark/document_panel.py:116
+#: stenmark/document_panel.py:117
 #, python-brace-format
 msgid "{n} min ago"
 msgid_plural "{n} min ago"
@@ -140,7 +140,7 @@ msgstr[0] "{n} минуту назад"
 msgstr[1] "{n} минуты назад"
 msgstr[2] "{n} минут назад"
 
-#: stenmark/document_panel.py:119
+#: stenmark/document_panel.py:120
 #, python-brace-format
 msgid "{n}h ago"
 msgid_plural "{n}h ago"
@@ -149,27 +149,27 @@ msgstr[1] "{n} часа назад"
 msgstr[2] "{n} часов назад"
 
 #. Translators: strftime format for a file date, e.g. "Mar 04, 2025".
-#: stenmark/document_panel.py:122
+#: stenmark/document_panel.py:123
 msgid "%b %d, %Y"
 msgstr "%d.%m.%Y"
 
-#: stenmark/document_panel.py:153
+#: stenmark/document_panel.py:155
 msgid "Filter documents…"
 msgstr "Отфильтровать документы…"
 
-#: stenmark/document_panel.py:186
+#: stenmark/document_panel.py:188
 msgid "No Documents"
 msgstr "Нет документов"
 
-#: stenmark/document_panel.py:187
+#: stenmark/document_panel.py:189
 msgid "This folder has no markdown files."
 msgstr "В этой папке нет markdown файлов."
 
-#: stenmark/document_panel.py:266
+#: stenmark/document_panel.py:268
 msgid "Documents"
 msgstr "Документы"
 
-#: stenmark/document_panel.py:312 stenmark/tag_panel.py:282
+#: stenmark/document_panel.py:314 stenmark/tag_panel.py:282
 #, python-brace-format
 msgid "{n} document"
 msgid_plural "{n} documents"
@@ -177,7 +177,7 @@ msgstr[0] "{n} документ"
 msgstr[1] "{n} документа"
 msgstr[2] "{n} документов"
 
-#: stenmark/document_panel.py:315
+#: stenmark/document_panel.py:317
 #, python-brace-format
 msgid "{n} folder"
 msgid_plural "{n} folders"
@@ -185,93 +185,105 @@ msgstr[0] "{n} папка"
 msgstr[1] "{n} папки"
 msgstr[2] "{n} папок"
 
-#: stenmark/document_panel.py:318
+#: stenmark/document_panel.py:320
 msgid "Empty"
 msgstr "Пусто"
 
-#: stenmark/document_panel.py:605
+#: stenmark/document_panel.py:607
 msgid "Open With…"
 msgstr "Открыть с помощью…"
 
-#: stenmark/document_panel.py:606 stenmark/document_panel.py:780
-#: stenmark/document_panel.py:865 stenmark/document_panel.py:869
-#: stenmark/document_panel.py:1123 stenmark/document_panel.py:1127
-#: stenmark/sidebar.py:425 stenmark/sidebar.py:565 stenmark/sidebar.py:569
+#: stenmark/document_panel.py:608 stenmark/document_panel.py:785
+#: stenmark/document_panel.py:876 stenmark/document_panel.py:880
+#: stenmark/document_panel.py:1144 stenmark/document_panel.py:1148
+#: stenmark/sidebar.py:436 stenmark/sidebar.py:582 stenmark/sidebar.py:586
 msgid "Rename"
 msgstr "Переименовать"
 
-#: stenmark/document_panel.py:607
+#: stenmark/document_panel.py:609
 msgid "Move to Folder…"
 msgstr "Переместить в папку…"
 
-#: stenmark/document_panel.py:608 stenmark/document_panel.py:1046
+#: stenmark/document_panel.py:610 stenmark/document_panel.py:1063
 msgid "Move to Trash"
 msgstr "Переместить в корзину"
 
-#: stenmark/document_panel.py:609 stenmark/document_panel.py:782
-#: stenmark/sidebar.py:427
+#: stenmark/document_panel.py:611 stenmark/document_panel.py:787
+#: stenmark/sidebar.py:438
 msgid "Reveal in File Manager"
 msgstr "Показать в файловом менеджере"
 
-#: stenmark/document_panel.py:612 stenmark/document_panel.py:785
-#: stenmark/sidebar.py:437
+#: stenmark/document_panel.py:614 stenmark/document_panel.py:790
+#: stenmark/sidebar.py:448
 msgid "Copy Path"
 msgstr "Скопировать путь"
 
-#: stenmark/document_panel.py:690
+#: stenmark/document_panel.py:692
 msgid "Create new Document here"
 msgstr "Создать новый документ здесь"
 
-#: stenmark/document_panel.py:691 stenmark/sidebar.py:438
+#: stenmark/document_panel.py:693 stenmark/sidebar.py:449
 msgid "Refresh"
 msgstr "Обновить"
 
-#: stenmark/document_panel.py:734 stenmark/sidebar.py:138
-#: stenmark/sidebar.py:431 stenmark/sidebar.py:626
+#: stenmark/document_panel.py:736 stenmark/sidebar.py:149
+#: stenmark/sidebar.py:442 stenmark/sidebar.py:650
 msgid "New Document"
 msgstr "Новый документ"
 
-#: stenmark/document_panel.py:735 stenmark/document_panel.py:843
-#: stenmark/document_panel.py:868 stenmark/document_panel.py:1045
-#: stenmark/document_panel.py:1082 stenmark/document_panel.py:1126
-#: stenmark/sidebar.py:541 stenmark/sidebar.py:568 stenmark/sidebar.py:627
-#: stenmark/sidebar.py:697 stenmark/window.py:801
+#: stenmark/document_panel.py:737 stenmark/document_panel.py:848
+#: stenmark/document_panel.py:879 stenmark/document_panel.py:1062
+#: stenmark/document_panel.py:1101 stenmark/document_panel.py:1147
+#: stenmark/sidebar.py:552 stenmark/sidebar.py:585 stenmark/sidebar.py:651
+#: stenmark/sidebar.py:724 stenmark/window.py:890
 msgid "Cancel"
 msgstr "Отменить"
 
-#: stenmark/document_panel.py:736 stenmark/sidebar.py:628
-#: stenmark/sidebar.py:698
+#: stenmark/document_panel.py:738 stenmark/sidebar.py:652
+#: stenmark/sidebar.py:725
 msgid "Create"
 msgstr "Создать"
 
-#: stenmark/document_panel.py:741 stenmark/sidebar.py:635
+#: stenmark/document_panel.py:743 stenmark/sidebar.py:659
 msgid "Untitled.md"
 msgstr "Безымянный.md"
 
-#: stenmark/document_panel.py:760 stenmark/document_panel.py:892
-#: stenmark/document_panel.py:1157 stenmark/sidebar.py:681
-#: stenmark/sidebar.py:721
+#: stenmark/document_panel.py:757 stenmark/document_panel.py:900
+#: stenmark/document_panel.py:1175 stenmark/sidebar.py:606
+#: stenmark/sidebar.py:695 stenmark/sidebar.py:745
+msgid "A name can’t contain a slash"
+msgstr ""
+
+#: stenmark/document_panel.py:764 stenmark/document_panel.py:906
+#: stenmark/document_panel.py:1184 stenmark/sidebar.py:612
+#: stenmark/sidebar.py:707 stenmark/sidebar.py:751
 #, python-brace-format
 msgid "“{name}” already exists"
 msgstr "«{name}» уже существует"
 
-#: stenmark/document_panel.py:776 stenmark/sidebar.py:421
+#: stenmark/document_panel.py:771 stenmark/sidebar.py:714
+#: stenmark/sidebar.py:757
+#, python-brace-format
+msgid "Could not create “{name}”: {reason}"
+msgstr ""
+
+#: stenmark/document_panel.py:781 stenmark/sidebar.py:432
 msgid "Unpin"
 msgstr "Открепить"
 
-#: stenmark/document_panel.py:776 stenmark/sidebar.py:421
+#: stenmark/document_panel.py:781 stenmark/sidebar.py:432
 msgid "Pin to Top"
 msgstr "Закрепить сверху"
 
-#: stenmark/document_panel.py:781 stenmark/sidebar.py:426
+#: stenmark/document_panel.py:786 stenmark/sidebar.py:437
 msgid "Delete Folder"
 msgstr "Удалить папку"
 
-#: stenmark/document_panel.py:829 stenmark/sidebar.py:527
+#: stenmark/document_panel.py:834 stenmark/sidebar.py:538
 msgid "Folder is not empty"
 msgstr "Папка не пуста"
 
-#: stenmark/document_panel.py:830 stenmark/sidebar.py:528
+#: stenmark/document_panel.py:835 stenmark/sidebar.py:539
 #, python-brace-format
 msgid ""
 "“{name}” still contains files or folders.\n"
@@ -280,66 +292,83 @@ msgstr ""
 "«{name}» всё ещё содержит файлы или папки.\n"
 "Сначала удали её содержимое."
 
-#: stenmark/document_panel.py:833 stenmark/settings_dialog.py:484
-#: stenmark/sidebar.py:531
+#: stenmark/document_panel.py:838 stenmark/settings_dialog.py:484
+#: stenmark/sidebar.py:542
 msgid "OK"
 msgstr "ОК"
 
-#: stenmark/document_panel.py:840 stenmark/sidebar.py:538
+#: stenmark/document_panel.py:845 stenmark/sidebar.py:549
 msgid "Delete Folder?"
 msgstr "Удалить папку?"
 
-#: stenmark/document_panel.py:841 stenmark/sidebar.py:539
+#: stenmark/document_panel.py:846 stenmark/sidebar.py:550
 #, python-brace-format
 msgid "“{name}” will be deleted."
 msgstr "Папка «{name}» будет удалена."
 
-#: stenmark/document_panel.py:844 stenmark/sidebar.py:542
+#: stenmark/document_panel.py:849 stenmark/sidebar.py:553
 msgid "Delete"
 msgstr "Удалить"
 
-#: stenmark/document_panel.py:866 stenmark/document_panel.py:1124
+#: stenmark/document_panel.py:862 stenmark/document_panel.py:1077
 #: stenmark/sidebar.py:566
+#, python-brace-format
+msgid "Could not delete “{name}”: {reason}"
+msgstr ""
+
+#: stenmark/document_panel.py:877 stenmark/document_panel.py:1145
+#: stenmark/sidebar.py:583
 #, python-brace-format
 msgid "Enter a new name for “{name}”:"
 msgstr "Введи новое имя для «{name}»:"
 
-#: stenmark/document_panel.py:920 stenmark/document_panel.py:1035
-#: stenmark/sidebar.py:498
+#: stenmark/document_panel.py:912 stenmark/document_panel.py:1190
+#: stenmark/sidebar.py:618
+#, fuzzy, python-brace-format
+msgid "Could not rename “{name}”: {reason}"
+msgstr "Введи новое имя для «{name}»:"
+
+#: stenmark/document_panel.py:937 stenmark/document_panel.py:1052
+#: stenmark/sidebar.py:509
 msgid "Path copied to clipboard"
 msgstr "Путь скопирован в буфер обмена"
 
-#: stenmark/document_panel.py:1042
+#: stenmark/document_panel.py:1059
 msgid "Move to Trash?"
 msgstr "Переместить в корзину?"
 
-#: stenmark/document_panel.py:1043
+#: stenmark/document_panel.py:1060
 #, python-brace-format
 msgid "“{name}” will be moved to the trash."
 msgstr "«{name}» будет перемещён в корзину."
 
-#: stenmark/document_panel.py:1076 stenmark/sidebar.py:251
-#: stenmark/sidebar.py:624 stenmark/tag_panel.py:289 stenmark/window.py:587
-#: stenmark/window.py:690
+#: stenmark/document_panel.py:1095 stenmark/sidebar.py:262
+#: stenmark/sidebar.py:648 stenmark/tag_panel.py:289 stenmark/window.py:688
+#: stenmark/window.py:783
 msgid "No Folder"
 msgstr "Без папки"
 
-#: stenmark/document_panel.py:1079
+#: stenmark/document_panel.py:1098
 msgid "Move to Folder"
 msgstr "Переместить в папку"
 
-#: stenmark/document_panel.py:1080
+#: stenmark/document_panel.py:1099
 #, python-brace-format
 msgid "Choose a destination folder for “{name}”:"
 msgstr "Выбери папку назначения для «{name}»:"
 
-#: stenmark/document_panel.py:1083
+#: stenmark/document_panel.py:1102
 msgid "Move"
 msgstr "Переместить"
 
-#: stenmark/document_panel.py:1108
+#: stenmark/document_panel.py:1127
 msgid "A file with that name already exists in the destination folder"
 msgstr "В папке назначения уже существует файл с таким именем"
+
+#: stenmark/document_panel.py:1133
+#, python-brace-format
+msgid "Could not move “{name}”: {reason}"
+msgstr ""
 
 #: stenmark/editor.py:207
 msgid "Heading 1"
@@ -389,15 +418,15 @@ msgstr "Маркированный список (Ctrl+Shift+U)"
 msgid "Numbered list (Ctrl+Shift+O)"
 msgstr "Нумерованный список (Ctrl+Shift+O)"
 
-#: stenmark/html_template.py:100
+#: stenmark/html_template.py:102
 msgid "Copy code"
 msgstr "Скопировать код"
 
-#: stenmark/html_template.py:101
+#: stenmark/html_template.py:103
 msgid "Copied!"
 msgstr "Скопировано!"
 
-#: stenmark/root_selector.py:49 stenmark/window.py:123
+#: stenmark/root_selector.py:49 stenmark/window.py:133
 #, fuzzy
 msgid "Change root folder"
 msgstr "Открыть корневую папку"
@@ -487,7 +516,7 @@ msgstr[0] "{n} результат"
 msgstr[1] "{n} результата"
 msgstr[2] "{n} результатов"
 
-#: stenmark/settings_dialog.py:119 stenmark/window.py:187
+#: stenmark/settings_dialog.py:119 stenmark/window.py:197
 msgid "Preferences"
 msgstr "Настройки"
 
@@ -701,7 +730,7 @@ msgstr "Позже"
 msgid "Restart Now"
 msgstr "Перезапустить сейчас"
 
-#: stenmark/settings_dialog.py:481 stenmark/window.py:798
+#: stenmark/settings_dialog.py:481 stenmark/window.py:887
 msgid "Unsaved Changes"
 msgstr "Несохранённые изменения"
 
@@ -713,41 +742,41 @@ msgstr "Сохрани открытый документ перед переза
 msgid "This one comes in a single variant and stays as it is"
 msgstr ""
 
-#: stenmark/sidebar.py:145 stenmark/sidebar.py:432 stenmark/sidebar.py:694
-#: stenmark/sidebar.py:703
+#: stenmark/sidebar.py:156 stenmark/sidebar.py:443 stenmark/sidebar.py:721
+#: stenmark/sidebar.py:730
 msgid "New Folder"
 msgstr "Новая папка"
 
-#: stenmark/sidebar.py:152 stenmark/tag_panel.py:123 stenmark/tag_panel.py:160
+#: stenmark/sidebar.py:163 stenmark/tag_panel.py:123 stenmark/tag_panel.py:160
 msgid "Filter by Tag"
 msgstr "Отфильтровать по метке"
 
-#: stenmark/sidebar.py:159
+#: stenmark/sidebar.py:170
 msgid "Search All Documents"
 msgstr "Искать во всех документах"
 
-#: stenmark/sidebar.py:181
+#: stenmark/sidebar.py:192
 msgid "Open root folder"
 msgstr "Открыть корневую папку"
 
-#: stenmark/sidebar.py:206
+#: stenmark/sidebar.py:217
 #, fuzzy
 msgid "Root folder"
 msgstr "Открыть корневую папку"
 
-#: stenmark/sidebar.py:240 stenmark/window.py:585 stenmark/window.py:688
+#: stenmark/sidebar.py:251 stenmark/window.py:686 stenmark/window.py:781
 msgid "All Documents"
 msgstr "Все документы"
 
-#: stenmark/sidebar.py:278 stenmark/sidebar.py:772 stenmark/window.py:1297
+#: stenmark/sidebar.py:289 stenmark/sidebar.py:803 stenmark/window.py:1378
 msgid "Tags"
 msgstr "Метки"
 
-#: stenmark/sidebar.py:647
+#: stenmark/sidebar.py:671
 msgid "Folder"
 msgstr "Папка"
 
-#: stenmark/sidebar.py:695
+#: stenmark/sidebar.py:722
 msgid "Enter a name for the new folder:"
 msgstr "Введи имя для новой папки:"
 
@@ -756,7 +785,7 @@ msgstr "Введи имя для новой папки:"
 msgid "Keep this app alive"
 msgstr "Поддержи это приложение"
 
-#: stenmark/support_dialog.py:49 stenmark/viewer.py:114
+#: stenmark/support_dialog.py:49 stenmark/viewer.py:125
 #: stenmark/whats_new_dialog.py:126
 msgid "Close"
 msgstr "Закрыть"
@@ -844,31 +873,36 @@ msgstr "Метки не найдены"
 msgid "No documents match the selected tags."
 msgstr "Нет документов, соответствующих выбранным меткам."
 
-#: stenmark/viewer.py:97
+#: stenmark/viewer.py:108
 msgid "Find in document"
 msgstr "Найти в документе"
 
-#: stenmark/viewer.py:106
+#: stenmark/viewer.py:117
 msgid "Previous match"
 msgstr "Предыдущее совпадение"
 
-#: stenmark/viewer.py:110
+#: stenmark/viewer.py:121
 msgid "Next match"
 msgstr "Следующее совпадение"
 
-#: stenmark/viewer.py:247
+#: stenmark/viewer.py:258
 msgid "No matches"
 msgstr "Совпадений нет"
 
-#: stenmark/viewer.py:382 stenmark/window.py:147
+#: stenmark/viewer.py:373
+#, fuzzy, python-brace-format
+msgid "“{name}” doesn’t exist"
+msgstr "«{name}» уже существует"
+
+#: stenmark/viewer.py:419 stenmark/window.py:157
 msgid "Back"
 msgstr "Назад"
 
-#: stenmark/viewer.py:383
+#: stenmark/viewer.py:420
 msgid "Forward"
 msgstr "Вперёд"
 
-#: stenmark/viewer.py:397
+#: stenmark/viewer.py:434
 msgid "Select a markdown file to view"
 msgstr "Выбери markdown файл для просмотра"
 
@@ -935,93 +969,147 @@ msgstr ""
 msgid "What's New"
 msgstr "Что нового"
 
-#: stenmark/window.py:156
+#: stenmark/window.py:87
+msgid "settings.json can’t be read, so changes to settings won’t be saved"
+msgstr ""
+
+#: stenmark/window.py:166
 msgid "Toggle edit mode"
 msgstr "Режим редактирования"
 
-#: stenmark/window.py:167
+#: stenmark/window.py:177
 msgid "Toggle live preview"
 msgstr "Предпросмотр"
 
-#: stenmark/window.py:181
+#: stenmark/window.py:191
 msgid "New Window"
 msgstr "Новое окно"
 
-#: stenmark/window.py:184
+#: stenmark/window.py:194
 msgid "Export to PDF"
 msgstr "Экспортировать в PDF"
 
-#: stenmark/window.py:188
+#: stenmark/window.py:198
 msgid "Support Stenmark"
 msgstr "Поддержать Stenmark"
 
-#: stenmark/window.py:191
+#: stenmark/window.py:201
 msgid "About"
 msgstr "О приложении"
 
-#: stenmark/window.py:196
+#: stenmark/window.py:206
 msgid "Menu"
 msgstr "Меню"
 
-#: stenmark/window.py:204
+#: stenmark/window.py:214
 msgid "Toggle sidebar"
 msgstr "Боковая панель"
 
-#: stenmark/window.py:212
+#: stenmark/window.py:222
 msgid "Open in…"
 msgstr "Открыть в…"
 
-#: stenmark/window.py:221
+#: stenmark/window.py:231
 msgid "Copy as rich text"
 msgstr "Скопировать как форматированный текст"
 
-#: stenmark/window.py:230
+#: stenmark/window.py:240
 msgid "Edit tags"
 msgstr "Редактировать метки"
 
-#: stenmark/window.py:239
+#: stenmark/window.py:249
 msgid "Table of contents"
 msgstr "Оглавление"
 
-#: stenmark/window.py:583 stenmark/window.py:686
+#: stenmark/window.py:478
+#, python-brace-format
+msgid "Some of the text can’t be stored as {encoding}"
+msgstr ""
+
+#: stenmark/window.py:489
+#, python-brace-format
+msgid "Could not save “{name}”: {reason}"
+msgstr ""
+
+#: stenmark/window.py:499
+#, fuzzy
+msgid "Note Deleted"
+msgstr "Удалить"
+
+#: stenmark/window.py:500
+#, python-brace-format
+msgid "“{name}” was deleted while you were editing it."
+msgstr ""
+
+#: stenmark/window.py:503 stenmark/window.py:511
+msgid "Keep Editing"
+msgstr ""
+
+#: stenmark/window.py:504
+msgid "Save Again"
+msgstr ""
+
+#: stenmark/window.py:507
+msgid "Note Changed"
+msgstr ""
+
+#: stenmark/window.py:508
+#, python-brace-format
+msgid "“{name}” changed on disk while you were editing it."
+msgstr ""
+
+#: stenmark/window.py:512
+msgid "Use Version on Disk"
+msgstr ""
+
+#: stenmark/window.py:513
+msgid "Overwrite"
+msgstr ""
+
+#: stenmark/window.py:590
+#, python-brace-format
+msgid "Could not open “{name}”: {reason}"
+msgstr ""
+
+#: stenmark/window.py:684 stenmark/window.py:779
 #, python-brace-format
 msgid "Tagged: {tag}"
 msgstr "Метка: {tag}"
 
-#: stenmark/window.py:616
+#: stenmark/window.py:717
 msgid "Typewriter = ON"
 msgstr ""
 
-#: stenmark/window.py:616
+#: stenmark/window.py:717
 msgid "Typewriter = OFF"
 msgstr ""
 
-#: stenmark/window.py:627
+#: stenmark/window.py:728
 #, python-brace-format
 msgid "Keep the current line centred ({accel})"
 msgstr ""
 
-#: stenmark/window.py:628
+#: stenmark/window.py:729
 msgid "Keep the current line centred"
 msgstr ""
 
-#: stenmark/window.py:799
+#: stenmark/window.py:888
 msgid "You have unsaved changes. What would you like to do?"
 msgstr "У тебя есть несохранённые изменения. Что хочешь сделать?"
 
-#: stenmark/window.py:802
+#: stenmark/window.py:891
 msgid "Discard"
 msgstr "Не сохранять"
 
-#: stenmark/window.py:803
+#: stenmark/window.py:892
 msgid "Save"
 msgstr "Сохранить"
 
-#: stenmark/window.py:1044
+#: stenmark/window.py:1146
 msgid "Copied as rich text"
 msgstr "Скопировано как форматированный текст"
 
-#: stenmark/window.py:1050
+#: stenmark/window.py:1152
 #, python-brace-format
 msgid "{n} word"
 msgid_plural "{n} words"
@@ -1029,37 +1117,37 @@ msgstr[0] "{n} слово"
 msgstr[1] "{n} слова"
 msgstr[2] "{n} слов"
 
-#: stenmark/window.py:1053
+#: stenmark/window.py:1155
 #, python-brace-format
 msgid "{n} min read"
 msgstr "{n} мин. чтения"
 
-#: stenmark/window.py:1227
+#: stenmark/window.py:1309
 msgid "Add tag…"
 msgstr "Добавить метку…"
 
-#: stenmark/window.py:1329
+#: stenmark/window.py:1403
 msgid "Search"
 msgstr "Поиск"
 
-#: stenmark/window.py:1359
+#: stenmark/window.py:1433
 msgid "translator-credits"
 msgstr "derVedro с божьей помощью"
 
-#: stenmark/window.py:1367
+#: stenmark/window.py:1441
 #, fuzzy
 msgid "Translators"
 msgstr "derVedro с божьей помощью"
 
-#: stenmark/window.py:1374
+#: stenmark/window.py:1448
 msgid "Help Translate Stenmark"
 msgstr "Помоги перевести Stenmark"
 
-#: stenmark/window.py:1380
+#: stenmark/window.py:1454
 msgid "Give Stenmark a Like"
 msgstr "Поставь Stenmark лайк"
 
-#: stenmark/window.py:1381
+#: stenmark/window.py:1455
 msgid "Support Stenmark on Ko-fi"
 msgstr "Поддержи Stenmark на Ko-fi"
 

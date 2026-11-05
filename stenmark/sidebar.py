@@ -120,6 +120,7 @@ class Sidebar(Gtk.Box):
 
         scrolled = Gtk.ScrolledWindow(vexpand=True, hexpand=True)
         scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scrolled.add_css_class("sidebar-list")
 
         self._listbox = Gtk.ListBox()
         self._listbox.add_css_class("navigation-sidebar")

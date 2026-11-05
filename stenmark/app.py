@@ -84,6 +84,7 @@ class Application(Adw.Application):
         css = Gtk.CssProvider()
         css.load_from_string("""
             .app-sidebar { background-color: shade(@window_bg_color, 0.97); }
+            .sidebar-list { background-color: mix(shade(@window_bg_color, 0.97), @accent_color, 0.06); }
             .tag-chip {
                 background: alpha(@accent_color, 0.15);
                 border-radius: 9999px;

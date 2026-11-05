@@ -18,17 +18,19 @@ Your markdown librarian. A GTK4 Markdown reader, organizer and editor.
 - Full-text search across documents (`Ctrl+Shift+F`) — scoped to the selected folder
 - Quick filter on the document list (`Ctrl+F` on the documents page) — also matches tags
 - Find in document (`Ctrl+F` in viewer) with customizable highlight colors
-- WebKit-based rendered markdown view with syntax highlighting
+- WebKit-based rendered markdown view with syntax highlighting — notes can't run scripts or load anything from the network
 - CodeMirror 6 editor with live preview pane and scroll sync
 - 48 editor colour themes — Dracula, Nord, Gruvbox, Tokyo Night, VS Code, Solarized and friends — searchable in Preferences, with a colour preview beside the picker
 - Edit where you were reading — double-click any text to open the editor with the caret on that word; switching back scrolls the reader to the line you were editing (double-click can be turned off in Preferences)
 - Sidebar hides while editing, giving the editor and preview pane the full window width (optional, in Preferences)
 - `Esc` leaves edit mode and saves (when the editor's find panel is open, the first `Esc` closes that instead)
+- Safe saving for synced notes — a version that arrived while you were editing is never overwritten without asking, writes are atomic, and each note keeps its encoding and line endings
 - Dark mode — follows system theme
+- Accent-tinted sidebar list (optional, in Preferences)
 - File management — rename, move, trash, delete empty folders, create documents from context menu
 - Pin folders to top — pinned folders appear first in the sidebar and document panel with a pin icon
 - Pin documents to top — pinned documents float to the top of their folder; click the pin icon to unpin
-- File watching — auto-reloads on disk changes
+- File watching — auto-reloads on disk changes and keeps your reading position
 - Document linking — click relative markdown links (e.g. `[notes](../notes.md)`) to navigate between documents; external links open in the default browser
 - Link navigation history — go back/forward with Alt+Left/Right, mouse side buttons, or the right-click context menu
 - Task list checkboxes — toggle directly in the rendered view
@@ -37,7 +39,7 @@ Your markdown librarian. A GTK4 Markdown reader, organizer and editor.
 - Welcome screen with root directory setup prompt when no folder is configured
 - Remember last folder across sessions (optional, in Preferences)
 - Configurable keyboard shortcuts, fonts, and themes
-- Translated interface — English and German, switchable in Preferences (see [TRANSLATING.md](TRANSLATING.md))
+- Translated interface — English, German and Russian, switchable in Preferences (see [TRANSLATING.md](TRANSLATING.md))
 
 ## Dependencies
 
@@ -93,6 +95,12 @@ Requires [nfpm](https://nfpm.goreleaser.com) in addition to meson and ninja. The
 
 ```bash
 ./build-deb.sh
+```
+
+### Run the tests
+
+```bash
+python3 -m unittest discover tests
 ```
 
 ## Usage

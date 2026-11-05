@@ -20,6 +20,8 @@ Links may be written as [label](https://…) or as a bare URL. Prefer the labell
 form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
-- Editor colour themes can follow the app's light and dark mode. Turn on Match Light/Dark in Preferences → Editor, and themes that come in a pair — GitHub, Solarized, Gruvbox, Tokyo Night and seven more — show their light half in a light session and their dark half in a dark one. Suggested by [ner216](https://github.com/ner216).
-- With that switch on, the picker lists such themes once, as "GitHub" rather than as both halves. Themes that only come one way stay as they are.
-- The theme preview in Preferences now sits directly under the theme picker, instead of below the switches further down the page.
+- Safer saving for synced notes. If a note changes on disk while you edit it, Stenmark now asks instead of overwriting it, and it tells you when a save fails. Discard really discards, and closing or quitting asks about unsaved edits.
+- Undo stays inside the note you're editing. Files are written atomically, and keep their encoding and line endings.
+- Notes can no longer run scripts or load anything from the network, so remote images don't show.
+- A new Markdown engine fixes lists after a paragraph, code blocks in lists, loose task lists, list numbering and strikethrough. Checkboxes and the table of contents now find the exact line. A heading needs a space after the #: "###Title" is plain text now.
+- Renames and moves keep pins, failed file operations say so, and copying code keeps every line. The sidebar list has a light accent tint, which Preferences can turn off.

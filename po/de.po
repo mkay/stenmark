@@ -241,7 +241,6 @@ msgstr "Unbenannt.md"
 #: stenmark/document_panel.py:757 stenmark/document_panel.py:900
 #: stenmark/document_panel.py:1175 stenmark/sidebar.py:606
 #: stenmark/sidebar.py:695 stenmark/sidebar.py:745
-#, fuzzy
 msgid "A name can’t contain a slash"
 msgstr "Ein Name darf keinen Schrägstrich enthalten"
 
@@ -254,7 +253,7 @@ msgstr "„{name}“ existiert bereits"
 
 #: stenmark/document_panel.py:771 stenmark/sidebar.py:714
 #: stenmark/sidebar.py:757
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not create “{name}”: {reason}"
 msgstr "„{name}“ konnte nicht angelegt werden: {reason}"
 
@@ -303,7 +302,7 @@ msgstr "Löschen"
 
 #: stenmark/document_panel.py:862 stenmark/document_panel.py:1077
 #: stenmark/sidebar.py:566
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not delete “{name}”: {reason}"
 msgstr "„{name}“ konnte nicht gelöscht werden: {reason}"
 
@@ -315,7 +314,7 @@ msgstr "Gib einen neuen Namen für „{name}“ ein:"
 
 #: stenmark/document_panel.py:912 stenmark/document_panel.py:1190
 #: stenmark/sidebar.py:618
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not rename “{name}”: {reason}"
 msgstr "„{name}“ konnte nicht umbenannt werden: {reason}"
 
@@ -357,7 +356,7 @@ msgid "A file with that name already exists in the destination folder"
 msgstr "Im Zielordner existiert bereits eine Datei dieses Namens"
 
 #: stenmark/document_panel.py:1133
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not move “{name}”: {reason}"
 msgstr "„{name}“ konnte nicht verschoben werden: {reason}"
 
@@ -882,7 +881,7 @@ msgid "No matches"
 msgstr "Keine Treffer"
 
 #: stenmark/viewer.py:373
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "“{name}” doesn’t exist"
 msgstr "„{name}“ existiert nicht"
 
@@ -967,7 +966,6 @@ msgid "What's New"
 msgstr "Neu in dieser Version"
 
 #: stenmark/window.py:87
-#, fuzzy
 msgid "settings.json can’t be read, so changes to settings won’t be saved"
 msgstr "settings.json kann nicht gelesen werden, Änderungen an den Einstellungen werden daher nicht gespeichert"
 
@@ -1020,57 +1018,51 @@ msgid "Table of contents"
 msgstr "Inhaltsverzeichnis"
 
 #: stenmark/window.py:478
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Some of the text can’t be stored as {encoding}"
 msgstr "Ein Teil des Textes kann nicht als {encoding} gespeichert werden"
 
 #: stenmark/window.py:489
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not save “{name}”: {reason}"
 msgstr "„{name}“ konnte nicht gespeichert werden: {reason}"
 
 #: stenmark/window.py:499
-#, fuzzy
 msgid "Note Deleted"
 msgstr "Dokument gelöscht"
 
 #: stenmark/window.py:500
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "“{name}” was deleted while you were editing it."
 msgstr "„{name}“ wurde gelöscht, während du es bearbeitet hast."
 
 #: stenmark/window.py:503 stenmark/window.py:511
-#, fuzzy
 msgid "Keep Editing"
 msgstr "Weiter bearbeiten"
 
 #: stenmark/window.py:504
-#, fuzzy
 msgid "Save Again"
 msgstr "Erneut speichern"
 
 #: stenmark/window.py:507
-#, fuzzy
 msgid "Note Changed"
 msgstr "Dokument geändert"
 
 #: stenmark/window.py:508
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "“{name}” changed on disk while you were editing it."
 msgstr "„{name}“ wurde auf dem Datenträger geändert, während du es bearbeitet hast."
 
 #: stenmark/window.py:512
-#, fuzzy
 msgid "Use Version on Disk"
 msgstr "Version auf dem Datenträger verwenden"
 
 #: stenmark/window.py:513
-#, fuzzy
 msgid "Overwrite"
 msgstr "Überschreiben"
 
 #: stenmark/window.py:590
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not open “{name}”: {reason}"
 msgstr "„{name}“ konnte nicht geöffnet werden: {reason}"
 

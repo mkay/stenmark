@@ -546,12 +546,10 @@ msgid "Display tags section in the sidebar"
 msgstr "Den Schlagwortbereich in der Seitenleiste einblenden"
 
 #: stenmark/settings_dialog.py:191
-#, fuzzy
 msgid "Tint Sidebar"
 msgstr "Seitenleiste einfärben"
 
 #: stenmark/settings_dialog.py:192
-#, fuzzy
 msgid "Mix the accent colour into the sidebar list"
 msgstr "Die Akzentfarbe in die Liste der Seitenleiste mischen"
 

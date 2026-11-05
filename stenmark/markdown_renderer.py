@@ -14,6 +14,27 @@ from stenmark.frontmatter import parse_frontmatter
 
 _TASK_MARKER = re.compile(r"\[([ xX])\](?=\s|$)")
 _CODE_FORMATTER = HtmlFormatter(cssclass="highlight", wrapcode=True)
+# Instead of markdown-it's own "replacements", which also turns two dots into
+# an ellipsis, so a ../ path in running text would show as \u2026/.
+_TYPOGRAPHY = (
+    (re.compile(r"\.{3,}"), "\u2026"),
+    (re.compile(r"(^|[^-])---(?=[^-]|$)", re.MULTILINE), "\\1\u2014"),
+    (re.compile(r"(^|\s)--(?=\s|$)", re.MULTILINE), "\\1\u2013"),
+    (re.compile(r"(^|[^-\s])--(?=[^-\s]|$)", re.MULTILINE), "\\1\u2013"),
+)
+
+
+def _typography(state):
+    for token in state.tokens:
+        if token.type != "inline":
+            continue
+        in_autolink = False
+        for child in token.children:
+            if child.type in ("link_open", "link_close") and child.markup == "autolink":
+                in_autolink = child.type == "link_open"
+            elif child.type == "text" and not in_autolink:
+                for pattern, replacement in _TYPOGRAPHY:
+                    child.content = pattern.sub(replacement, child.content)
 
 
 def _source_lines(state):
@@ -71,7 +92,8 @@ def _render_code(_renderer, tokens, idx, _options, _env):
 class MarkdownRenderer:
     def __init__(self):
         self._md = MarkdownIt("commonmark", {"html": True, "typographer": True})
-        self._md.enable(["table", "strikethrough", "replacements", "smartquotes"])
+        self._md.enable(["table", "strikethrough", "smartquotes"])
+        self._md.core.ruler.before("smartquotes", "typography", _typography)
         self._md.core.ruler.push("source_lines", _source_lines)
         self._md.core.ruler.push("task_items", _task_items)
         self._md.add_render_rule("fence", _render_code)

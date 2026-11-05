@@ -76,6 +76,24 @@ class RendererTest(unittest.TestCase):
         html = self.render("```text\n\na\n\nb\n```\n")
         self.assertIn("<code>\na\n\nb\n</code>", html)
 
+    def test_two_dots_stay_two_dots(self):
+        self.assertIn("../Mailserver/a.md", self.render("see ../Mailserver/a.md\n"))
+        self.assertIn(">../a.md</a>", self.render("[../a.md](<../a b.md>)\n"))
+
+    def test_typography(self):
+        html = self.render("wait... a -- b --- c 10--20\n")
+        self.assertIn("wait\u2026 a \u2013 b \u2014 c 10\u201320", html)
+
+    def test_flags_and_symbols_are_left_alone(self):
+        html = self.render("use --force (c) +-\n")
+        self.assertIn("use --force (c) +-", html)
+
+    def test_autolinks_are_left_alone(self):
+        self.assertIn(">http://a.de/x...y--z</a>", self.render("<http://a.de/x...y--z>\n"))
+
+    def test_escaped_dots_stay_literal(self):
+        self.assertIn("a...b", self.render("a\\.\\.\\.b\n"))
+
     def test_headings_match_the_page(self):
         text = "---\na: 1\n---\nTitle\n=====\n\n#NoSpace\n\n## Foo **bar** `x`\n\n```\n# not one\n```\n\n> ### Quoted\n"
         self.assertEqual(

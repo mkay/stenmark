@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: 2026 Kreuder <mk@singular.de>
 # SPDX-License-Identifier: GPL-3.0-only
 
+import base64
+import hashlib
 import json
 
 from pygments.formatters import HtmlFormatter
@@ -85,7 +87,7 @@ def _pygments_css(style_name):
 
 
 def wrap_html(body_html, font_family="Sans", font_size=16, dark=False, viewer_theme="auto",
-              edit_on_dblclick=False):
+              edit_on_dblclick=False, read_only_tasks=False):
     if viewer_theme == "auto":
         t = _THEMES["dark" if dark else "light"]
     else:
@@ -101,11 +103,116 @@ def wrap_html(body_html, font_family="Sans", font_size=16, dark=False, viewer_th
     copied_label = json.dumps(_("Copied!"))[1:-1]
 
     dblclick_js = "true" if edit_on_dblclick else "false"
+    read_only_tasks_js = "true" if read_only_tasks else "false"
+
+    script = f"""
+document.addEventListener("DOMContentLoaded", function() {{
+    document.querySelectorAll("li.task-item input[type='checkbox']").forEach(function(cb, i) {{
+        if ({read_only_tasks_js}) {{
+            cb.disabled = true;
+            return;
+        }}
+        cb.addEventListener("change", function() {{
+            window.webkit.messageHandlers.checkboxToggled.postMessage(
+                JSON.stringify({{index: i, checked: cb.checked}})
+            );
+        }});
+    }});
+    var svgIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+    document.querySelectorAll("pre").forEach(function(pre) {{
+        var btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.title = "{copy_code_label}";
+        btn.innerHTML = svgIcon;
+        btn.addEventListener("click", function() {{
+            var code = pre.querySelector("code");
+            var raw = (code || pre).textContent;
+            var text = raw.split("\\n").filter(function(line) {{
+                var t = line.trim();
+                return t !== "" && !t.startsWith("#");
+            }}).join("\\n");
+            window.webkit.messageHandlers.copyCode.postMessage(text);
+            btn.innerHTML = "{copied_label}";
+            btn.classList.add("copied");
+            setTimeout(function() {{
+                btn.innerHTML = svgIcon;
+                btn.classList.remove("copied");
+            }}, 1500);
+        }});
+        pre.appendChild(btn);
+    }});
+}});
+window.editOnDoubleClick = {dblclick_js};
+
+// Source line of the first block still visible at the top of the viewport.
+// Used to hand the reading position over to the editor.
+window.topSourceLine = function() {{
+    var els = document.querySelectorAll("[data-source-line]");
+    for (var i = 0; i < els.length; i++) {{
+        if (els[i].getBoundingClientRect().bottom > 0) {{
+            return parseInt(els[i].getAttribute("data-source-line"), 10) || 1;
+        }}
+    }}
+    return 1;
+}};
+
+document.addEventListener("dblclick", function(ev) {{
+    if (!window.editOnDoubleClick) return;
+    if (!(window.webkit && window.webkit.messageHandlers.editRequest)) return;
+
+    var el = ev.target;
+    while (el && el !== document.body) {{
+        var tag = el.tagName;
+        // Links, checkboxes and the copy button have their own behaviour
+        if (tag === "A" || tag === "INPUT" || tag === "BUTTON") return;
+        if (el.hasAttribute && el.hasAttribute("data-source-line")) break;
+        el = el.parentNode;
+    }}
+
+    var line = 0;
+    if (el && el.getAttribute) {{
+        line = parseInt(el.getAttribute("data-source-line"), 10) || 0;
+    }}
+    // The double click selected a word — pass it along so the editor can
+    // land on it rather than at the start of the block.
+    var word = String(window.getSelection() || "").trim().slice(0, 80);
+    window.webkit.messageHandlers.editRequest.postMessage(
+        JSON.stringify({{line: line, word: word}})
+    );
+}});
+
+window.scrollToSourceLine = function(line) {{
+    // Find the element with the closest data-source-line <= line
+    var els = document.querySelectorAll("[data-source-line]");
+    if (!els.length) return;
+    var best = els[0];
+    for (var i = 0; i < els.length; i++) {{
+        var n = parseInt(els[i].getAttribute("data-source-line"), 10);
+        if (n <= line) best = els[i];
+        else break;
+    }}
+    best.scrollIntoView({{ behavior: "smooth", block: "start" }});
+}};
+"""
+
+    # A note is arbitrary HTML, so the page runs nothing but this one script.
+    # A hash rather than a nonce: a note ending in an unclosed <script src=...
+    # swallows the next tag on the page, nonce attribute included.
+    script_hash = base64.b64encode(hashlib.sha256(script.encode()).digest()).decode()
+    csp = (
+        "default-src 'none'; "
+        f"script-src 'sha256-{script_hash}'; "
+        "style-src 'unsafe-inline'; "
+        "img-src file: data:; "
+        "base-uri 'none'; "
+        "form-action 'none'"
+    )
 
     return f"""<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="{csp}">
 <style>
 body {{
     font-family: {font_family}, sans-serif;
@@ -220,90 +327,6 @@ li.task-item input[type="checkbox"] {{
 </head>
 <body>
 {body_html}
-<script>
-document.addEventListener("DOMContentLoaded", function() {{
-    document.querySelectorAll("li.task-item input[type='checkbox']").forEach(function(cb, i) {{
-        cb.addEventListener("change", function() {{
-            window.webkit.messageHandlers.checkboxToggled.postMessage(
-                JSON.stringify({{index: i, checked: cb.checked}})
-            );
-        }});
-    }});
-    var svgIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-    document.querySelectorAll("pre").forEach(function(pre) {{
-        var btn = document.createElement("button");
-        btn.className = "copy-btn";
-        btn.title = "{copy_code_label}";
-        btn.innerHTML = svgIcon;
-        btn.addEventListener("click", function() {{
-            var code = pre.querySelector("code");
-            var raw = (code || pre).textContent;
-            var text = raw.split("\\n").filter(function(line) {{
-                var t = line.trim();
-                return t !== "" && !t.startsWith("#");
-            }}).join("\\n");
-            window.webkit.messageHandlers.copyCode.postMessage(text);
-            btn.innerHTML = "{copied_label}";
-            btn.classList.add("copied");
-            setTimeout(function() {{
-                btn.innerHTML = svgIcon;
-                btn.classList.remove("copied");
-            }}, 1500);
-        }});
-        pre.appendChild(btn);
-    }});
-}});
-window.editOnDoubleClick = {dblclick_js};
-
-// Source line of the first block still visible at the top of the viewport.
-// Used to hand the reading position over to the editor.
-window.topSourceLine = function() {{
-    var els = document.querySelectorAll("[data-source-line]");
-    for (var i = 0; i < els.length; i++) {{
-        if (els[i].getBoundingClientRect().bottom > 0) {{
-            return parseInt(els[i].getAttribute("data-source-line"), 10) || 1;
-        }}
-    }}
-    return 1;
-}};
-
-document.addEventListener("dblclick", function(ev) {{
-    if (!window.editOnDoubleClick) return;
-    if (!(window.webkit && window.webkit.messageHandlers.editRequest)) return;
-
-    var el = ev.target;
-    while (el && el !== document.body) {{
-        var tag = el.tagName;
-        // Links, checkboxes and the copy button have their own behaviour
-        if (tag === "A" || tag === "INPUT" || tag === "BUTTON") return;
-        if (el.hasAttribute && el.hasAttribute("data-source-line")) break;
-        el = el.parentNode;
-    }}
-
-    var line = 0;
-    if (el && el.getAttribute) {{
-        line = parseInt(el.getAttribute("data-source-line"), 10) || 0;
-    }}
-    // The double click selected a word — pass it along so the editor can
-    // land on it rather than at the start of the block.
-    var word = String(window.getSelection() || "").trim().slice(0, 80);
-    window.webkit.messageHandlers.editRequest.postMessage(
-        JSON.stringify({{line: line, word: word}})
-    );
-}});
-
-window.scrollToSourceLine = function(line) {{
-    // Find the element with the closest data-source-line <= line
-    var els = document.querySelectorAll("[data-source-line]");
-    if (!els.length) return;
-    var best = els[0];
-    for (var i = 0; i < els.length; i++) {{
-        var n = parseInt(els[i].getAttribute("data-source-line"), 10);
-        if (n <= line) best = els[i];
-        else break;
-    }}
-    best.scrollIntoView({{ behavior: "smooth", block: "start" }});
-}};
-</script>
+<script>{script}</script>
 </body>
 </html>"""

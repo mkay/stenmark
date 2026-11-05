@@ -95,6 +95,9 @@ class MainWindow(Adw.ApplicationWindow):
         # __init__ sets this before the status bar exists.
         if hasattr(self, "_typewriter_btn"):
             self._update_typewriter_label()
+            # Tags are written to the file, which the editor would then
+            # overwrite or report as a conflict.
+            self._tags_btn.set_sensitive(not value)
 
     def _build_ui(self):
         # === Sidebar ToolbarView ===
@@ -280,7 +283,8 @@ class MainWindow(Adw.ApplicationWindow):
         self._stack.add_named(self._viewer, "view")
 
         self._editor = MarkdownEditor(self._settings)
-        self._preview_viewer = MarkdownViewer(self._settings)
+        # Its checkboxes describe the unsaved text, not the file they'd write to
+        self._preview_viewer = MarkdownViewer(self._settings, read_only_tasks=True)
         self._preview_viewer.set_visible(self._preview_btn.get_active())
 
         dbl = self._settings.double_click_to_edit
@@ -784,7 +788,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _on_file_selected(self, _panel, path):
         if self._editing:
-            self._prompt_unsaved(path)
+            self._prompt_unsaved(lambda: self._load_file(path))
             return
         # Reset link navigation history when opening from the panel/search
         self._nav_history = [path]
@@ -793,7 +797,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _on_viewer_link(self, _viewer, path):
         if self._editing:
-            self._prompt_unsaved(path)
+            self._prompt_unsaved(lambda: self._load_file(path))
             return
         self._load_file(path, push_history=True)
 
@@ -867,7 +871,11 @@ class MainWindow(Adw.ApplicationWindow):
             pass
         self._sync_nav_state()
 
-    def _prompt_unsaved(self, next_path):
+    def _prompt_unsaved(self, then):
+        """Leave edit mode and call `then`, asking first if there's anything to lose."""
+        if self._editor.get_text() == self._note.text:
+            self._leave_edit_mode(then)
+            return
         dialog = Adw.AlertDialog(
             heading=_("Unsaved Changes"),
             body=_("You have unsaved changes. What would you like to do?"),
@@ -880,13 +888,13 @@ class MainWindow(Adw.ApplicationWindow):
         dialog.set_default_response("save")
         dialog.set_close_response("cancel")
 
-        dialog.connect("response", self._on_unsaved_response, next_path)
+        dialog.connect("response", self._on_unsaved_response, then)
         dialog.present(self)
 
-    def _on_unsaved_response(self, _dialog, response, next_path):
+    def _on_unsaved_response(self, _dialog, response, then):
         if response == "cancel":
             return
-        self._leave_edit_mode(lambda: self._load_file(next_path), save=response == "save")
+        self._leave_edit_mode(then, save=response == "save")
 
     def _start_watching(self):
         self._stop_watching()
@@ -1326,6 +1334,12 @@ class MainWindow(Adw.ApplicationWindow):
         popover.popup()
 
     def _on_close_request(self, _win):
+        if self.get_visible_dialog():
+            return True
+        if self._editing:
+            # On an idle callback: GTK ignores close() during close-request
+            self._prompt_unsaved(lambda: GLib.idle_add(self.close))
+            return True
         if self._settings.get("remember_last_folder") and not getattr(self._settings, "cli_root", False):
             self._settings.set("last_root_folder", self._settings.root_directory)
         return False

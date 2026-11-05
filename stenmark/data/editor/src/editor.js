@@ -22,6 +22,7 @@ const fontCompartment        = new Compartment();
 const lineNumbersCompartment = new Compartment();
 const lineWrapCompartment    = new Compartment();
 const typewriterCompartment  = new Compartment();
+const historyCompartment     = new Compartment();
 
 // Adwaita-inspired light theme (custom, matches GTK window)
 const adwaitaLight = EditorView.theme(
@@ -268,7 +269,7 @@ const view = new EditorView({
   state: EditorState.create({
     doc: "",
     extensions: [
-      history(),
+      historyCompartment.of(history()),
       lineNumbersCompartment.of(lineNumbers()),
       highlightActiveLine(),
       drawSelection(),
@@ -339,11 +340,15 @@ const view = new EditorView({
 // --- Python-callable API ---
 
 window.setContent = (text) => {
+  // One editor serves every note, so the document is swapped with the history
+  // switched off and a fresh one started: undo must never reach the last note.
+  view.dispatch({ effects: historyCompartment.reconfigure([]) });
   view.dispatch({
     changes: { from: 0, to: view.state.doc.length, insert: text },
     selection: EditorSelection.cursor(0),
     scrollIntoView: true,
   });
+  view.dispatch({ effects: historyCompartment.reconfigure(history()) });
   view.focus();
 };
 

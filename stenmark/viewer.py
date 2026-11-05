@@ -4,6 +4,7 @@
 import json
 import os
 import re
+from urllib.parse import unquote, urlparse
 
 import gi
 gi.require_version("Gtk", "4.0")
@@ -27,9 +28,12 @@ class MarkdownViewer(Gtk.Box):
         "edit-requested": (GObject.SignalFlags.RUN_FIRST, None, (int, str)),
     }
 
-    def __init__(self, settings):
+    def __init__(self, settings, read_only_tasks=False):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self._settings = settings
+        self._read_only_tasks = read_only_tasks
+        # The address of the page this viewer last asked for
+        self._page_uri = None
         self._renderer = MarkdownRenderer()
         self._current_path = None
         self._can_go_back = False
@@ -326,11 +330,17 @@ class MarkdownViewer(Gtk.Box):
             return False
 
         action = decision.get_navigation_action()
-        if action.get_navigation_type() != WebKit.NavigationType.LINK_CLICKED:
-            return False
-
         request = action.get_request()
         uri = request.get_uri()
+
+        if action.get_navigation_type() != WebKit.NavigationType.LINK_CLICKED:
+            if self._is_own_page(uri):
+                return False
+            # A note can leave the page without a click, with
+            # <meta http-equiv="refresh">, and whatever it loads would get
+            # the message handlers that write to the note.
+            decision.ignore()
+            return True
 
         # External links → open in default browser
         if uri.startswith("http://") or uri.startswith("https://"):
@@ -340,7 +350,6 @@ class MarkdownViewer(Gtk.Box):
 
         # Local file links
         if uri.startswith("file://"):
-            from urllib.parse import unquote, urlparse
             parsed = urlparse(uri)
             path = unquote(parsed.path)
 
@@ -353,6 +362,16 @@ class MarkdownViewer(Gtk.Box):
         # Block all other navigation (don't leave the rendered page)
         decision.ignore()
         return True
+
+    def _is_own_page(self, uri):
+        # WebKit percent-encodes what load_html() was given
+        return (self._page_uri is not None
+                and unquote(uri).rstrip("/") == unquote(self._page_uri).rstrip("/"))
+
+    def _load_page(self, html, base_uri):
+        self._page_uri = base_uri
+        self._loading = True
+        self._webview.load_html(html, base_uri)
 
     def set_nav_state(self, can_back, can_forward):
         self._can_go_back = can_back
@@ -402,8 +421,7 @@ class MarkdownViewer(Gtk.Box):
             dark=self._is_dark(),
             viewer_theme=self._settings.viewer_theme,
         )
-        self._loading = True
-        self._webview.load_html(html, "file:///")
+        self._load_page(html, "file:///")
 
     def load_file(self, path):
         if self._skip_next_load and path == self._current_path:
@@ -424,12 +442,12 @@ class MarkdownViewer(Gtk.Box):
         body = self._renderer.render(text)
         html = wrap_html(body, self._settings.font_family, self._settings.font_size,
                          dark=self._is_dark(), viewer_theme=self._settings.viewer_theme,
-                         edit_on_dblclick=self._edit_on_dblclick)
+                         edit_on_dblclick=self._edit_on_dblclick,
+                         read_only_tasks=self._read_only_tasks)
         base_uri = "file://"
         if self._current_path:
             base_uri = "file://" + os.path.dirname(os.path.abspath(self._current_path)) + "/"
-        self._loading = True
-        self._webview.load_html(html, base_uri)
+        self._load_page(html, base_uri)
 
     def reload(self):
         if self._current_path:

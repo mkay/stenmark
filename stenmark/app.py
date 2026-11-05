@@ -52,7 +52,7 @@ class Application(Adw.Application):
         self.set_accels_for_action("app.new-window", ["<Control><Shift>n"])
 
         quit_action = Gio.SimpleAction.new("quit", None)
-        quit_action.connect("activate", lambda *_: self.quit())
+        quit_action.connect("activate", self._on_quit)
         self.add_action(quit_action)
         self.set_accels_for_action("app.quit", ["<Control>q"])
 
@@ -248,6 +248,12 @@ class Application(Adw.Application):
             from stenmark.whats_new_dialog import present_if_updated
             GLib.idle_add(present_if_updated, win, self.settings,
                           self.settings.first_run)
+
+    def _on_quit(self, _action, _param):
+        # Closing rather than quit(), which would skip each window's chance to
+        # ask about unsaved edits. The app exits with its last window.
+        for win in self.get_windows():
+            win.close()
 
     def _on_support(self, _action, _param):
         win = self.props.active_window

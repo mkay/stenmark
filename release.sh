@@ -165,7 +165,9 @@ if [[ "$CHECKSUMS_OK" -ne 1 ]]; then
     exit 1
 fi
 echo "==> Building Arch package"
-makepkg -sf --noconfirm
+# -C wipes src/: a leftover src/build keeps the previous version's source dir,
+# so without it the package silently holds the old code.
+makepkg -Csf --noconfirm
 # makepkg --packagelist prints the exact paths this PKGBUILD produces,
 # honouring pkgrel, PKGEXT and PKGDEST. A glob over the repo root would
 # happily pick a package left over from an earlier release instead.

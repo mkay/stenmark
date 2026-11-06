@@ -20,6 +20,7 @@ Links may be written as [label](https://…) or as a bare URL. Prefer the labell
 form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
+- New: [Stenmark for macOS](https://github.com/mkay/stenmark-mac), a native app that shares your synced notes folder with Linux.
 - Safer saving: Stenmark asks before overwriting a note that changed on disk, and before closing with unsaved edits.
 - Discard really discards, undo stays inside the current note, and failed saves and file operations now say so.
 - Notes can no longer run scripts or load anything from the network, so remote images don't show.

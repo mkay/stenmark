@@ -2,7 +2,8 @@
 
 Your markdown librarian. A GTK4 Markdown reader, organizer and editor.
 
-On a Mac? [Stenmark for macOS](https://github.com/mkay/stenmark-mac) is a native app that shares a synced notes folder with this one.
+> [!tip]
+> **On a Mac?** [Stenmark for macOS](https://github.com/mkay/stenmark-mac) is a native app that shares a synced notes folder with this one.
 
 > Early-stage release — expect rough edges. Feedback and bug reports welcome via Issues.
 

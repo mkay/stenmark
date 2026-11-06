@@ -189,7 +189,7 @@ class SettingsDialog(Adw.PreferencesDialog):
 
         tint_row = Adw.SwitchRow(
             title=_("Tint Sidebar"),
-            subtitle=_("Mix the accent colour into the sidebar list"),
+            subtitle=_("Mix the accent colour of your GTK theme into the sidebar list"),
         )
         tint_row.set_active(self._settings.get("tint_sidebar"))
         tint_row.connect(

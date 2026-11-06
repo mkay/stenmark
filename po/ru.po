@@ -566,7 +566,7 @@ msgid "Tint Sidebar"
 msgstr "Показывать метки на боковой панели"
 
 #: stenmark/settings_dialog.py:192
-msgid "Mix the accent colour into the sidebar list"
+msgid "Mix the accent colour of your GTK theme into the sidebar list"
 msgstr ""
 
 #: stenmark/settings_dialog.py:204 stenmark/settings_dialog.py:383

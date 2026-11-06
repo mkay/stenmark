@@ -550,8 +550,8 @@ msgid "Tint Sidebar"
 msgstr "Seitenleiste einfärben"
 
 #: stenmark/settings_dialog.py:192
-msgid "Mix the accent colour into the sidebar list"
-msgstr "Die Akzentfarbe in die Liste der Seitenleiste mischen"
+msgid "Mix the accent colour of your GTK theme into the sidebar list"
+msgstr "Die Akzentfarbe deines GTK-Themes in die Liste der Seitenleiste mischen"
 
 #: stenmark/settings_dialog.py:204 stenmark/settings_dialog.py:383
 msgid "Appearance"

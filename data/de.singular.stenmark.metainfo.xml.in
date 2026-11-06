@@ -69,7 +69,7 @@
        could exist. Keep the attribute on new entries; a release genuinely
        worth translating can drop it. -->
   <releases>
-    <release version="0.11.0" date="2026-11-05">
+    <release version="0.11.0" date="2026-11-06">
       <description translate="no">
         <p>Safer saving for synced notes: if a note changes on disk while you edit it, Stenmark now asks instead of overwriting it, tells you when a save fails, and asks about unsaved edits before closing. Notes can no longer run scripts or load anything from the network, so remote images don't show. A new Markdown engine fixes lists after a paragraph, code blocks in lists, loose task lists and strikethrough, and a heading now needs a space after the #. Renames and moves keep pins, and the sidebar's accent tint can be turned off in Preferences.</p>
       </description>

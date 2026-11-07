@@ -40,12 +40,11 @@ class SearchPanel(Gtk.Box):
         bar = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
             spacing=6,
-            margin_start=12,
-            margin_end=12,
-            margin_top=8,
-            margin_bottom=8,
+            margin_start=8,
+            margin_end=8,
+            margin_top=6,
+            margin_bottom=4,
         )
-        bar.add_css_class("toolbar")
 
         self._entry = Gtk.SearchEntry(
             placeholder_text=_("Search all documents\u2026"),
@@ -67,17 +66,13 @@ class SearchPanel(Gtk.Box):
 
         # Results area
         self._scrolled = Gtk.ScrolledWindow(vexpand=True)
-        clamp = Adw.Clamp(maximum_size=640, tightening_threshold=400)
+        self._scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 
         self._results_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL,
-            margin_start=12,
-            margin_end=12,
-            margin_top=4,
-            margin_bottom=12,
+            margin_bottom=6,
         )
-        clamp.set_child(self._results_box)
-        self._scrolled.set_child(clamp)
+        self._scrolled.set_child(self._results_box)
         self.append(self._scrolled)
 
         # Empty / status page
@@ -86,9 +81,14 @@ class SearchPanel(Gtk.Box):
             title=_("Search Documents"),
             description=_("Search for text across all your markdown files."),
             vexpand=True,
+            css_classes=["compact"],
         )
         tag_link = Gtk.Button(
-            label=_("or filter by tags"),
+            child=Gtk.Label(
+                label=_("or filter by tags"),
+                wrap=True,
+                justify=Gtk.Justification.CENTER,
+            ),
             css_classes=["flat", "link"],
             halign=Gtk.Align.CENTER,
         )
@@ -215,7 +215,7 @@ class SearchPanel(Gtk.Box):
 
             # Build row
             if listbox is None:
-                listbox = Gtk.ListBox(css_classes=["boxed-list"])
+                listbox = Gtk.ListBox(css_classes=["navigation-sidebar"])
                 listbox.set_selection_mode(Gtk.SelectionMode.NONE)
                 listbox.connect("row-activated", self._on_row_activated)
 
@@ -277,10 +277,10 @@ class SearchPanel(Gtk.Box):
         box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
             spacing=8,
-            margin_start=12,
-            margin_end=12,
-            margin_top=10,
-            margin_bottom=10,
+            margin_start=4,
+            margin_end=4,
+            margin_top=4,
+            margin_bottom=4,
         )
 
         icon = Gtk.Image(icon_name="stenmark-document-all-symbolic")

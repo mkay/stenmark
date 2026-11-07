@@ -118,6 +118,8 @@ class Application(Adw.Application):
                 min-height: 0;
                 padding: 0;
             }
+            /* Turns go-previous into the chevron on folder rows */
+            .flip-horizontal { -gtk-icon-transform: scaleX(-1); }
             .tag-filter-chip:checked {
                 background: alpha(@accent_color, 0.25);
             }

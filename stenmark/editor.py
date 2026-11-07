@@ -164,7 +164,13 @@ class MarkdownEditor(Gtk.Box):
         key_ctl.connect("key-pressed", self._on_key_pressed)
         self._webview.add_controller(key_ctl)
 
-        self.prepend(self._build_toolbar())
+        # Scrolls rather than set the note column's minimum width
+        toolbar_scroller = Gtk.ScrolledWindow(
+            hscrollbar_policy=Gtk.PolicyType.AUTOMATIC,
+            vscrollbar_policy=Gtk.PolicyType.NEVER,
+            child=self._build_toolbar(),
+        )
+        self.prepend(toolbar_scroller)
         self.append(self._webview)
 
         Adw.StyleManager.get_default().connect("notify::dark", self._on_dark_changed)

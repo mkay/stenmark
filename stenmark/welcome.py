@@ -45,6 +45,8 @@ class WelcomeView(Adw.Bin):
         self._create_label = Gtk.Label(
             use_markup=True,
             halign=Gtk.Align.CENTER,
+            wrap=True,
+            justify=Gtk.Justification.CENTER,
         )
         # Translators: the <a href="create"> markup wraps the clickable part
         # of the sentence — keep the tag, move it wherever the sentence needs.

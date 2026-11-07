@@ -1,13 +1,15 @@
 # Stenmark
 
-Your markdown librarian. A GTK4 Markdown reader, organizer and editor.
+Your markdown librarian: a Linux app for reading, organizing and editing a folder of Markdown notes. Browse them, search them, tag and pin them, and double-click any word to edit right where you were reading.
 
 > [!tip]
 > **On a Mac?** [Stenmark for macOS](https://github.com/mkay/stenmark-mac) is a native app that shares a synced notes folder with this one.
 
 > Early-stage release — expect rough edges. Feedback and bug reports welcome via Issues.
 
-![Stenmark Icon](data/de.singular.stenmark.svg)
+<img src="data/de.singular.stenmark.svg" alt="Stenmark icon" width="128">
+
+![Reading a note, with its folders and documents beside it](data/screenshots/reader.png)
 
 ## Features
 
@@ -148,8 +150,6 @@ Stenmark bundles the following, both GPL-compatible — [COPYRIGHT](COPYRIGHT) h
 Translations are contributed by native speakers — see [TRANSLATING.md](TRANSLATING.md) if you would like to add yours.
 
 ## Screenshots
-
-![View screen](data/screenshots/reader.png)
 
 ![Editor screen](data/screenshots/editor.png)
 

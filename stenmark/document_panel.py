@@ -141,14 +141,16 @@ class DocumentPanel(Gtk.Box):
         self._browsing_folder = None  # actual dir being displayed (may differ from _current_folder when drilled in)
         self._context_path = None
         self._context_folder_path = None
+        # The open note, highlighted wherever it turns up in the list
+        self._selected_path = None
 
-        # Filter bar
+        # Filter bar, always on hand at the top of the column
         self._filter_bar = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
             spacing=6,
-            margin_start=12,
-            margin_end=12,
-            margin_top=8,
+            margin_start=8,
+            margin_end=8,
+            margin_top=6,
             margin_bottom=4,
         )
         self._filter_entry = Gtk.SearchEntry(
@@ -160,28 +162,18 @@ class DocumentPanel(Gtk.Box):
         key_ctl.connect("key-pressed", self._on_filter_key_pressed)
         self._filter_entry.add_controller(key_ctl)
         self._filter_bar.append(self._filter_entry)
-        self._filter_bar.set_visible(False)
         self._filter_text = ""
         self.append(self._filter_bar)
 
         # Main scrolled area
         self._scrolled = Gtk.ScrolledWindow(vexpand=True)
-
-        self._clamp = Adw.Clamp(
-            maximum_size=640,
-            tightening_threshold=400,
-        )
+        self._scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 
         self._content_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL,
-            margin_start=12,
-            margin_end=12,
-            margin_top=12,
-            margin_bottom=12,
+            margin_bottom=6,
         )
-
-        self._clamp.set_child(self._content_box)
-        self._scrolled.set_child(self._clamp)
+        self._scrolled.set_child(self._content_box)
 
         # Empty state
         self._empty = Adw.StatusPage(
@@ -189,6 +181,7 @@ class DocumentPanel(Gtk.Box):
             description=_("This folder has no markdown files."),
             icon_name="stenmark-search-symbolic",
             vexpand=True,
+            css_classes=["compact"],
         )
         self._empty.set_visible(False)
 
@@ -264,15 +257,7 @@ class DocumentPanel(Gtk.Box):
         # Document rows
         if files:
             if subdirs:
-                header = Gtk.Label(
-                    label=_("Documents"),
-                    xalign=0,
-                    css_classes=["heading"],
-                    margin_top=20,
-                    margin_bottom=6,
-                    margin_start=4,
-                )
-                self._content_box.append(header)
+                self._content_box.append(self._make_section_header(_("Documents")))
 
             pinned, unpinned = self._partition_pinned(files)
             listbox = self._make_listbox()
@@ -285,10 +270,10 @@ class DocumentPanel(Gtk.Box):
         box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
             spacing=8,
-            margin_start=12,
-            margin_end=12,
-            margin_top=10,
-            margin_bottom=10,
+            margin_start=4,
+            margin_end=4,
+            margin_top=4,
+            margin_bottom=4,
         )
 
         icon_name = "stenmark-pin-symbolic" if pinned else "stenmark-folder-symbolic"
@@ -305,6 +290,7 @@ class DocumentPanel(Gtk.Box):
             label=name,
             css_classes=["heading"],
             xalign=0,
+            ellipsize=3,  # END
         )
 
         doc_count = _count_md_files(dir_path)
@@ -328,14 +314,20 @@ class DocumentPanel(Gtk.Box):
             label=" \u00b7 ".join(parts),
             css_classes=["dim-label", "caption"],
             xalign=0,
+            ellipsize=3,  # END
         )
 
         info_box.append(title)
         info_box.append(subtitle)
         box.append(icon)
         box.append(info_box)
+        box.append(Gtk.Image(
+            icon_name="stenmark-go-previous-symbolic",
+            css_classes=["dim-label", "flip-horizontal"],
+            valign=Gtk.Align.CENTER,
+        ))
 
-        row = Gtk.ListBoxRow(child=box)
+        row = Gtk.ListBoxRow(child=box, selectable=False)
         row._folder_path = dir_path
         row._display_name = name.lower()
 
@@ -365,19 +357,11 @@ class DocumentPanel(Gtk.Box):
 
         for dir_path in sorted(groups.keys()):
             if dir_path == root:
-                section_name = "No Folder"
+                section_name = _("No Folder")
             else:
                 section_name = os.path.relpath(dir_path, root)
 
-            header = Gtk.Label(
-                label=section_name,
-                xalign=0,
-                css_classes=["heading"],
-                margin_top=20,
-                margin_bottom=6,
-                margin_start=4,
-            )
-            self._content_box.append(header)
+            self._content_box.append(self._make_section_header(section_name))
 
             listbox = self._make_listbox()
             for path in sorted(groups[dir_path], key=lambda p: os.path.basename(p).lower()):
@@ -399,19 +383,11 @@ class DocumentPanel(Gtk.Box):
         for dir_path, files in groups.items():
             # Section header
             if dir_path == root:
-                section_name = "No Folder"
+                section_name = _("No Folder")
             else:
                 section_name = os.path.relpath(dir_path, root)
 
-            header = Gtk.Label(
-                label=section_name,
-                xalign=0,
-                css_classes=["heading"],
-                margin_top=20,
-                margin_bottom=6,
-                margin_start=4,
-            )
-            self._content_box.append(header)
+            self._content_box.append(self._make_section_header(section_name))
 
             pinned, unpinned = self._partition_pinned(files)
             listbox = self._make_listbox()
@@ -421,19 +397,31 @@ class DocumentPanel(Gtk.Box):
         self._apply_filter()
 
     def _make_listbox(self):
-        listbox = Gtk.ListBox(css_classes=["boxed-list"])
-        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        listbox = Gtk.ListBox(css_classes=["navigation-sidebar"])
+        listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
         listbox.connect("row-activated", self._on_row_activated)
         return listbox
+
+    @staticmethod
+    def _make_section_header(text):
+        return Gtk.Label(
+            label=text,
+            xalign=0,
+            ellipsize=3,  # END
+            css_classes=["dim-label", "caption-heading"],
+            margin_top=10,
+            margin_start=14,
+            margin_end=14,
+        )
 
     def _make_document_row(self, path):
         box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
             spacing=8,
-            margin_start=12,
-            margin_end=12,
-            margin_top=10,
-            margin_bottom=10,
+            margin_start=4,
+            margin_end=4,
+            margin_top=4,
+            margin_bottom=4,
         )
 
         info_box = Gtk.Box(
@@ -451,6 +439,7 @@ class DocumentPanel(Gtk.Box):
             label=display_name,
             css_classes=["heading"],
             xalign=0,
+            ellipsize=3,  # END
         )
 
         # Subtitle: filename + size + modified date
@@ -469,6 +458,7 @@ class DocumentPanel(Gtk.Box):
             label=subtitle_text,
             css_classes=["dim-label", "caption"],
             xalign=0,
+            ellipsize=3,  # END
         )
 
         info_box.append(title)
@@ -476,9 +466,12 @@ class DocumentPanel(Gtk.Box):
 
         tags = self._tag_index.get_tags(path) if self._tag_index else []
         if tags:
-            tags_box = Gtk.Box(
-                orientation=Gtk.Orientation.HORIZONTAL,
-                spacing=6,
+            # Wraps, so a long tag list can't hold the column open
+            tags_box = Gtk.FlowBox(
+                selection_mode=Gtk.SelectionMode.NONE,
+                max_children_per_line=20,
+                column_spacing=6,
+                row_spacing=4,
                 margin_top=2,
             )
             for tag in tags:
@@ -490,6 +483,7 @@ class DocumentPanel(Gtk.Box):
                 click.connect("pressed", self._on_tag_label_pressed, tag)
                 chip.add_controller(click)
                 tags_box.append(chip)
+                tags_box.get_last_child().set_can_focus(False)
             info_box.append(tags_box)
 
         box.append(info_box)
@@ -520,15 +514,10 @@ class DocumentPanel(Gtk.Box):
 
     # ---- Quick filter ---------------------------------------------------
 
-    def toggle_filter(self):
-        if self._filter_bar.get_visible():
-            self.hide_filter()
-        else:
-            self._filter_bar.set_visible(True)
-            self._filter_entry.grab_focus()
+    def focus_filter(self):
+        self._filter_entry.grab_focus()
 
-    def hide_filter(self):
-        self._filter_bar.set_visible(False)
+    def clear_filter(self):
         self._filter_entry.set_text("")
         self._filter_text = ""
         self._apply_filter()
@@ -539,12 +528,13 @@ class DocumentPanel(Gtk.Box):
 
     def _on_filter_key_pressed(self, _ctl, keyval, _keycode, _state):
         if keyval == Gdk.KEY_Escape:
-            self.hide_filter()
+            self.clear_filter()
             return True
         return False
 
     def _apply_filter(self):
         """Show/hide rows based on current filter text."""
+        self._restore_highlight()
         query = self._filter_text
         if not query:
             # Show everything
@@ -594,7 +584,34 @@ class DocumentPanel(Gtk.Box):
         if hasattr(row, "_folder_path"):
             self._navigate_to(row._folder_path)
         elif hasattr(row, "_file_path"):
+            # The window answers with select_file once the note has opened;
+            # until then — or if an unsaved-changes prompt is cancelled —
+            # the highlight stays on the note that is actually open.
+            self._restore_highlight()
             self.emit("file-selected", row._file_path)
+
+    def _listboxes(self):
+        child = self._content_box.get_first_child()
+        while child:
+            if isinstance(child, Gtk.ListBox):
+                yield child
+            child = child.get_next_sibling()
+
+    def _restore_highlight(self):
+        """Select the open note's row, in whichever section holds it."""
+        for listbox in self._listboxes():
+            match = None
+            if self._selected_path:
+                row = listbox.get_first_child()
+                while row:
+                    if getattr(row, "_file_path", None) == self._selected_path:
+                        match = row
+                        break
+                    row = row.get_next_sibling()
+            if match:
+                listbox.select_row(match)
+            else:
+                listbox.unselect_all()
 
     # ---- Context menu ---------------------------------------------------
 
@@ -1203,6 +1220,11 @@ class DocumentPanel(Gtk.Box):
         if self._current_folder in (Sidebar.ALL_DOCUMENTS, Sidebar.NO_FOLDER):
             return False
         return self._browsing_folder != self._current_folder
+
+    def select_file(self, path):
+        """Highlight `path` as the open note, or nothing for None."""
+        self._selected_path = path
+        self._restore_highlight()
 
     def folder_renamed(self, old_path, new_path):
         """Keep showing the same folder when it, or one above it, was renamed."""

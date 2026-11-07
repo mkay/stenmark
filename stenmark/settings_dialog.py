@@ -515,8 +515,15 @@ class SettingsDialog(Adw.PreferencesDialog):
         # execv replaces this process, so the single-instance lock is released
         # with it — a fresh Stenmark comes up rather than a second one handing
         # off to the corpse of the old.
+        # Under `python3 -m stenmark` argv[0] is __main__.py, which can't
+        # import its own package when run as a plain script.
+        spec = getattr(sys.modules.get("__main__"), "__spec__", None)
+        if spec is not None and spec.parent:
+            argv = [sys.executable, "-m", spec.parent] + sys.argv[1:]
+        else:
+            argv = [sys.executable] + sys.argv
         try:
-            os.execv(sys.executable, [sys.executable] + sys.argv)
+            os.execv(sys.executable, argv)
         except OSError:
             pass
         return GLib.SOURCE_REMOVE

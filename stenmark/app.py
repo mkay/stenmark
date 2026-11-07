@@ -85,6 +85,9 @@ class Application(Adw.Application):
         css.load_from_string("""
             .app-sidebar { background-color: shade(@window_bg_color, 0.97); }
             .sidebar-list { background-color: mix(shade(@window_bg_color, 0.97), @accent_color, 0.06); }
+            /* The document list, on its own lighter base and at half the
+               tint, so the sidebar stays the stronger of the two as on macOS */
+            .list-column-tint { background-color: mix(@secondary_sidebar_bg_color, @accent_color, 0.03); }
             .tag-chip {
                 background: alpha(@accent_color, 0.15);
                 border-radius: 9999px;
@@ -118,6 +121,8 @@ class Application(Adw.Application):
                 min-height: 0;
                 padding: 0;
             }
+            /* Turns go-previous into the chevron on folder rows */
+            .flip-horizontal { -gtk-icon-transform: scaleX(-1); }
             .tag-filter-chip:checked {
                 background: alpha(@accent_color, 0.25);
             }

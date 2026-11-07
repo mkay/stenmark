@@ -151,9 +151,9 @@ Translations are contributed by native speakers — see [TRANSLATING.md](TRANSLA
 
 ## Screenshots
 
-![Editor screen](data/screenshots/editor.png)
+![Editing a note, with the live preview beside it](data/screenshots/preview.png)
 
-![Document list](data/screenshots/documents.png)
+![The editor at the window's full width](data/screenshots/editor.png)
 
 ## Disclaimer
 

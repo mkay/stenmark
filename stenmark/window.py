@@ -63,6 +63,10 @@ class MainWindow(Adw.ApplicationWindow):
         # The note as it stood when editing began or was last saved
         self._note = None
         self._sidebar_before_edit = None
+        # Sidebar visibility to return to when the note-only view ends
+        self._sidebar_before_note_only = True
+        # Set while we move the split views ourselves, not the user
+        self._layout_syncing = False
 
         self.set_default_size(settings.window_width, settings.window_height)
         self.set_title(APP_NAME)
@@ -79,6 +83,8 @@ class MainWindow(Adw.ApplicationWindow):
         self._build_ui()
         self._connect_signals()
         self._setup_actions()
+        self._show_default_folder()
+        self._on_layout_changed(None, None)
         self.connect("close-request", self._on_close_request)
 
         if open_file:
@@ -143,6 +149,16 @@ class MainWindow(Adw.ApplicationWindow):
         self._sidebar = Sidebar(self._settings, tag_index=self._tag_index)
         self._sidebar.set_root_widget(self._root_dropdown)
 
+        # Bound to the split view's show-sidebar once that exists; a twin
+        # sits in the list column's header for when this one is hidden.
+        self._sidebar_btn = Gtk.ToggleButton(
+            icon_name="stenmark-sidebar-symbolic",
+            tooltip_text=_("Toggle sidebar"),
+            active=True,
+        )
+        self._sidebar_btn.set_focus_on_click(False)
+        sidebar_header.pack_end(self._sidebar_btn)
+
         sidebar_toolbar = Adw.ToolbarView()
         sidebar_toolbar.add_css_class("app-sidebar")
         sidebar_toolbar.add_top_bar(sidebar_header)
@@ -151,14 +167,14 @@ class MainWindow(Adw.ApplicationWindow):
         # === Content ToolbarView ===
         self._content_header = Adw.HeaderBar(show_start_title_buttons=False)
 
-        # Back button (start, leftmost)
-        self._back_btn = Gtk.Button(
-            icon_name="stenmark-go-previous-symbolic",
-            tooltip_text=_("Back"),
-            visible=False,
+        # Note only: hides the sidebar and the document list together,
+        # leftmost, as in the Mac app
+        self._lists_btn = Gtk.Button(
+            icon_name="stenmark-sidebar-hide-symbolic",
+            tooltip_text=_("Show note only"),
         )
-        self._back_btn.connect("clicked", self._on_back_clicked)
-        self._content_header.pack_start(self._back_btn)
+        self._lists_btn.set_focus_on_click(False)
+        self._content_header.pack_start(self._lists_btn)
 
         # Edit toggle (start)
         self._edit_btn = Gtk.ToggleButton(
@@ -173,7 +189,8 @@ class MainWindow(Adw.ApplicationWindow):
         # Restores whatever the user last chose
         preview_on = bool(self._settings.get("preview_enabled"))
         self._preview_btn = Gtk.ToggleButton(
-            icon_name="stenmark-preview-symbolic" if preview_on else "stenmark-preview-off-symbolic",
+            # One icon, as in the Mac app; the pressed state says it's on
+            icon_name="stenmark-split-symbolic",
             tooltip_text=_("Toggle live preview"),
             active=preview_on,
             visible=False,
@@ -208,13 +225,6 @@ class MainWindow(Adw.ApplicationWindow):
         menu_btn.set_focus_on_click(False)
         self._content_header.pack_end(menu_btn)
 
-        # Sidebar toggle (left of menu button)
-        self._sidebar_btn = Gtk.Button(
-            icon_name="stenmark-sidebar-hide-symbolic",
-            tooltip_text=_("Toggle sidebar"),
-        )
-        self._sidebar_btn.set_focus_on_click(False)
-        self._content_header.pack_end(self._sidebar_btn)
 
         # Open In (visible when a file is open, disabled while editing)
         self._open_in_btn = Gtk.Button(
@@ -265,7 +275,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._content_header.pack_end(self._toc_btn)
 
         # Content stack
-        self._stack = Gtk.Stack()
+        self._stack = Gtk.Stack(hhomogeneous=False)
         self._stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
 
         self._welcome = WelcomeView(
@@ -274,15 +284,6 @@ class MainWindow(Adw.ApplicationWindow):
             on_new_file=self._on_new_file_from_welcome,
         )
         self._stack.add_named(self._welcome, "welcome")
-
-        self._doc_panel = DocumentPanel(self._settings, tag_index=self._tag_index)
-        self._stack.add_named(self._doc_panel, "documents")
-
-        self._search_panel = SearchPanel(self._settings)
-        self._stack.add_named(self._search_panel, "search")
-
-        self._tag_panel = TagPanel(self._settings, self._tag_index)
-        self._stack.add_named(self._tag_panel, "tags")
 
         self._viewer = MarkdownViewer(self._settings)
         self._stack.add_named(self._viewer, "view")
@@ -346,11 +347,78 @@ class MainWindow(Adw.ApplicationWindow):
         content_toolbar.add_bottom_bar(self._status_bar)
         content_toolbar.set_content(self._stack)
 
-        # === Split View ===
+        # === Document list column ===
+        self._list_header = Adw.HeaderBar(
+            show_start_title_buttons=False,
+            show_end_title_buttons=False,
+        )
+        self._list_sidebar_btn = Gtk.ToggleButton(
+            icon_name="stenmark-sidebar-symbolic",
+            tooltip_text=_("Toggle sidebar"),
+            visible=False,
+        )
+        self._list_sidebar_btn.set_focus_on_click(False)
+        self._list_header.pack_start(self._list_sidebar_btn)
+
+        # Out of a subfolder, search or the tag filter
+        self._list_back_btn = Gtk.Button(
+            icon_name="stenmark-go-previous-symbolic",
+            tooltip_text=_("Back"),
+            visible=False,
+        )
+        self._list_back_btn.connect("clicked", self._on_list_back_clicked)
+        self._list_header.pack_start(self._list_back_btn)
+
+        self._list_title = Adw.WindowTitle()
+        self._list_header.set_title_widget(self._list_title)
+
+        self._list_stack = Gtk.Stack(hhomogeneous=False)
+        self._list_stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
+
+        self._doc_panel = DocumentPanel(self._settings, tag_index=self._tag_index)
+        self._list_stack.add_named(self._doc_panel, "documents")
+
+        self._search_panel = SearchPanel(self._settings)
+        self._list_stack.add_named(self._search_panel, "search")
+
+        self._tag_panel = TagPanel(self._settings, self._tag_index)
+        self._list_stack.add_named(self._tag_panel, "tags")
+
+        self._list_toolbar = Adw.ToolbarView()
+        self._list_toolbar.add_top_bar(self._list_header)
+        self._list_toolbar.set_content(self._list_stack)
+        self._update_list_tint()
+
+        # === Split views: sidebar | (list | note) ===
+        self._list_split = Adw.OverlaySplitView(
+            min_sidebar_width=240,
+            max_sidebar_width=360,
+            sidebar_width_fraction=0.32,
+        )
+        self._list_split.set_sidebar(self._list_toolbar)
+        self._list_split.set_content(content_toolbar)
+
         self._split_view = Adw.OverlaySplitView()
         self._split_view.set_show_sidebar(True)
         self._split_view.set_sidebar(sidebar_toolbar)
-        self._split_view.set_content(content_toolbar)
+        self._split_view.set_content(self._list_split)
+
+        for btn in (self._sidebar_btn, self._list_sidebar_btn):
+            self._split_view.bind_property(
+                "show-sidebar", btn, "active",
+                GObject.BindingFlags.BIDIRECTIONAL | GObject.BindingFlags.SYNC_CREATE,
+            )
+
+        # Narrow windows fold the columns into overlays, list first. Only the
+        # last matching breakpoint applies, so the narrower one folds both.
+        self.set_size_request(400, 360)
+        for width, splits in (("860sp", [self._list_split]),
+                              ("600sp", [self._list_split, self._split_view])):
+            bp = Adw.Breakpoint.new(Adw.BreakpointCondition.parse(f"max-width: {width}"))
+            for split in splits:
+                bp.add_setter(split, "collapsed", True)
+                bp.add_setter(split, "show-sidebar", False)
+            self.add_breakpoint(bp)
 
         self._toast_overlay = Adw.ToastOverlay()
         self._toast_overlay.set_child(self._split_view)
@@ -373,8 +441,10 @@ class MainWindow(Adw.ApplicationWindow):
         )
 
     def _connect_signals(self):
-        self._sidebar_btn.connect("clicked", self._on_sidebar_toggled)
-        self._split_view.connect("notify::show-sidebar", self._on_split_sidebar_changed)
+        self._lists_btn.connect("clicked", self._on_lists_toggled)
+        for split in (self._split_view, self._list_split):
+            split.connect("notify::show-sidebar", self._on_layout_changed)
+            split.connect("notify::collapsed", self._on_layout_changed)
         self._edit_btn.connect("toggled", self._on_edit_toggled)
         self._sidebar.connect("folder-selected", self._on_folder_selected)
         self._sidebar.connect("changed", self._on_sidebar_changed)
@@ -395,10 +465,10 @@ class MainWindow(Adw.ApplicationWindow):
         self._editor.set_scroll_callback(self._on_editor_scroll)
         self._editor.set_escape_callback(self._on_editor_escape)
         self._search_panel.connect("file-selected", self._on_file_selected)
-        self._search_panel.connect("close-requested", lambda _p: self._on_back_clicked(None))
+        self._search_panel.connect("close-requested", lambda _p: self._show_documents_list())
         self._search_panel.connect("tag-filter-requested", lambda _p: self._open_tag_panel())
         self._tag_panel.connect("file-selected", self._on_file_selected)
-        self._tag_panel.connect("close-requested", lambda _p: self._on_back_clicked(None))
+        self._tag_panel.connect("close-requested", lambda _p: self._show_documents_list())
         self._viewer.connect("link-activated", self._on_viewer_link)
         self._viewer.connect("navigate-back", lambda *_: self._navigate_back())
         self._viewer.connect("navigate-forward", lambda *_: self._navigate_forward())
@@ -538,34 +608,78 @@ class MainWindow(Adw.ApplicationWindow):
             self._edit_btn.set_active(False)
 
     def _on_find(self, *_args):
-        page = self._stack.get_visible_child_name()
-        if page == "documents":
-            self._doc_panel.toggle_filter()
+        focus = self.get_focus()
+        in_list = focus is not None and focus.is_ancestor(self._list_toolbar)
+        if not self._current_file or (in_list and self._list_stack.get_visible_child_name() == "documents"):
+            self._reveal_lists()
+            self._show_documents_list()
+            self._doc_panel.focus_filter()
         elif self._editing:
             self._editor.toggle_search()
         else:
             self._viewer.toggle_search()
 
-    def _on_sidebar_toggled(self, _btn):
-        self._split_view.set_show_sidebar(not self._split_view.get_show_sidebar())
+    # ---- Column layout ----------------------------------------------------
 
-    def _on_split_sidebar_changed(self, split_view, _param):
-        if self._editing:
+    @property
+    def _note_only(self):
+        return not self._list_split.get_show_sidebar()
+
+    def _set_note_only(self, note_only):
+        """Hide the sidebar and the list together, or bring both back."""
+        self._layout_syncing = True
+        try:
+            if note_only:
+                self._sidebar_before_note_only = self._split_view.get_show_sidebar()
+                self._split_view.set_show_sidebar(False)
+                self._list_split.set_show_sidebar(False)
+            else:
+                self._list_split.set_show_sidebar(True)
+                # An overlay sidebar would cover the list it just brought back
+                if not self._split_view.get_collapsed():
+                    self._split_view.set_show_sidebar(self._sidebar_before_note_only)
+        finally:
+            self._layout_syncing = False
+
+    def _reveal_lists(self):
+        """Search, tags and the filter live in the list, so it must be on screen."""
+        if self._note_only:
+            self._set_note_only(False)
+
+    def _on_lists_toggled(self, _btn):
+        self._set_note_only(not self._note_only)
+
+    def _dismiss_overlays(self):
+        """A pick made in a folded column hands the room back to the note."""
+        if self._split_view.get_collapsed():
+            self._split_view.set_show_sidebar(False)
+        if self._list_split.get_collapsed():
+            self._list_split.set_show_sidebar(False)
+
+    def _on_layout_changed(self, _split, _param):
+        if self._editing and not self._layout_syncing:
             # Changed by hand mid-edit — leave it alone when edit mode ends
             self._sidebar_before_edit = None
-        showing = split_view.get_show_sidebar()
-        if showing:
-            self._sidebar_btn.set_icon_name("stenmark-sidebar-hide-symbolic")
+        side_docked = (self._split_view.get_show_sidebar()
+                       and not self._split_view.get_collapsed())
+        list_docked = (self._list_split.get_show_sidebar()
+                       and not self._list_split.get_collapsed())
+        # Window buttons go on whichever header is leftmost
+        self._list_header.set_show_start_title_buttons(not side_docked)
+        self._content_header.set_show_start_title_buttons(not side_docked and not list_docked)
+        self._list_sidebar_btn.set_visible(not side_docked)
+        if self._note_only:
+            self._lists_btn.set_icon_name("stenmark-sidebar-show-symbolic")
+            self._lists_btn.set_tooltip_text(_("Show lists"))
         else:
-            self._sidebar_btn.set_icon_name("stenmark-sidebar-show-symbolic")
-        self._content_header.set_show_start_title_buttons(not showing)
+            self._lists_btn.set_icon_name("stenmark-sidebar-hide-symbolic")
+            self._lists_btn.set_tooltip_text(_("Show note only"))
 
     def _restore_sidebar_after_edit(self):
         if self._sidebar_before_edit is None:
             return
-        show = self._sidebar_before_edit
         self._sidebar_before_edit = None
-        self._split_view.set_show_sidebar(show)
+        self._set_note_only(False)
 
     def _on_edit_toggled(self, btn):
         # Only a press that disagrees with the actual state means anything.
@@ -607,11 +721,10 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             self._viewer.get_top_source_line(self._editor.goto_line)
 
-        # Editing wants the width — the sidebar comes back on the way out
-        if (self._settings.hide_sidebar_on_edit
-                and self._split_view.get_show_sidebar()):
+        # Editing wants the width — the lists come back on the way out
+        if self._settings.hide_sidebar_on_edit and not self._note_only:
+            self._set_note_only(True)
             self._sidebar_before_edit = True
-            self._split_view.set_show_sidebar(False)
 
         self._stack.set_visible_child_name("edit")
         self._editing = True
@@ -674,35 +787,14 @@ class MainWindow(Adw.ApplicationWindow):
             self._editor.goto_line(line, word, center=True)
 
     def _on_folder_selected(self, _sidebar, folder_path):
-        if self._editing:
-            self._leave_edit_mode(lambda: self._on_folder_selected(_sidebar, folder_path))
-            return
-
-        from stenmark.sidebar import Sidebar
-        if folder_path.startswith("tag:"):
-            self._title_widget.set_subtitle(
-                _("Tagged: {tag}").format(tag=folder_path[4:]))
-        elif folder_path == Sidebar.ALL_DOCUMENTS:
-            self._title_widget.set_subtitle(_("All Documents"))
-        elif folder_path == Sidebar.NO_FOLDER:
-            self._title_widget.set_subtitle(_("No Folder"))
-        else:
-            self._title_widget.set_subtitle(os.path.basename(folder_path))
-
-        self._edit_btn.set_sensitive(False)
-        self._copy_rich_btn.set_visible(False)
-        self._open_in_btn.set_visible(False)
-        self._export_pdf_action.set_enabled(False)
-        self._toc_btn.set_visible(False)
-        self._tags_btn.set_visible(False)
-        self._status_bar.set_visible(False)
         self._doc_panel.show_folder(folder_path)
-        self._stack.set_visible_child_name("documents")
-        self._update_back_btn()
+        self._show_documents_list()
+        self._reveal_lists()
+        if self._split_view.get_collapsed():
+            self._split_view.set_show_sidebar(False)
 
-    def _on_folder_navigated(self, _panel, folder_path):
-        self._title_widget.set_subtitle(os.path.basename(folder_path))
-        self._update_back_btn()
+    def _on_folder_navigated(self, _panel, _folder_path):
+        self._update_list_header()
 
     def _on_typewriter_action(self, *_args):
         # The readout is inert outside edit mode; so is the shortcut, rather
@@ -729,62 +821,68 @@ class MainWindow(Adw.ApplicationWindow):
                 if accel else _("Keep the current line centred")
             )
 
-    def _update_back_btn(self):
-        page = self._stack.get_visible_child_name()
-        if page in ("view", "edit", "search", "tags"):
-            self._back_btn.set_visible(True)
-        elif page == "documents" and self._doc_panel.is_drilled_in:
-            self._back_btn.set_visible(True)
-        else:
-            self._back_btn.set_visible(False)
+    # ---- List column -------------------------------------------------------
 
-    def _on_back_clicked(self, _btn):
-        if self._editing:
-            self._leave_edit_mode(lambda: self._on_back_clicked(_btn))
-            return
-        page = self._stack.get_visible_child_name()
-        if page in ("view", "edit"):
-            self._stop_watching()
-            self._current_file = None
-            self._edit_btn.set_sensitive(False)
-            self._copy_rich_btn.set_visible(False)
-            self._open_in_btn.set_visible(False)
-            self._export_pdf_action.set_enabled(False)
-            self._toc_btn.set_visible(False)
-            self._tags_btn.set_visible(False)
-            self._status_bar.set_visible(False)
-            self._sidebar.set_outside_root(False)
-            self._doc_panel.refresh()
-            self._stack.set_visible_child_name("documents")
-            self._restore_folder_subtitle()
-        elif page == "search":
+    def _show_documents_list(self):
+        """Back from search or the tag filter to the folder's documents."""
+        page = self._list_stack.get_visible_child_name()
+        if page == "search":
             self._search_panel.clear()
-            self._doc_panel.refresh()
-            self._stack.set_visible_child_name("documents")
-            self._restore_folder_subtitle()
         elif page == "tags":
             self._tag_panel.clear()
+        if page != "documents":
             self._doc_panel.refresh()
-            self._stack.set_visible_child_name("documents")
-            self._restore_folder_subtitle()
-        elif page == "documents" and self._doc_panel.is_drilled_in:
-            self._doc_panel.navigate_back()
-        self._update_back_btn()
+        self._list_stack.set_visible_child_name("documents")
+        self._update_list_header()
 
-    def _restore_folder_subtitle(self):
+    def _on_list_back_clicked(self, _btn):
+        if self._list_stack.get_visible_child_name() != "documents":
+            self._show_documents_list()
+        elif self._doc_panel.is_drilled_in:
+            self._doc_panel.navigate_back()
+            self._update_list_header()
+
+    def _update_list_header(self):
+        page = self._list_stack.get_visible_child_name()
+        self._list_back_btn.set_visible(
+            page != "documents" or self._doc_panel.is_drilled_in)
+        if page == "search":
+            self._list_title.set_title(_("Search"))
+        elif page == "tags":
+            self._list_title.set_title(_("Tags"))
+        else:
+            self._list_title.set_title(self._folder_label())
+
+    def _folder_label(self):
         from stenmark.sidebar import Sidebar
         folder = self._doc_panel._current_folder
         if folder and folder.startswith("tag:"):
-            self._title_widget.set_subtitle(
-                _("Tagged: {tag}").format(tag=folder[4:]))
-        elif folder == Sidebar.ALL_DOCUMENTS:
-            self._title_widget.set_subtitle(_("All Documents"))
-        elif folder == Sidebar.NO_FOLDER:
-            self._title_widget.set_subtitle(_("No Folder"))
-        elif self._doc_panel.is_drilled_in:
-            self._title_widget.set_subtitle(os.path.basename(self._doc_panel._browsing_folder))
+            return _("Tagged: {tag}").format(tag=folder[4:])
+        if folder == Sidebar.ALL_DOCUMENTS:
+            return _("All Documents")
+        if folder == Sidebar.NO_FOLDER:
+            return _("No Folder")
+        if self._doc_panel.is_drilled_in:
+            return os.path.basename(self._doc_panel._browsing_folder)
+        return os.path.basename(folder) if folder else ""
+
+    def _update_list_tint(self):
+        """The sidebar's tint, carried more faintly into the list column."""
+        if self._settings.get("tint_sidebar"):
+            self._list_stack.add_css_class("list-column-tint")
         else:
-            self._title_widget.set_subtitle(os.path.basename(folder) if folder else "")
+            self._list_stack.remove_css_class("list-column-tint")
+
+    def _show_default_folder(self):
+        """List All Documents, as a fresh window or a new root starts out."""
+        from stenmark.sidebar import Sidebar
+        if self._settings.root_directory:
+            self._sidebar.set_selection(Sidebar.ALL_DOCUMENTS)
+            self._doc_panel.show_folder(Sidebar.ALL_DOCUMENTS)
+        else:
+            self._sidebar.set_selection(None)
+            self._doc_panel.clear_selection()
+        self._show_documents_list()
 
     def _on_file_created(self, _sidebar, path):
         if self._editing:
@@ -801,6 +899,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._nav_history = [path]
         self._nav_index = 0
         self._load_file(path)
+        self._dismiss_overlays()
 
     def _on_viewer_link(self, _viewer, path):
         if self._editing:
@@ -840,8 +939,8 @@ class MainWindow(Adw.ApplicationWindow):
             gesture.set_state(Gtk.EventSequenceState.CLAIMED)
 
     def open_file(self, path):
-        """Open a file directly in view mode with sidebar hidden."""
-        self._split_view.set_show_sidebar(False)
+        """Open a file directly in view mode, the lists hidden."""
+        self._set_note_only(True)
         self._load_file(path)
         # Show "Open root folder" in sidebar if file is outside the
         # persistent root (ceiling), not the session override.
@@ -859,14 +958,14 @@ class MainWindow(Adw.ApplicationWindow):
             self._nav_history.append(path)
             self._nav_index = len(self._nav_history) - 1
         self._current_file = path
-        self._back_btn.set_visible(True)
+        self._doc_panel.select_file(path)
         self._edit_btn.set_sensitive(True)
         self._copy_rich_btn.set_visible(True)
         self._open_in_btn.set_visible(True)
         self._export_pdf_action.set_enabled(True)
         self._toc_btn.set_visible(True)
         self._tags_btn.set_visible(True)
-        self._title_widget.set_subtitle(os.path.basename(path))
+        self._title_widget.set_title(os.path.basename(path))
         self._viewer.load_file(path)
         self._stack.set_visible_child_name("view")
         self._start_watching()
@@ -939,14 +1038,17 @@ class MainWindow(Adw.ApplicationWindow):
             self._restore_sidebar_after_edit()
             self._edit_btn.set_active(False)
             self._edit_btn.set_sensitive(False)
+            self._preview_btn.set_visible(False)
+            self._open_in_btn.set_sensitive(True)
             self._copy_rich_btn.set_visible(False)
             self._open_in_btn.set_visible(False)
             self._export_pdf_action.set_enabled(False)
             self._toc_btn.set_visible(False)
             self._tags_btn.set_visible(False)
-            self._title_widget.set_subtitle("")
+            self._title_widget.set_title(APP_NAME)
             self._status_bar.set_visible(False)
-            self._stack.set_visible_child_name("documents")
+            self._doc_panel.select_file(None)
+            self._stack.set_visible_child_name("welcome")
         self._sidebar.refresh()
 
     def _on_file_renamed(self, _panel, old_path, new_path):
@@ -971,7 +1073,8 @@ class MainWindow(Adw.ApplicationWindow):
         if moved != self._current_file:
             self._current_file = moved
             self._viewer.follow_rename(moved)
-            self._title_widget.set_subtitle(os.path.basename(moved))
+            self._doc_panel.select_file(moved)
+            self._title_widget.set_title(os.path.basename(moved))
             if not self._editing:
                 self._start_watching()
 
@@ -983,18 +1086,10 @@ class MainWindow(Adw.ApplicationWindow):
                 self._root_ceiling = persisted
             self._tag_index.set_root(self._settings.root_directory)
             self._rebuild_root_model()
-            # A new root starts fresh. Both panes still hold a selection made
-            # against the tree we just left — including All Documents, which
-            # would otherwise silently re-list every document under whatever
-            # root you land on next.
-            self._doc_panel.clear_selection()
-            self._sidebar.set_selection(None)
-            if self._stack.get_visible_child_name() == "documents":
-                self._title_widget.set_subtitle("")
-                self._stack.set_visible_child_name("welcome")
-                self._update_back_btn()
+            # A new root starts fresh, on its own All Documents: both panes
+            # still hold a selection made against the tree we just left.
             self._sidebar.refresh()
-            self._doc_panel.refresh()
+            self._show_default_folder()
             self._welcome.refresh()
         elif key in ("font_family", "font_size", "viewer_theme"):
             self._viewer.update_style()
@@ -1019,6 +1114,7 @@ class MainWindow(Adw.ApplicationWindow):
             self._sidebar.refresh()
         elif key == "tint_sidebar":
             self._sidebar.update_tint()
+            self._update_list_tint()
         elif key == "double_click_to_edit":
             enabled = self._settings.double_click_to_edit
             self._viewer.set_edit_on_dblclick(enabled)
@@ -1028,9 +1124,6 @@ class MainWindow(Adw.ApplicationWindow):
         active = btn.get_active()
         self._settings.set("preview_enabled", active)
         self._preview_viewer.set_visible(active)
-        btn.set_icon_name(
-            "stenmark-preview-symbolic" if active else "stenmark-preview-off-symbolic"
-        )
         if active:
             text = self._editor.get_text()
             self._preview_viewer.render_text(text, self._current_file)
@@ -1373,45 +1466,25 @@ class MainWindow(Adw.ApplicationWindow):
         self._open_tag_panel()
 
     def _open_tag_panel(self, preselect_tag=None):
-        """Show the tag filter pane, optionally pre-selecting a tag."""
-        if self._editing:
-            self._leave_edit_mode(lambda: self._open_tag_panel(preselect_tag))
-            return
-        self._title_widget.set_subtitle(_("Tags"))
-        self._edit_btn.set_sensitive(False)
-        self._copy_rich_btn.set_visible(False)
-        self._open_in_btn.set_visible(False)
-        self._export_pdf_action.set_enabled(False)
-        self._toc_btn.set_visible(False)
-        self._tags_btn.set_visible(False)
-        self._status_bar.set_visible(False)
+        """Show the tag filter in the list column, optionally pre-selecting a tag."""
+        self._reveal_lists()
         if preselect_tag:
             self._tag_panel.select_tag(preselect_tag)
         else:
             self._tag_panel.show_tags()
-        self._stack.set_visible_child_name("tags")
-        self._back_btn.set_visible(True)
+        self._list_stack.set_visible_child_name("tags")
+        self._update_list_header()
         self._tag_panel.focus_entry()
 
     def _on_search(self, *_args):
-        """Switch to the full-text search panel."""
-        if self._editing:
-            self._leave_edit_mode(lambda: self._on_search(*_args))
-            return
+        """Show full-text search in the list column."""
+        self._reveal_lists()
         # Scope search to the currently selected folder
         folder = self._doc_panel._current_folder
         if folder:
             self._search_panel.set_folder(folder)
-        self._title_widget.set_subtitle(_("Search"))
-        self._edit_btn.set_sensitive(False)
-        self._copy_rich_btn.set_visible(False)
-        self._open_in_btn.set_visible(False)
-        self._export_pdf_action.set_enabled(False)
-        self._toc_btn.set_visible(False)
-        self._tags_btn.set_visible(False)
-        self._status_bar.set_visible(False)
-        self._stack.set_visible_child_name("search")
-        self._back_btn.set_visible(True)
+        self._list_stack.set_visible_child_name("search")
+        self._update_list_header()
         self._search_panel.focus_search()
 
     def _on_preferences(self, *_args):
@@ -1471,7 +1544,8 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_open_root_requested(self, _sidebar):
         ceiling = os.path.expanduser(self._root_ceiling)
         self._settings.set_override("root_directory", ceiling)
-        self._split_view.set_show_sidebar(True)
+        self._sidebar_before_note_only = True
+        self._set_note_only(False)
 
     # ---- Root folder navigation (sidebar header) -------------------------
 

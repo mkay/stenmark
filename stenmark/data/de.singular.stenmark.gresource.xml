@@ -18,11 +18,11 @@
     <file alias="stenmark-go-down-symbolic.svg">icons/hicolor/scalable/actions/stenmark-go-down-symbolic.svg</file>
     <file alias="stenmark-close-symbolic.svg">icons/hicolor/scalable/actions/stenmark-close-symbolic.svg</file>
     <file alias="stenmark-document-all-symbolic.svg">icons/hicolor/scalable/actions/stenmark-document-all-symbolic.svg</file>
+    <file alias="stenmark-sidebar-symbolic.svg">icons/hicolor/scalable/actions/stenmark-sidebar-symbolic.svg</file>
     <file alias="stenmark-sidebar-show-symbolic.svg">icons/hicolor/scalable/actions/stenmark-sidebar-show-symbolic.svg</file>
     <file alias="stenmark-sidebar-hide-symbolic.svg">icons/hicolor/scalable/actions/stenmark-sidebar-hide-symbolic.svg</file>
     <file alias="stenmark-search-symbolic.svg">icons/hicolor/scalable/actions/stenmark-search-symbolic.svg</file>
-    <file alias="stenmark-preview-symbolic.svg">icons/hicolor/scalable/actions/stenmark-preview-symbolic.svg</file>
-    <file alias="stenmark-preview-off-symbolic.svg">icons/hicolor/scalable/actions/stenmark-preview-off-symbolic.svg</file>
+    <file alias="stenmark-split-symbolic.svg">icons/hicolor/scalable/actions/stenmark-split-symbolic.svg</file>
     <file alias="stenmark-format-code-symbolic.svg">icons/hicolor/scalable/actions/stenmark-format-code-symbolic.svg</file>
     <file alias="stenmark-format-code-block-symbolic.svg">icons/hicolor/scalable/actions/stenmark-format-code-block-symbolic.svg</file>
     <file alias="stenmark-format-quote-symbolic.svg">icons/hicolor/scalable/actions/stenmark-format-quote-symbolic.svg</file>

@@ -31,9 +31,9 @@ class TagPanel(Gtk.Box):
         tag_bar = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL,
             spacing=4,
-            margin_start=12,
-            margin_end=12,
-            margin_top=8,
+            margin_start=8,
+            margin_end=8,
+            margin_top=6,
             margin_bottom=4,
         )
 
@@ -104,17 +104,13 @@ class TagPanel(Gtk.Box):
         self._bottom_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, vexpand=True)
 
         self._scrolled = Gtk.ScrolledWindow(vexpand=True)
-        clamp = Adw.Clamp(maximum_size=640, tightening_threshold=400)
+        self._scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 
         self._results_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL,
-            margin_start=12,
-            margin_end=12,
-            margin_top=4,
-            margin_bottom=12,
+            margin_bottom=6,
         )
-        clamp.set_child(self._results_box)
-        self._scrolled.set_child(clamp)
+        self._scrolled.set_child(self._results_box)
         self._bottom_box.append(self._scrolled)
 
         # Empty state
@@ -123,6 +119,7 @@ class TagPanel(Gtk.Box):
             title=_("Filter by Tag"),
             description=_("Select tags above to find matching documents."),
             vexpand=True,
+            css_classes=["compact"],
         )
         self._bottom_box.append(self._status)
 
@@ -293,14 +290,15 @@ class TagPanel(Gtk.Box):
             header = Gtk.Label(
                 label=section_name,
                 xalign=0,
-                css_classes=["heading"],
-                margin_top=12,
-                margin_bottom=4,
-                margin_start=4,
+                ellipsize=3,  # END
+                css_classes=["dim-label", "caption-heading"],
+                margin_top=10,
+                margin_start=14,
+                margin_end=14,
             )
             self._results_box.append(header)
 
-            listbox = Gtk.ListBox(css_classes=["boxed-list"])
+            listbox = Gtk.ListBox(css_classes=["navigation-sidebar"])
             listbox.set_selection_mode(Gtk.SelectionMode.NONE)
             listbox.connect("row-activated", self._on_row_activated)
 
@@ -313,10 +311,10 @@ class TagPanel(Gtk.Box):
         box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
             spacing=8,
-            margin_start=12,
-            margin_end=12,
-            margin_top=10,
-            margin_bottom=10,
+            margin_start=4,
+            margin_end=4,
+            margin_top=4,
+            margin_bottom=4,
         )
 
         info_box = Gtk.Box(

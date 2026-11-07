@@ -43,16 +43,16 @@
        actually see. -->
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/mkay/stenmark/8337da9c08508b4dc94d0575f9093a1b0a886af6/data/screenshots/reader.png</image>
+      <image>https://raw.githubusercontent.com/mkay/stenmark/44e3a4918f7b58537fd7bc9b73fdb27a775ce7e3/data/screenshots/reader.png</image>
       <caption>Reading a document beside the folder sidebar</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/mkay/stenmark/8337da9c08508b4dc94d0575f9093a1b0a886af6/data/screenshots/editor.png</image>
+      <image>https://raw.githubusercontent.com/mkay/stenmark/44e3a4918f7b58537fd7bc9b73fdb27a775ce7e3/data/screenshots/preview.png</image>
       <caption>Editing Markdown beside a live preview</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/mkay/stenmark/8337da9c08508b4dc94d0575f9093a1b0a886af6/data/screenshots/documents.png</image>
-      <caption>Every document in the root folder, grouped by subfolder</caption>
+      <image>https://raw.githubusercontent.com/mkay/stenmark/44e3a4918f7b58537fd7bc9b73fdb27a775ce7e3/data/screenshots/editor.png</image>
+      <caption>The editor at the window's full width</caption>
     </screenshot>
   </screenshots>
 
@@ -69,6 +69,11 @@
        could exist. Keep the attribute on new entries; a release genuinely
        worth translating can drop it. -->
   <releases>
+    <release version="0.12.0" date="2026-11-07">
+      <description translate="no">
+        <p>A new three-column layout, as in the Mac app: folders, documents and the open note side by side, so picking a folder no longer closes the note. Search and the tag filter open in the document list, beside the note they lead to. A button in the note header hides both lists for a note-only view, editing does the same, and narrow windows fold the lists away. The live preview toggle is now a split-pane button, and the sidebar tint reaches the document list at half strength.</p>
+      </description>
+    </release>
     <release version="0.11.0" date="2026-11-06">
       <description translate="no">
         <p>Safer saving for synced notes: if a note changes on disk while you edit it, Stenmark now asks instead of overwriting it, tells you when a save fails, and asks about unsaved edits before closing. Notes can no longer run scripts or load anything from the network, so remote images don't show. A new Markdown engine fixes lists after a paragraph, code blocks in lists, loose task lists and strikethrough, and a heading now needs a space after the #. Renames and moves keep pins, and the sidebar's accent tint can be turned off in Preferences.</p>

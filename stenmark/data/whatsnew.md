@@ -20,9 +20,8 @@ Links may be written as [label](https://…) or as a bare URL. Prefer the labell
 form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
-- New: [Stenmark for macOS](https://github.com/mkay/stenmark-mac), a native app that shares your synced notes folder with Linux.
-- Safer saving: Stenmark asks before overwriting a note that changed on disk, and before closing with unsaved edits.
-- Discard really discards, undo stays inside the current note, and failed saves and file operations now say so.
-- Notes can no longer run scripts or load anything from the network, so remote images don't show.
-- A new Markdown engine fixes many lists, strikethrough and task checkboxes. Headings now need a space after the #.
-- Renames and moves keep pins, copying code keeps every line, and the sidebar tint can be turned off in Preferences.
+- New three-column layout, as in the Mac app: folders, documents and the open note side by side. Picking a folder no longer closes the note.
+- Search and the tag filter open in the document list, beside the note they lead to.
+- The first button in the note header hides both lists for a note-only view, and editing does the same. Narrow windows fold the lists away.
+- The live preview toggle is now a split-pane button.
+- The sidebar tint reaches the document list too, at half strength.

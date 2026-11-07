@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 16:20+0100\n"
+"POT-Creation-Date: 2026-11-07 16:28+0100\n"
 "PO-Revision-Date: 2026-08-10 18:25+0200\n"
 "Last-Translator: derVedro <dervedro@googlemail.com>\n"
 "Language-Team: Russian\n"
@@ -91,7 +91,7 @@ msgid "Editing Markdown beside a live preview"
 msgstr "Редактирование markdown с подсветкой синтаксиса"
 
 #: data/de.singular.stenmark.metainfo.xml.in:55
-msgid "Every document in the root folder, grouped by subfolder"
+msgid "The editor at the window's full width"
 msgstr ""
 
 #: stenmark/app.py:26
@@ -191,7 +191,7 @@ msgstr "Пусто"
 
 #: stenmark/document_panel.py:360 stenmark/document_panel.py:386
 #: stenmark/document_panel.py:1112 stenmark/sidebar.py:263
-#: stenmark/sidebar.py:649 stenmark/tag_panel.py:286 stenmark/window.py:863
+#: stenmark/sidebar.py:649 stenmark/tag_panel.py:286 stenmark/window.py:864
 msgid "No Folder"
 msgstr "Без папки"
 
@@ -241,7 +241,7 @@ msgstr "Новый документ"
 #: stenmark/document_panel.py:896 stenmark/document_panel.py:1079
 #: stenmark/document_panel.py:1118 stenmark/document_panel.py:1164
 #: stenmark/sidebar.py:553 stenmark/sidebar.py:586 stenmark/sidebar.py:652
-#: stenmark/sidebar.py:725 stenmark/window.py:981
+#: stenmark/sidebar.py:725 stenmark/window.py:989
 msgid "Cancel"
 msgstr "Отменить"
 
@@ -739,7 +739,7 @@ msgstr "Позже"
 msgid "Restart Now"
 msgstr "Перезапустить сейчас"
 
-#: stenmark/settings_dialog.py:492 stenmark/window.py:978
+#: stenmark/settings_dialog.py:492 stenmark/window.py:986
 msgid "Unsaved Changes"
 msgstr "Несохранённые изменения"
 
@@ -773,11 +773,11 @@ msgstr "Открыть корневую папку"
 msgid "Root folder"
 msgstr "Открыть корневую папку"
 
-#: stenmark/sidebar.py:252 stenmark/window.py:861
+#: stenmark/sidebar.py:252 stenmark/window.py:862
 msgid "All Documents"
 msgstr "Все документы"
 
-#: stenmark/sidebar.py:290 stenmark/sidebar.py:810 stenmark/window.py:851
+#: stenmark/sidebar.py:290 stenmark/sidebar.py:810 stenmark/window.py:852
 msgid "Tags"
 msgstr "Метки"
 
@@ -987,7 +987,7 @@ msgstr ""
 msgid "Toggle sidebar"
 msgstr "Боковая панель"
 
-#: stenmark/window.py:174 stenmark/window.py:675
+#: stenmark/window.py:174 stenmark/window.py:676
 msgid "Show note only"
 msgstr ""
 
@@ -1035,103 +1035,103 @@ msgstr "Редактировать метки"
 msgid "Table of contents"
 msgstr "Оглавление"
 
-#: stenmark/window.py:547
+#: stenmark/window.py:548
 #, python-brace-format
 msgid "Some of the text can’t be stored as {encoding}"
 msgstr ""
 
-#: stenmark/window.py:558
+#: stenmark/window.py:559
 #, python-brace-format
 msgid "Could not save “{name}”: {reason}"
 msgstr ""
 
-#: stenmark/window.py:568
+#: stenmark/window.py:569
 #, fuzzy
 msgid "Note Deleted"
 msgstr "Удалить"
 
-#: stenmark/window.py:569
+#: stenmark/window.py:570
 #, python-brace-format
 msgid "“{name}” was deleted while you were editing it."
 msgstr ""
 
-#: stenmark/window.py:572 stenmark/window.py:580
+#: stenmark/window.py:573 stenmark/window.py:581
 msgid "Keep Editing"
 msgstr ""
 
-#: stenmark/window.py:573
+#: stenmark/window.py:574
 msgid "Save Again"
 msgstr ""
 
-#: stenmark/window.py:576
+#: stenmark/window.py:577
 msgid "Note Changed"
 msgstr ""
 
-#: stenmark/window.py:577
+#: stenmark/window.py:578
 #, python-brace-format
 msgid "“{name}” changed on disk while you were editing it."
 msgstr ""
 
-#: stenmark/window.py:581
+#: stenmark/window.py:582
 msgid "Use Version on Disk"
 msgstr ""
 
-#: stenmark/window.py:582
+#: stenmark/window.py:583
 msgid "Overwrite"
 msgstr ""
 
-#: stenmark/window.py:672
+#: stenmark/window.py:673
 msgid "Show lists"
 msgstr ""
 
-#: stenmark/window.py:703
+#: stenmark/window.py:704
 #, python-brace-format
 msgid "Could not open “{name}”: {reason}"
 msgstr ""
 
-#: stenmark/window.py:808
+#: stenmark/window.py:809
 msgid "Typewriter = ON"
 msgstr ""
 
-#: stenmark/window.py:808
+#: stenmark/window.py:809
 msgid "Typewriter = OFF"
 msgstr ""
 
-#: stenmark/window.py:819
+#: stenmark/window.py:820
 #, python-brace-format
 msgid "Keep the current line centred ({accel})"
 msgstr ""
 
-#: stenmark/window.py:820
+#: stenmark/window.py:821
 msgid "Keep the current line centred"
 msgstr ""
 
-#: stenmark/window.py:849
+#: stenmark/window.py:850
 msgid "Search"
 msgstr "Поиск"
 
-#: stenmark/window.py:859
+#: stenmark/window.py:860
 #, python-brace-format
 msgid "Tagged: {tag}"
 msgstr "Метка: {tag}"
 
-#: stenmark/window.py:979
+#: stenmark/window.py:987
 msgid "You have unsaved changes. What would you like to do?"
 msgstr "У тебя есть несохранённые изменения. Что хочешь сделать?"
 
-#: stenmark/window.py:982
+#: stenmark/window.py:990
 msgid "Discard"
 msgstr "Не сохранять"
 
-#: stenmark/window.py:983
+#: stenmark/window.py:991
 msgid "Save"
 msgstr "Сохранить"
 
-#: stenmark/window.py:1232
+#: stenmark/window.py:1241
 msgid "Copied as rich text"
 msgstr "Скопировано как форматированный текст"
 
-#: stenmark/window.py:1238
+#: stenmark/window.py:1247
 #, python-brace-format
 msgid "{n} word"
 msgid_plural "{n} words"
@@ -1139,33 +1139,33 @@ msgstr[0] "{n} слово"
 msgstr[1] "{n} слова"
 msgstr[2] "{n} слов"
 
-#: stenmark/window.py:1241
+#: stenmark/window.py:1250
 #, python-brace-format
 msgid "{n} min read"
 msgstr "{n} мин. чтения"
 
-#: stenmark/window.py:1395
+#: stenmark/window.py:1404
 msgid "Add tag…"
 msgstr "Добавить метку…"
 
-#: stenmark/window.py:1499
+#: stenmark/window.py:1508
 msgid "translator-credits"
 msgstr "derVedro с божьей помощью"
 
-#: stenmark/window.py:1507
+#: stenmark/window.py:1516
 #, fuzzy
 msgid "Translators"
 msgstr "derVedro с божьей помощью"
 
-#: stenmark/window.py:1514
+#: stenmark/window.py:1523
 msgid "Help Translate Stenmark"
 msgstr "Помоги перевести Stenmark"
 
-#: stenmark/window.py:1520
+#: stenmark/window.py:1529
 msgid "Give Stenmark a Like"
 msgstr "Поставь Stenmark лайк"
 
-#: stenmark/window.py:1521
+#: stenmark/window.py:1530
 msgid "Support Stenmark on Ko-fi"
 msgstr "Поддержи Stenmark на Ko-fi"
 

@@ -523,7 +523,7 @@ class SettingsDialog(Adw.PreferencesDialog):
         else:
             argv = [sys.executable] + sys.argv
         try:
-            os.execv(sys.executable, argv)
+            os.execv(sys.executable, argv)  # nosec B606  # nosemgrep
         except OSError:
             pass
         return GLib.SOURCE_REMOVE

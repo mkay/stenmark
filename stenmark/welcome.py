@@ -50,9 +50,10 @@ class WelcomeView(Adw.Bin):
         )
         # Translators: the <a href="create"> markup wraps the clickable part
         # of the sentence — keep the tag, move it wherever the sentence needs.
+        # The line break keeps the label from running wide; keep one too.
         self._create_label.set_markup(_(
-            'Select a Markdown file from the sidebar or '
-            '<a href="create">click here to create one</a>.'
+            'Select a Markdown file from the list\n'
+            'or <a href="create">click here to create one</a>.'
         ))
         self._create_label.connect("activate-link", self._on_link_activated)
         child_box.append(self._create_label)

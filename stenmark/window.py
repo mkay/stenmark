@@ -387,6 +387,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._list_toolbar = Adw.ToolbarView()
         self._list_toolbar.add_top_bar(self._list_header)
         self._list_toolbar.set_content(self._list_stack)
+        self._update_list_tint()
 
         # === Split views: sidebar | (list | note) ===
         self._list_split = Adw.OverlaySplitView(
@@ -865,6 +866,13 @@ class MainWindow(Adw.ApplicationWindow):
             return os.path.basename(self._doc_panel._browsing_folder)
         return os.path.basename(folder) if folder else ""
 
+    def _update_list_tint(self):
+        """The sidebar's tint, carried more faintly into the list column."""
+        if self._settings.get("tint_sidebar"):
+            self._list_stack.add_css_class("list-column-tint")
+        else:
+            self._list_stack.remove_css_class("list-column-tint")
+
     def _show_default_folder(self):
         """List All Documents, as a fresh window or a new root starts out."""
         from stenmark.sidebar import Sidebar
@@ -1106,6 +1114,7 @@ class MainWindow(Adw.ApplicationWindow):
             self._sidebar.refresh()
         elif key == "tint_sidebar":
             self._sidebar.update_tint()
+            self._update_list_tint()
         elif key == "double_click_to_edit":
             enabled = self._settings.double_click_to_edit
             self._viewer.set_edit_on_dblclick(enabled)

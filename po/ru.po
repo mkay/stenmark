@@ -561,13 +561,12 @@ msgid "Display tags section in the sidebar"
 msgstr "Отображать раздел меток на боковой панели"
 
 #: stenmark/settings_dialog.py:191
-#, fuzzy
 msgid "Tint Sidebar"
-msgstr "Показывать метки на боковой панели"
+msgstr "Подкрашивать боковую панель"
 
 #: stenmark/settings_dialog.py:192
 msgid "Mix the accent colour of your GTK theme into the sidebar list"
-msgstr ""
+msgstr "Добавлять акцентный цвет темы GTK в список на боковой панели"
 
 #: stenmark/settings_dialog.py:204 stenmark/settings_dialog.py:383
 msgid "Appearance"

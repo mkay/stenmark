@@ -86,7 +86,6 @@ msgid "Reading a document beside the folder sidebar"
 msgstr "Чтение документа рядом с боковой панелью папок"
 
 #: data/de.singular.stenmark.metainfo.xml.in:51
-#, fuzzy
 msgid "Editing Markdown beside a live preview"
 msgstr "Редактирование markdown рядом с предпросмотром"
 
@@ -1152,7 +1151,7 @@ msgstr "derVedro с божьей помощью"
 
 #: stenmark/window.py:1516
 msgid "Translators"
-msgstr "derVedro с божьей помощью"
+msgstr "Переводчики"
 
 #: stenmark/window.py:1523
 msgid "Help Translate Stenmark"

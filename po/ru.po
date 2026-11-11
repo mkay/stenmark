@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 16:28+0100\n"
+"POT-Creation-Date: 2026-11-11 08:18+0100\n"
 "PO-Revision-Date: 2026-08-10 18:25+0200\n"
 "Last-Translator: derVedro <dervedro@googlemail.com>\n"
 "Language-Team: Russian\n"
@@ -88,11 +88,11 @@ msgstr "Чтение документа рядом с боковой панел�
 #: data/de.singular.stenmark.metainfo.xml.in:51
 #, fuzzy
 msgid "Editing Markdown beside a live preview"
-msgstr "Редактирование markdown с подсветкой синтаксиса"
+msgstr "Редактирование markdown рядом с предпросмотром"
 
 #: data/de.singular.stenmark.metainfo.xml.in:55
 msgid "The editor at the window's full width"
-msgstr ""
+msgstr "Редактор на всю ширину окна"
 
 #: stenmark/app.py:26
 msgid "[FOLDER | FILE.md]"
@@ -427,14 +427,12 @@ msgid "Copied!"
 msgstr "Скопировано!"
 
 #: stenmark/root_selector.py:49 stenmark/window.py:139
-#, fuzzy
 msgid "Change root folder"
-msgstr "Открыть корневую папку"
+msgstr "Изменить корневую папку"
 
 #: stenmark/root_selector.py:93
-#, fuzzy
 msgid "Choose folder"
-msgstr "Открыть корневую папку"
+msgstr "Выбрать папку"
 
 #: stenmark/root_selector.py:129
 msgid "No subfolders"
@@ -442,12 +440,11 @@ msgstr "Нет подпапок"
 
 #: stenmark/root_selector.py:152
 msgid "Use this folder as root"
-msgstr ""
+msgstr "Использовать эту папку как корневую"
 
 #: stenmark/root_selector.py:189
-#, fuzzy
 msgid "Show subfolders"
-msgstr "Нет подпапок"
+msgstr "Показать подпапки"
 
 #. Translators: search scope, as it reads inside "Search in {scope}".
 #. Translators: search scope, as it reads inside "Search in {scope}".
@@ -667,11 +664,11 @@ msgstr "Цветовая тема"
 
 #: stenmark/settings_dialog.py:368
 msgid "Match Light/Dark"
-msgstr ""
+msgstr "Подстраиваться под светлую или тёмную тему"
 
 #: stenmark/settings_dialog.py:369
 msgid "Themes that come in both use the half that suits the app"
-msgstr ""
+msgstr "Темы со светлыми или тёмными вариантами подстраиваются под приложение"
 
 #: stenmark/settings_dialog.py:385
 msgid "Line Numbers"
@@ -683,11 +680,11 @@ msgstr "Перенос строк"
 
 #: stenmark/settings_dialog.py:396 stenmark/settings_dialog.py:432
 msgid "Typewriter Mode"
-msgstr ""
+msgstr "Режим печатной машинки"
 
 #: stenmark/settings_dialog.py:397
 msgid "Keeps the line you are writing centred in the window"
-msgstr ""
+msgstr "Держит вводимую строку по центру окна"
 
 #: stenmark/settings_dialog.py:405
 msgid "Behaviour"
@@ -748,7 +745,7 @@ msgstr "Сохрани открытый документ перед переза
 
 #: stenmark/settings_dialog.py:594
 msgid "This one comes in a single variant and stays as it is"
-msgstr ""
+msgstr "Эта тема идёт только в одном варианте и не меняется"
 
 #: stenmark/sidebar.py:157 stenmark/sidebar.py:444 stenmark/sidebar.py:722
 #: stenmark/sidebar.py:731
@@ -768,9 +765,8 @@ msgid "Open root folder"
 msgstr "Открыть корневую папку"
 
 #: stenmark/sidebar.py:218
-#, fuzzy
 msgid "Root folder"
-msgstr "Открыть корневую папку"
+msgstr "Корневая папка"
 
 #: stenmark/sidebar.py:252 stenmark/window.py:862
 msgid "All Documents"
@@ -898,9 +894,9 @@ msgid "No matches"
 msgstr "Совпадений нет"
 
 #: stenmark/viewer.py:373
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "“{name}” doesn’t exist"
-msgstr "«{name}» уже существует"
+msgstr "«{name}» не существует"
 
 #: stenmark/viewer.py:419 stenmark/window.py:366
 msgid "Back"
@@ -924,7 +920,6 @@ msgid "Set a Root Directory for Stenmark"
 msgstr "Укажи корневой каталог для Stenmark"
 
 #: stenmark/welcome.py:55
-#, fuzzy
 msgid ""
 "Select a Markdown file from the list\n"
 "or <a href=\"create\">click here to create one</a>."
@@ -933,7 +928,7 @@ msgstr ""
 "или <a href=\"create\">нажми здесь, чтобы создать новый</a>."
 
 #: stenmark/welcome.py:83
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Your markdown librarian\n"
 "Version {version}\n"
@@ -944,11 +939,11 @@ msgstr ""
 "Твой markdown архивариус\n"
 "Версия {version}\n"
 "\n"
-"Stenmark — приложение в альфа-версии.\n"
-"Функции могут появляться и внезапно исчезать, а иногда даже и улучшаться."
+"Выбери папку в которой живут твои markdown файлы.\n"
+"Ты можешь изменить это позже в Настройки → Общие → Файлы"
 
 #: stenmark/welcome.py:92
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Your markdown librarian\n"
 "Version {version}\n"
@@ -959,7 +954,7 @@ msgstr ""
 "Твой markdown архивариус\n"
 "Версия {version}\n"
 "\n"
-"Корневой каталог не задан, или настроенный каталог отсутствует.\n"
+"Корневая папка не задана или отсутствует.\n"
 "Чтобы начать, выбери папку."
 
 #: stenmark/welcome.py:100
@@ -971,6 +966,11 @@ msgid ""
 "Early-stage release — expect rough edges.\n"
 "Feedback and bug reports welcome via Issues."
 msgstr ""
+"Твой markdown архивариус\n"
+"Версия {version}\n"
+"\n"
+"Альфа-версия, возможны ошибки и шероховатости.\n"
+"Отзывы и сообщения об ошибках крайне приветствуются."
 
 #. Translators: dialog title for the release notes shown after an
 #. update. The notes themselves are always English.
@@ -980,7 +980,7 @@ msgstr "Что нового"
 
 #: stenmark/window.py:93
 msgid "settings.json can’t be read, so changes to settings won’t be saved"
-msgstr ""
+msgstr "settings.json не может быть прочитан, изменения настроек не будут сохранены"
 
 #: stenmark/window.py:156 stenmark/window.py:357
 msgid "Toggle sidebar"
@@ -988,7 +988,7 @@ msgstr "Боковая панель"
 
 #: stenmark/window.py:174 stenmark/window.py:676
 msgid "Show note only"
-msgstr ""
+msgstr "Показывать только заметки"
 
 #: stenmark/window.py:182
 msgid "Toggle edit mode"
@@ -1037,7 +1037,7 @@ msgstr "Оглавление"
 #: stenmark/window.py:548
 #, python-brace-format
 msgid "Some of the text can’t be stored as {encoding}"
-msgstr ""
+msgstr "Часть текста не может быть сохранена в кодировке {encoding}"
 
 #: stenmark/window.py:559
 #, python-brace-format
@@ -1045,65 +1045,64 @@ msgid "Could not save “{name}”: {reason}"
 msgstr ""
 
 #: stenmark/window.py:569
-#, fuzzy
 msgid "Note Deleted"
-msgstr "Удалить"
+msgstr "Заметка удалена"
 
 #: stenmark/window.py:570
 #, python-brace-format
 msgid "“{name}” was deleted while you were editing it."
-msgstr ""
+msgstr "«{name}» была удалена, пока ты её редактировал."
 
 #: stenmark/window.py:573 stenmark/window.py:581
 msgid "Keep Editing"
-msgstr ""
+msgstr "Продолжить редактирование"
 
 #: stenmark/window.py:574
 msgid "Save Again"
-msgstr ""
+msgstr "Сохранить снова"
 
 #: stenmark/window.py:577
 msgid "Note Changed"
-msgstr ""
+msgstr "Заметка изменена"
 
 #: stenmark/window.py:578
 #, python-brace-format
 msgid "“{name}” changed on disk while you were editing it."
-msgstr ""
+msgstr "«{name}» изменилась на диске, пока ты её редактировал."
 
 #: stenmark/window.py:582
 msgid "Use Version on Disk"
-msgstr ""
+msgstr "Использовать версию с диска"
 
 #: stenmark/window.py:583
 msgid "Overwrite"
-msgstr ""
+msgstr "Перезаписать"
 
 #: stenmark/window.py:673
 msgid "Show lists"
-msgstr ""
+msgstr "Показать список"
 
 #: stenmark/window.py:704
 #, python-brace-format
 msgid "Could not open “{name}”: {reason}"
-msgstr ""
+msgstr "Не удалось открыть «{name}»: {reason}"
 
 #: stenmark/window.py:809
 msgid "Typewriter = ON"
-msgstr ""
+msgstr "Печатная машинка = ВКЛ"
 
 #: stenmark/window.py:809
 msgid "Typewriter = OFF"
-msgstr ""
+msgstr "Печатная машинка = ВЫКЛ"
 
 #: stenmark/window.py:820
 #, python-brace-format
 msgid "Keep the current line centred ({accel})"
-msgstr ""
+msgstr "Держать текущую строку по центру ({accel})"
 
 #: stenmark/window.py:821
 msgid "Keep the current line centred"
-msgstr ""
+msgstr "Держать текущую строку по центру"
 
 #: stenmark/window.py:850
 msgid "Search"
@@ -1152,7 +1151,6 @@ msgid "translator-credits"
 msgstr "derVedro с божьей помощью"
 
 #: stenmark/window.py:1516
-#, fuzzy
 msgid "Translators"
 msgstr "derVedro с божьей помощью"
 
@@ -1167,68 +1165,3 @@ msgstr "Поставь Stenmark лайк"
 #: stenmark/window.py:1530
 msgid "Support Stenmark on Ko-fi"
 msgstr "Поддержи Stenmark на Ko-fi"
-
-#, python-brace-format
-#~ msgid ""
-#~ "Your markdown librarian\n"
-#~ "Version {version}\n"
-#~ "\n"
-#~ "Stenmark is alpha software\n"
-#~ "Features may appear, disappear, or spontaneously improve."
-#~ msgstr ""
-#~ "Твой markdown архивариус\n"
-#~ "Версия {version}\n"
-#~ "\n"
-#~ "Stenmark — приложение в альфа-версии.\n"
-#~ "Функции могут появляться и внезапно исчезать, а иногда даже и улучшаться."
-
-#~ msgid ""
-#~ "Corrected the version this metadata reports: it had stopped at 0.3.3, so "
-#~ "software centres named the wrong release."
-#~ msgstr ""
-#~ "Исправлена версия этих метаданных: она остановилась на 0.3.3, менеджеры "
-#~ "приложений указывали неверный релиз."
-
-#~ msgid ""
-#~ "German translation and a language picker, a Flatpak of its own, a Support "
-#~ "item in the menu, and a move to GPL-3.0-only."
-#~ msgstr ""
-#~ "Немецкий перевод и выбор языка, собственный Flatpak, пункт «Поддержать» в "
-#~ "меню и переход на GPL-3.0-only."
-
-#~ msgid ""
-#~ "The preview pane starts off and remembers your last choice; the sidebar "
-#~ "tag list refreshes as tags change."
-#~ msgstr ""
-#~ "Панель предпросмотра скрыта по умолчанию и запоминает твой последний "
-#~ "выбор; список меток в боковой панели обновляется при их изменении."
-
-#~ msgid "Tagging, and filtering documents by one or more tags."
-#~ msgstr ""
-#~ "Добавление меток и фильтрация документов по одной или нескольким меткам."
-
-#~ msgid ""
-#~ "Navigation between linked documents, Stenmark offered as an \"Open with\" "
-#~ "handler, and fixes to the sidebar outside the root folder."
-#~ msgstr ""
-#~ "Навигация между связанными документами, доступность Stenmark в качестве "
-#~ "обработчика «Открыть с помощью», а также исправления для боковой панели "
-#~ "за пределами корневой папки."
-
-#~ msgid ""
-#~ "Renamed from Marklite to Stenmark, with a new icon and AppStream metadata."
-#~ msgstr ""
-#~ "Переименование Marklite в Stenmark, новый значок и метаданные AppStream."
-
-#~ msgid ""
-#~ "Switched to Phosphor Icons, fixed opening directories via CLI argument."
-#~ msgstr ""
-#~ "Переход на иконки Phosphor, исправлено открытие каталогов через аргумент "
-#~ "командной строки."
-
-#~ msgid "Better new document behaviour, minor UI improvements."
-#~ msgstr "Улучшено создание новых документов, небольшие улучшения интерфейса."
-
-#~ msgid "Added pin-to-top for folders, various fixes and cleanup."
-#~ msgstr ""
-#~ "Добавлено закрепление папок сверху, различные исправления и очистка кода."

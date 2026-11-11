@@ -69,6 +69,11 @@
        could exist. Keep the attribute on new entries; a release genuinely
        worth translating can drop it. -->
   <releases>
+    <release version="0.12.1" date="2026-11-11">
+      <description translate="no">
+        <p>A much more complete Russian translation, contributed by derVedro: typewriter mode, the dialogs about notes that change or vanish while you edit, and the root folder picker are now translated.</p>
+      </description>
+    </release>
     <release version="0.12.0" date="2026-11-07">
       <description translate="no">
         <p>A new three-column layout, as in the Mac app: folders, documents and the open note side by side, so picking a folder no longer closes the note. Search and the tag filter open in the document list, beside the note they lead to. A button in the note header hides both lists for a note-only view, editing does the same, and narrow windows fold the lists away. The live preview toggle is now a split-pane button, and the sidebar tint reaches the document list at half strength.</p>

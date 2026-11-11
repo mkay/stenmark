@@ -20,8 +20,4 @@ Links may be written as [label](https://…) or as a bare URL. Prefer the labell
 form: a full URL wraps mid-scheme in a dialog this narrow.
 -->
 
-- New three-column layout, as in the Mac app: folders, documents and the open note side by side. Picking a folder no longer closes the note.
-- Search and the tag filter open in the document list, beside the note they lead to.
-- The first button in the note header hides both lists for a note-only view, and editing does the same. Narrow windows fold the lists away.
-- The live preview toggle is now a split-pane button.
-- The sidebar tint reaches the document list too, at half strength.
+- The Russian translation is much more complete, thanks to derVedro: typewriter mode, the note-changed dialogs and the root folder picker now speak Russian.

@@ -965,7 +965,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._export_pdf_action.set_enabled(True)
         self._toc_btn.set_visible(True)
         self._tags_btn.set_visible(True)
-        self._title_widget.set_title(os.path.basename(path))
+        self._show_doc_title(path)
         self._viewer.load_file(path)
         self._stack.set_visible_child_name("view")
         self._start_watching()
@@ -976,6 +976,16 @@ class MainWindow(Adw.ApplicationWindow):
         except OSError:
             pass
         self._sync_nav_state()
+
+    def _show_doc_title(self, path):
+        """Name the open note in the header bar and the window title; None for no note."""
+        if path is None:
+            self._title_widget.set_title(APP_NAME)
+            self.set_title(APP_NAME)
+            return
+        name = os.path.basename(path)
+        self._title_widget.set_title(name)
+        self.set_title(_("{document} — Stenmark").format(document=name))
 
     def _prompt_unsaved(self, then):
         """Leave edit mode and call `then`, asking first if there's anything to lose."""
@@ -1045,7 +1055,7 @@ class MainWindow(Adw.ApplicationWindow):
             self._export_pdf_action.set_enabled(False)
             self._toc_btn.set_visible(False)
             self._tags_btn.set_visible(False)
-            self._title_widget.set_title(APP_NAME)
+            self._show_doc_title(None)
             self._status_bar.set_visible(False)
             self._doc_panel.select_file(None)
             self._stack.set_visible_child_name("welcome")
@@ -1074,7 +1084,7 @@ class MainWindow(Adw.ApplicationWindow):
             self._current_file = moved
             self._viewer.follow_rename(moved)
             self._doc_panel.select_file(moved)
-            self._title_widget.set_title(os.path.basename(moved))
+            self._show_doc_title(moved)
             if not self._editing:
                 self._start_watching()
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stenmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 16:28+0100\n"
+"POT-Creation-Date: 2026-11-11 22:53+0100\n"
 "PO-Revision-Date: 2026-08-10 14:10+0300\n"
 "Last-Translator: Kreuder <mk@singular.de>\n"
 "Language-Team: German\n"
@@ -231,7 +231,7 @@ msgstr "Neues Dokument"
 #: stenmark/document_panel.py:896 stenmark/document_panel.py:1079
 #: stenmark/document_panel.py:1118 stenmark/document_panel.py:1164
 #: stenmark/sidebar.py:553 stenmark/sidebar.py:586 stenmark/sidebar.py:652
-#: stenmark/sidebar.py:725 stenmark/window.py:989
+#: stenmark/sidebar.py:725 stenmark/window.py:999
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -727,7 +727,7 @@ msgstr "Später"
 msgid "Restart Now"
 msgstr "Jetzt neu starten"
 
-#: stenmark/settings_dialog.py:492 stenmark/window.py:986
+#: stenmark/settings_dialog.py:492 stenmark/window.py:996
 msgid "Unsaved Changes"
 msgstr "Ungespeicherte Änderungen"
 
@@ -1112,55 +1112,60 @@ msgstr "Suche"
 msgid "Tagged: {tag}"
 msgstr "Schlagwort: {tag}"
 
-#: stenmark/window.py:987
+#: stenmark/window.py:988
+#, python-brace-format
+msgid "{document} — Stenmark"
+msgstr "{document} — Stenmark"
+
+#: stenmark/window.py:997
 msgid "You have unsaved changes. What would you like to do?"
 msgstr "Du hast ungespeicherte Änderungen. Was möchtest du tun?"
 
-#: stenmark/window.py:990
+#: stenmark/window.py:1000
 msgid "Discard"
 msgstr "Verwerfen"
 
-#: stenmark/window.py:991
+#: stenmark/window.py:1001
 msgid "Save"
 msgstr "Speichern"
 
-#: stenmark/window.py:1241
+#: stenmark/window.py:1251
 msgid "Copied as rich text"
 msgstr "Als formatierter Text kopiert"
 
-#: stenmark/window.py:1247
+#: stenmark/window.py:1257
 #, python-brace-format
 msgid "{n} word"
 msgid_plural "{n} words"
 msgstr[0] "{n} Wort"
 msgstr[1] "{n} Wörter"
 
-#: stenmark/window.py:1250
+#: stenmark/window.py:1260
 #, python-brace-format
 msgid "{n} min read"
 msgstr "{n} Min. Lesezeit"
 
-#: stenmark/window.py:1404
+#: stenmark/window.py:1414
 msgid "Add tag…"
 msgstr "Schlagwort hinzufügen…"
 
-#: stenmark/window.py:1508
+#: stenmark/window.py:1518
 msgid "translator-credits"
 msgstr "Kreuder <mk@singular.de>"
 
-#: stenmark/window.py:1516
+#: stenmark/window.py:1526
 msgid "Translators"
 msgstr "Übersetzung"
 
-#: stenmark/window.py:1523
+#: stenmark/window.py:1533
 msgid "Help Translate Stenmark"
 msgstr "Hilf mit, Stenmark zu übersetzen"
 
-#: stenmark/window.py:1529
+#: stenmark/window.py:1539
 msgid "Give Stenmark a Like"
 msgstr "Gib Stenmark ein Like"
 
-#: stenmark/window.py:1530
+#: stenmark/window.py:1540
 msgid "Support Stenmark on Ko-fi"
 msgstr "Stenmark auf Ko-fi unterstützen"
 
